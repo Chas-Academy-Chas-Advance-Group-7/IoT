@@ -39,3 +39,10 @@
 
 # debug information files
 *.dwo
+
+# ignore clangd cache
+.cache
+
+# ignore compile-commands
+**/compile_commands.json
+
