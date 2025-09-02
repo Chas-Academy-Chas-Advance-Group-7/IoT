@@ -25,9 +25,9 @@ For example, see the structure of the following example libraries `Foo` and `Bar
 |
 |- platformio.ini
 |--src
-   |- main.c
+   |- main.cpp
 
-Example contents of `src/main.c` using Foo and Bar:
+Example contents of `src/main.cpp` using Foo and Bar:
 ```
 #include <Foo.h>
 #include <Bar.h>
