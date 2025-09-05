@@ -46,3 +46,4 @@
 # ignore compile-commands
 **/compile_commands.json
 
+**/.vscode/
