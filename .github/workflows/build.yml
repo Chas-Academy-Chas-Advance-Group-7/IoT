@@ -16,39 +16,39 @@ jobs:
     permissions:
       contents: write
 
-  steps:
-    - name: Checkout repository
-      user: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Cache pip
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/pip
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
 
-    - name: Cache PlatformIO packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.platformio
+      - name: Cache PlatformIO packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.platformio
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.x"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
 
-    - name: Install PlatformIO
-      shell: bash
-      run: |
-        python -m pip install --upgrade pip
-        pip install --upgrade platformio
+      - name: Install PlatformIO
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade platformio
 
-    - name: Build broker firmware
-      shell: bash
-      run: |
-        cd src_broker_esp32
-        platformio run
+      - name: Build broker firmware
+        shell: bash
+        run: |
+          cd src_broker_esp32
+          platformio run
 
-    - name: Build package firmware
-      shell: bash
-      run: |
-        cd src_package_arduino
-        platformio run
+      - name: Build package firmware
+        shell: bash
+        run: |
+          cd src_package_arduino
+          platformio run
