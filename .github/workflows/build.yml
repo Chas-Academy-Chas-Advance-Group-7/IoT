@@ -27,7 +27,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/platformio.ini') }}
           restore-keys: |
             ${{ runner.os }}-
 
