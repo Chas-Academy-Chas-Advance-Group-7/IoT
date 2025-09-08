@@ -1,4 +1,4 @@
-name: Build hardware firmware
+name: Run unit-tests
 
 on:
   push:
@@ -9,11 +9,9 @@ on:
       - "*"
   workflow_dispatch:
 
-jobs:
-  build:
+jobs: 
+  runUnitTests:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - name: Checkout repository
@@ -31,30 +29,23 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.platformio
-          key: ${{ runner.os }}-${{ hashFiles('**/platformio.ini') }}
+          key: ${{ runner.os }}-platformio-${{ hashFiles('**/platformio.ini') }}
           restore-keys: |
-            ${{ runner.os }}-
+            ${{ runner.os }}-platformio-
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-
+      
       - name: Install PlatformIO
         shell: bash
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade platformio
-
-      - name: Build broker firmware
-        shell: bash
-        run: |
-          cd src_broker_esp32
-          platformio run -e esp32_broker
-
-      - name: Build package firmware
+      
+      - name: Run native unit tests
         shell: bash
         run: |
           cd src_package_arduino
-          platformio run -e uno_r4_wifi
-        
+          pio test -e native

@@ -13,3 +13,16 @@ void initializeDHT()
     dht.begin();
     Serial.println("DHT initialized!");
 }
+
+SensorPacket readDHT(uint8_t sensorId, uint32_t timestamp, uint32_t serverId)
+{
+    SensorPacket packet;
+
+    packet.sensor_id = sensorId;
+    packet.sensor_timestamp = timestamp;
+    packet.temperature = dht.readTemperature();
+    packet.humidity = dht.readHumidity();
+    packet.server_package_id = serverId;
+
+    return packet;
+}
