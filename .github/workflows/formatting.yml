@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -15,6 +18,7 @@ jobs:
 
       - name: Debug working directory
         run: |
+          echo "Debug..."
           echo "Current working directory: $(pwd)"
           echo "Directory contents:"
           ls -la
@@ -26,7 +30,7 @@ jobs:
         with:
           source: "."
           exclude: "./src_broker_esp32/lib ./src_package_arduino/lib ./.github"
-          extensions: ".cpp,.h,.hpp,.c,.ino"
+          extensions: "cpp,h,hpp,c,ino"
           clangFormatVersion: 20
           inplace: True
 
