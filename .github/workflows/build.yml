@@ -50,7 +50,7 @@ jobs:
         shell: bash
         run: |
           cd src_broker_esp32
-          platformio run
+          platformio run -e esp32_broker
 
       - name: Build package firmware
         shell: bash
