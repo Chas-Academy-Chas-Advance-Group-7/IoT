@@ -24,5 +24,6 @@ typedef struct
 extern DHT dht;
 
 void initializeDHT();
+SensorPacket readDHT(uint8_t sensorId, uint32_t timestamp, uint32_t serverId);
 
 #endif
