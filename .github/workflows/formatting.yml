@@ -17,7 +17,7 @@ jobs:
         uses: DoozyX/clang-format-lint-action@v0.20
         with:
           source: "."
-          exclude: "./src_broker_esp32/lib;./src_package_arduino/lib;./.github"
+          exclude: "./src_broker_esp32/lib ./src_package_arduino/lib ./.github"
           extensions: ".cpp,.h,.hpp,.c,.ino"
           clangFormatVersion: 20
           inplace: True
