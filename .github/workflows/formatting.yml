@@ -19,7 +19,7 @@ jobs:
           source: "."
           exclude: "./src_broker_esp32/lib;./src_package_arduino/lib;./.github"
           extensions: ".cpp,.h,.hpp,.c,.ino"
-          clang-format-version: 20
+          clangFormatVersion: 20
           inplace: True
 
       - name: "Add and commit"
