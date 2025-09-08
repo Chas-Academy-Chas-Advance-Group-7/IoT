@@ -1,0 +1,32 @@
+name: "Clang-Format Lint"
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: "clang-format lint"
+        uses: DoozyX/clang-format-lint-action@v0.20
+        with:
+          source: "."
+          exclude: "./src_broker_esp32/lib;./src_package_arduino/lib;./.github"
+          extensions: ".cpp,.h,.hpp,.c,.ino"
+          clang-format-version: 20
+          inplace: True
+
+      - name: "Add and commit"
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: chas-robot
+          author_email: root@chasacademy.se
+          message: "Committing clang-format changes"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
