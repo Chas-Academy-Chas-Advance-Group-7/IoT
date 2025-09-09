@@ -31,7 +31,7 @@ convert() {
 }
 
 usage() {
-  echo "Usage: $0 [init|compiledb]"
+  echo "Usage: $0 [init|compiledb|convert]"
 }
 
 if [ "$PARAMETER" == "init" ]; then
