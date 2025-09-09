@@ -7,13 +7,13 @@ BOARD=$2
 if [ "$ENV" == "default" ]; then
   BOARD="esp32_broker"
 elif [ "$BOARD" == "fredrik" ]; then
-  ENV="uno_r4_wifi"
+  ENV="esp32_broker_fredrik"
 fi
 
 init() {
   echo "Initializing PlatformIO CLI..."
   if [ -z "$ENV" ]; then
-    pio init --ide vim && pio run -t compiledb -e uno_r4_wifi
+    pio init --ide vim && pio run -t compiledb -e esp32_broker
   else
     pio init --ide vim && pio run -t compiledb -e "$ENV"
   fi

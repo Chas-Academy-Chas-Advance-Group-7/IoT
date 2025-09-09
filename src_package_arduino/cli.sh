@@ -2,10 +2,10 @@
 # Simple script for switching clang between boards and different compile_commands on CLI
 
 PARAMETER=$1
-BOARD=$2
+ENV=$2
 
 if [ "$ENV" == "default" ]; then
-  BOARD="uno_r4_wifi"
+  ENV="uno_r4_wifi"
 fi
 
 init() {
