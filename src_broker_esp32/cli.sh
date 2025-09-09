@@ -2,11 +2,11 @@
 # Simple script for switching clang between boards and different compile_commands on CLI
 
 PARAMETER=$1
-BOARD=$2
+ENV=$2
 
 if [ "$ENV" == "default" ]; then
-  BOARD="esp32_broker"
-elif [ "$BOARD" == "fredrik" ]; then
+  ENV="esp32_broker"
+elif [ "$ENV" == "fredrik" ]; then
   ENV="esp32_broker_fredrik"
 fi
 
