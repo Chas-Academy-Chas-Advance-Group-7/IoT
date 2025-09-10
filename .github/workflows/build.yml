@@ -2,11 +2,7 @@ name: Build hardware firmware
 
 on:
   push:
-    branches:
-      - "*"
   pull_request:
-    branches:
-      - "*"
   workflow_dispatch:
 
 jobs:
@@ -17,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Cache pip
         uses: actions/cache@v4
@@ -57,4 +53,3 @@ jobs:
         run: |
           cd src_package_arduino
           platformio run -e uno_r4_wifi
-        

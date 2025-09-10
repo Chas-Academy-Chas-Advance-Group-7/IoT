@@ -1,16 +1,12 @@
-name: Run unit-tests
+name: PlatformIO Lint check
 
 on:
   push:
-    branches:
-      - "*"
   pull_request:
-    branches:
-      - "*"
   workflow_dispatch:
 
 jobs:
-  runUnitTests:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,9 +25,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.platformio
-          key: ${{ runner.os }}-platformio-${{ hashFiles('**/platformio.ini') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/platformio.ini') }}
           restore-keys: |
-            ${{ runner.os }}-platformio-
+            ${{ runner.os }}-
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -44,8 +40,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade platformio
 
-      - name: Run native unit tests
+      - name: Check broker firmware
+        shell: bash
+        run: |
+          cd src_broker_esp32
+          platformio check -e esp32_broker
+
+      - name: Check package firmware
         shell: bash
         run: |
           cd src_package_arduino
-          pio test -e native
+          platformio check -e uno_r4_wifi
