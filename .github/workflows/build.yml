@@ -75,12 +75,14 @@ jobs:
           platformio run -e uno_r4_wifi
 
       - name: Upload broker firmware/artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: ESP32-broker
           path: src_broker_esp32/.pio/build/esp32_broker/firmware.bin
 
       - name: Upload sensor firmware/artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: uno-r4-wifi
