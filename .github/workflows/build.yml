@@ -50,6 +50,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade platformio
 
+      - name: Lint check broker source
+        shell: bash
+        run: |
+          cd src_broker_esp32
+          platformio check -e esp32_broker
+
+      - name: Lint check package source
+        shell: bash
+        run: |
+          cd src_package_arduino
+          platformio check -e uno_r4_wifi
+
       - name: Build broker firmware
         shell: bash
         run: |
