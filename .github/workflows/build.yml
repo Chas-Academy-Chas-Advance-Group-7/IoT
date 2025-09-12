@@ -85,12 +85,12 @@ jobs:
           mkdir -p release
           cp src_broker_esp32/.pio/build/esp32_broker/firmware.bin release/esp32-broker.bin
           cp src_package_arduino/.pio/build/uno_r4_wifi/firmware.bin release/uno-r4-wifi.bin
-          zip -j release/firmware.zip release/esp32-broker.bin release/uno-r4-wifi.bin
+          zip -j release/firmware-${GITHUB_REF#refs/tags/}.zip release/esp32-broker.bin release/uno-r4-wifi.bin
 
       - name: Upload firmware ZIP to GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
-          files: release/firmware.zip
+          files: release/firmware-${GITHUB_REF#refs/tags/}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
