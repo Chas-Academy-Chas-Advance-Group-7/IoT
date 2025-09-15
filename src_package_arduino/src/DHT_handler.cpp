@@ -26,3 +26,5 @@ SensorPacket readDHT(uint8_t sensorId, uint32_t timestamp, uint32_t serverId)
 
     return packet;
 }
+
+//
