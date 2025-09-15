@@ -1,0 +1,29 @@
+name: 'Build and Lint Firmware'
+description: 'Builds and lints firmware for both broker and package'
+
+runs:
+  using: composite
+  steps:
+    - name: Lint check broker source
+      shell: bash
+      run: |
+        cd src_broker_esp32
+        platformio check -e esp32_broker
+
+    - name: Lint check package source
+      shell: bash
+      run: |
+        cd src_package_arduino
+        platformio check -e uno_r4_wifi
+
+    - name: Build broker firmware
+      shell: bash
+      run: |
+        cd src_broker_esp32
+        platformio run -e esp32_broker
+
+    - name: Build package firmware
+      shell: bash
+      run: |
+        cd src_package_arduino
+        platformio run -e uno_r4_wifi
