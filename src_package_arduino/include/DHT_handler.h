@@ -4,6 +4,7 @@
 #include "DHT.h"
 #include <Arduino.h>
 
+extern const size_t QUEUE_SIZE;
 extern const uint8_t DHT_PIN;
 extern const uint8_t DHT_TYPE;
 
@@ -20,9 +21,15 @@ typedef struct
     uint16_t package_sequence_number;
 } SensorPacket;
 
+extern SensorPacket buffer[QUEUE_SIZE];
+
+extern size_t queue_head, queue_tail, queue_count;
+
 extern DHT dht;
 
 void initializeDHT();
 void readDHT(SensorPacket &packet);
+bool addPacketToBuffer(SensorPacket &packet);
+bool getPacketFromBuffer(SensorPacket &packet);
 
 #endif
