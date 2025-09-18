@@ -12,18 +12,17 @@ extern float humidity;
 
 typedef struct
 {
-    // uint32_t local_packet_id; should we have this?
     uint8_t sensor_id;
     uint32_t sensor_timestamp;
     float temperature;
     float humidity;
     uint32_t server_package_id;
-    //? truck_id;
+    uint16_t package_sequence_number;
 } SensorPacket;
 
 extern DHT dht;
 
 void initializeDHT();
-SensorPacket readDHT(uint8_t sensorId, uint32_t timestamp, uint32_t serverId);
+void readDHT(SensorPacket &packet);
 
 #endif
