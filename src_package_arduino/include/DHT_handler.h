@@ -4,13 +4,10 @@
 #include "DHT.h"
 #include <Arduino.h>
 
+// Queue size constant
 constexpr size_t QUEUE_SIZE = 100;
-extern const uint8_t DHT_PIN;
-extern const uint8_t DHT_TYPE;
 
-extern float temperature;
-extern float humidity;
-
+// Sensor packet structure
 typedef struct
 {
     uint8_t sensor_id;
@@ -21,16 +18,31 @@ typedef struct
     uint16_t package_sequence_number;
 } SensorPacket;
 
-extern SensorPacket buffer[QUEUE_SIZE];
-
-extern size_t queue_head, queue_tail, queue_count;
-
+// DHT sensor object
 extern DHT dht;
 
+// Pins and type
+extern const uint8_t DHT_PIN;
+extern const uint8_t DHT_TYPE;
+
+// Sensor variables
+extern uint8_t sensor_id;
+extern float temperature;
+extern float humidity;
+
+// Circular buffer for sensor packets
+extern SensorPacket buffer[QUEUE_SIZE];
+extern size_t queue_head;
+extern size_t queue_tail;
+extern size_t queue_count;
+
+// Function declarations
 void initializeDHT();
 void readDHT(SensorPacket &packet);
+SensorPacket assembleSensorPacket();
 bool addPacketToBuffer(const SensorPacket &packet);
 bool getPacketFromBuffer(SensorPacket &packet);
 void flushBuffer();
+uint32_t getTimestamp();
 
 #endif
