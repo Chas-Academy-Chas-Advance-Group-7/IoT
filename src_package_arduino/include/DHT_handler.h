@@ -29,7 +29,8 @@ extern DHT dht;
 
 void initializeDHT();
 void readDHT(SensorPacket &packet);
-bool addPacketToBuffer(SensorPacket &packet);
+bool addPacketToBuffer(const SensorPacket &packet);
 bool getPacketFromBuffer(SensorPacket &packet);
+void flushBuffer();
 
 #endif

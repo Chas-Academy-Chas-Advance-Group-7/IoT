@@ -25,7 +25,7 @@ void readDHT(SensorPacket &packet)
     packet.humidity = dht.readHumidity();
 }
 
-bool addPacketToBuffer(SensorPacket &packet)
+bool addPacketToBuffer(const SensorPacket &packet)
 {
     if (queue_count < QUEUE_SIZE)
     {
@@ -53,4 +53,16 @@ bool getPacketFromBuffer(SensorPacket &packet)
     }
 
     return false;
+}
+
+void flushBuffer()
+{
+    queue_head = 0;
+    queue_tail = 0;
+    queue_count = 0;
+
+    for (size_t i = 0; i < QUEUE_SIZE; i++)
+    {
+        buffer[i] = SensorPacket{};
+    }
 }
