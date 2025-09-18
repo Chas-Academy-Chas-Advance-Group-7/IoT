@@ -4,7 +4,7 @@
 #include "DHT.h"
 #include <Arduino.h>
 
-extern const size_t QUEUE_SIZE;
+constexpr size_t QUEUE_SIZE = 100;
 extern const uint8_t DHT_PIN;
 extern const uint8_t DHT_TYPE;
 

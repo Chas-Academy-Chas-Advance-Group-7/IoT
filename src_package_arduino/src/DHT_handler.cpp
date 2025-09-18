@@ -1,6 +1,5 @@
 #include "DHT_handler.h"
 
-const size_t QUEUE_SIZE = 100;
 const uint8_t DHT_PIN = 2;
 const uint8_t DHT_TYPE = DHT11;
 
