@@ -2,8 +2,10 @@
 #define DHT_HANDLER_H
 
 #include "DHT.h"
-#include "sensor_package_manager.h"
 #include <Arduino.h>
+
+// forward declaration
+struct SensorPacket;
 
 // DHT sensor object
 extern DHT dht;

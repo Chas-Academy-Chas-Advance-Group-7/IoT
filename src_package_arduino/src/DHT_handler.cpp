@@ -1,4 +1,5 @@
 #include "DHT_handler.h"
+#include "sensor_package_manager.h"
 
 // Pins and DHT type
 const uint8_t DHT_PIN = 2;
