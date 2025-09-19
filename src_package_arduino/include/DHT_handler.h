@@ -2,28 +2,18 @@
 #define DHT_HANDLER_H
 
 #include "DHT.h"
+#include "sensor_package_manager.h"
 #include <Arduino.h>
 
+// DHT sensor object
+extern DHT dht;
+
+// Pins and type
 extern const uint8_t DHT_PIN;
 extern const uint8_t DHT_TYPE;
 
-extern float temperature;
-extern float humidity;
-
-typedef struct
-{
-    // uint32_t local_packet_id; should we have this?
-    uint8_t sensor_id;
-    uint32_t sensor_timestamp;
-    float temperature;
-    float humidity;
-    uint32_t server_package_id;
-    //? truck_id;
-} SensorPacket;
-
-extern DHT dht;
-
+// Function declarations
 void initializeDHT();
-SensorPacket readDHT(uint8_t sensorId, uint32_t timestamp, uint32_t serverId);
+bool readDHT(SensorPacket &packet);
 
 #endif

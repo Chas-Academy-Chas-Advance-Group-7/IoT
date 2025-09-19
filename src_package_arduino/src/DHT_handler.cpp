@@ -1,28 +1,32 @@
 #include "DHT_handler.h"
+#include "sensor_package_manager.h"
 
+// Pins and DHT type
 const uint8_t DHT_PIN = 2;
 const uint8_t DHT_TYPE = DHT11;
 
-float temperature = 0.0;
-float humidity = 0.0;
-
+// DHT object
 DHT dht(DHT_PIN, DHT_TYPE);
 
+// Initialize the DHT sensor
 void initializeDHT()
 {
     dht.begin();
     Serial.println("DHT initialized!");
 }
 
-SensorPacket readDHT(uint8_t sensorId, uint32_t timestamp, uint32_t serverId)
+// reads values and store them in a packet
+bool readDHT(SensorPacket &packet)
 {
-    SensorPacket packet;
+    temperature = dht.readTemperature();
+    humidity = dht.readHumidity();
 
-    packet.sensor_id = sensorId;
-    packet.sensor_timestamp = timestamp;
-    packet.temperature = dht.readTemperature();
-    packet.humidity = dht.readHumidity();
-    packet.server_package_id = serverId;
+    if (isnan(temperature) || isnan(humidity))
+    {
+        return false; // reading failed
+    }
 
-    return packet;
+    packet.temperature = temperature;
+    packet.humidity = humidity;
+    return true; // Successful reading
 }
