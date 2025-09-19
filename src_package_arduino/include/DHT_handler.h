@@ -14,6 +14,6 @@ extern const uint8_t DHT_TYPE;
 
 // Function declarations
 void initializeDHT();
-void readDHT(SensorPacket &packet);
+bool readDHT(SensorPacket &packet);
 
 #endif

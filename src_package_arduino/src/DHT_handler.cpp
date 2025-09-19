@@ -16,8 +16,17 @@ void initializeDHT()
 }
 
 // reads values and store them in a packet
-void readDHT(SensorPacket &packet)
+bool readDHT(SensorPacket &packet)
 {
-    packet.temperature = dht.readTemperature();
-    packet.humidity = dht.readHumidity();
+    temperature = dht.readTemperature();
+    humidity = dht.readHumidity();
+
+    if (isnan(temperature) || isnan(humidity))
+    {
+        return false; // reading failed
+    }
+
+    packet.temperature = temperature;
+    packet.humidity = humidity;
+    return true; // Successful reading
 }

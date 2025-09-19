@@ -15,7 +15,13 @@ SensorPacket assembleSensorPacket()
 
     packet.sensor_id = sensor_id;
     packet.sensor_timestamp = getTimestamp();
-    readDHT(packet);
+
+    if (!readDHT(packet))
+    {
+        Serial.println("Failed to read sensor, invalid package!");
+        return packet;
+    }
+
     packet.server_package_id = server_package_id;
     packet.package_sequence_number = ++package_sequence_number;
 
