@@ -7,14 +7,20 @@ sensor_state current_sensor_state = sensor_state::IDLE;
 // Manage and handle switching between different states
 void determineSensorState() {}
 
+// Implement later
 void state_CreateAndBufferPacket() {}
 
+// Implement later
 void state_TransferPacketBatch() {}
 
+// Implement later
 void state_UpdateServerId() {}
 
+// Implement later
 void state_ErrorState() {}
 
+// Implement later
 void state_ReadFlashMemory() {}
 
+// Implement later
 void state_WriteFlashMemoryBufferBatch() {}
