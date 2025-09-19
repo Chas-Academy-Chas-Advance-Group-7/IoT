@@ -1,7 +1,6 @@
 #ifndef SENSOR_PACKAGE_MANAGER_H
 #define SENSOR_PACKAGE_MANAGER_H
 
-#include "DHT_handler.h"
 #include <Arduino.h>
 
 // Sensor packet structure

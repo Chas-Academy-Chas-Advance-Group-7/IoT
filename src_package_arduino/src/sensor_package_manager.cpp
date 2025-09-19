@@ -1,4 +1,5 @@
 #include "sensor_package_manager.h"
+#include "DHT_handler.h"
 
 // Sensor variables
 uint8_t sensor_id = 0;
