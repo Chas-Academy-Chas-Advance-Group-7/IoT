@@ -29,6 +29,8 @@ extern const uint8_t DHT_TYPE;
 extern uint8_t sensor_id;
 extern float temperature;
 extern float humidity;
+extern uint32_t server_package_id;
+extern uint16_t package_sequence_number;
 
 // Circular buffer for sensor packets
 extern SensorPacket buffer[QUEUE_SIZE];
