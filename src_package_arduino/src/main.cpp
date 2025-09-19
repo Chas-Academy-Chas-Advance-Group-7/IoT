@@ -18,15 +18,25 @@ void loop()
         break;
 
     case sensor_state::CREATE_AND_BUFFER_PACKET:
+        state_CreateAndBufferPacket();
         break;
 
     case sensor_state::TRANSFER_PACKET_BATCH:
+        state_TransferPacketBatch();
         break;
 
     case sensor_state::UPDATE_SERVER_PACKAGE_ID:
+        state_UpdateServerId();
+        break;
+
+    case sensor_state::READ_FLASH_MEMORY:
+        break;
+
+    case sensor_state::WRITE_FLASH_MEMORY_BUFFER_BATCH:
         break;
 
     case sensor_state::ERROR_STATE:
+        state_ErrorState();
         break;
     }
 

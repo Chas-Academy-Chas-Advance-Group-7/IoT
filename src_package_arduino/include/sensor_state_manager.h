@@ -13,6 +13,8 @@ enum class sensor_state
     CREATE_AND_BUFFER_PACKET,
     TRANSFER_PACKET_BATCH,
     UPDATE_SERVER_PACKAGE_ID,
+    READ_FLASH_MEMORY,
+    WRITE_FLASH_MEMORY_BUFFER_BATCH,
     ERROR_STATE
 };
 
@@ -21,4 +23,12 @@ extern sensor_state current_sensor_state;
 
 // Function declarations
 void determineSensorState();
+
+// handles logic for respective state
+void state_CreateAndBufferPacket();
+void state_TransferPacketBatch();
+void state_UpdateServerId();
+void state_ErrorState();
+void state_ReadFlashMemory();
+void state_WriteFlashMemoryBufferBatch();
 #endif
