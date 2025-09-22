@@ -32,8 +32,8 @@ void loop()
     case sensor_state::READ_FLASH_MEMORY:
         break;
 
-    case sensor_state::WRITE_FLASH_MEMORY_BUFFER_BATCH:
-        break;
+        /*case sensor_state::WRITE_FLASH_MEMORY_BUFFER_BATCH:
+            break;*/
 
     case sensor_state::ERROR_STATE:
         state_ErrorState();

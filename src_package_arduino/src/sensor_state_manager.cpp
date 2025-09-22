@@ -40,4 +40,4 @@ void state_ErrorState() {}
 void state_ReadFlashMemory() {}
 
 // Implement later
-void state_WriteFlashMemoryBufferBatch() {}
+// void state_WriteFlashMemoryBufferBatch() {}

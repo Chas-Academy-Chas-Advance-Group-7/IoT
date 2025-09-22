@@ -14,7 +14,7 @@ enum class sensor_state
     TRANSFER_PACKET_BATCH,
     UPDATE_SERVER_PACKAGE_ID,
     READ_FLASH_MEMORY,
-    WRITE_FLASH_MEMORY_BUFFER_BATCH,
+    // WRITE_FLASH_MEMORY_BUFFER_BATCH,
     ERROR_STATE
 };
 
@@ -30,5 +30,5 @@ void state_TransferPacketBatch();
 void state_UpdateServerId();
 void state_ErrorState();
 void state_ReadFlashMemory();
-void state_WriteFlashMemoryBufferBatch();
+// void state_WriteFlashMemoryBufferBatch();
 #endif
