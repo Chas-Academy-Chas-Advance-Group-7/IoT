@@ -4,11 +4,7 @@
 PARAMETER=$1
 ENV=$2
 
-if [ "$ENV" == "default" ]; then
-  ENV="esp32_broker"
-elif [ "$ENV" == "fredrik" ]; then
-  ENV="esp32_broker_fredrik"
-fi
+ENV="esp32_broker"
 
 init() {
   echo "Initializing PlatformIO CLI..."
