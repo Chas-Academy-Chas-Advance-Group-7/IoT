@@ -1,4 +1,3 @@
-#include "DHT_handler.h"
 #include "sensor_state_manager.h"
 #include <Arduino.h>
 
@@ -6,6 +5,7 @@ void setup()
 {
     Serial.begin(9600);
     initializeDHT();
+    setupBluetooth();
 }
 
 void loop()

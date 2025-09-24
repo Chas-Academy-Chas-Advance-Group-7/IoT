@@ -27,7 +27,8 @@ void state_CreateAndBufferPacket()
     }
 }
 
-// Implement later
+// Sends one packet from the buffer via BLE. Uses peek/commit to avoid loss,
+// respects a per-packet interval, tracks failures, and sets IDLE or ERROR state.
 void state_TransferPacketBatch()
 {
     // Static variables to persist across calls
