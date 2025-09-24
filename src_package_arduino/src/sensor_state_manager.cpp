@@ -30,19 +30,15 @@ void state_CreateAndBufferPacket()
 // Implement later
 void state_TransferPacketBatch()
 {
+    // Static variables to persist across calls
     static int failed_transmission_attempts_counter = 0;
     static unsigned long lastTransferTime = 0;
-    const unsigned long TRANSFER_INTERVAL = 10;
+    const unsigned long TRANSFER_INTERVAL = 25; // ms between packets
 
     // Connected to central unit and there's things in the buffer
-    while (isCentralConnected() && queue_count > 0)
+    // Only run in accordance with transfer interval
+    if (isCentralConnected() && queue_count > 0 && millis() - lastTransferTime >= TRANSFER_INTERVAL)
     {
-        // only run in accordance with transfer interval
-        if (millis() - lastTransferTime < TRANSFER_INTERVAL)
-        {
-            return;
-        }
-
         SensorPacket packet;
 
         // Copy oldest value from buffer
@@ -52,12 +48,12 @@ void state_TransferPacketBatch()
             uint8_t buffer[sizeof(SensorPacket)];
             memcpy(buffer, &packet, sizeof(SensorPacket));
 
+            // Attempt to send packet
             if (charRef.writeValue(buffer, sizeof(SensorPacket)))
             {
                 commitPacketRemoval(); // Succeeded: erase packet from buffer
                 failed_transmission_attempts_counter = 0;
             }
-
             else
             {
                 failed_transmission_attempts_counter++;
@@ -66,21 +62,20 @@ void state_TransferPacketBatch()
                 Serial.print("Failed attempts: ");
                 Serial.println(failed_transmission_attempts_counter);
 
+                // Switch to ERROR_STATE if failed repeatedly
                 if (failed_transmission_attempts_counter > MAX_FAILED_ATTEMPTS)
                 {
                     current_sensor_state = sensor_state::ERROR_STATE;
-                    Serial.println("ERROR: failed BLE transmission repeatably.");
+                    Serial.println("ERROR: failed BLE transmission repeatedly.");
                 }
-
-                break; // failed: save packet for later attempt
             }
-        }
 
-        // Updates for next interval
-        lastTransferTime = millis();
+            // Updates for next interval
+            lastTransferTime = millis();
+        }
     }
 
-    // returns to idle if no error occured and buffer is empty
+    // Returns to idle if no error occurred and buffer is empty
     if (queue_count == 0 && current_sensor_state != sensor_state::ERROR_STATE)
     {
         current_sensor_state = sensor_state::IDLE;
