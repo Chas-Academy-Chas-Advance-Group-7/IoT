@@ -24,7 +24,7 @@ void setup()
 
     if (serialMutex == NULL)
     {
-        safePrintf("Failed to create serial mutex\n");
+        Serial.println("Failed to create serial mutex");
         while (1)
             ;
     }
