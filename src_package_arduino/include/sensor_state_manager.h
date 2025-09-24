@@ -7,6 +7,8 @@
 #include "sensor_package_manager.h"
 #include <Arduino.h>
 
+constexpr int MAX_FAILED_ATTEMPTS = 3;
+
 // Defines the states of the sensor
 enum class sensor_state
 {
