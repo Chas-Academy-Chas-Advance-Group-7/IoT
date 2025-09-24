@@ -10,7 +10,6 @@ QueueHandle_t dataQueue;
 QueueHandle_t networkQueue;
 
 EventGroupHandle_t networkEventGroup;
-#define NETWORK_CONNECTED_BIT BIT0
 #define SYSTEM_READY_BIT BIT1
 
 SemaphoreHandle_t serialMutex;
