@@ -16,6 +16,8 @@ extern size_t queue_count;
 // Function declarations
 bool addPacketToBuffer(const SensorPacket &packet);
 bool getPacketFromBuffer(SensorPacket &packet);
+bool peekPacketFromBuffer(SensorPacket &packet);
+void commitPacketRemoval();
 void flushBuffer();
 
 #endif
