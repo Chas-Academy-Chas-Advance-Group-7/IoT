@@ -10,7 +10,15 @@ void setup()
     // Pre-fill buffer with a few test packets
     for (int i = 0; i < 5; i++)
     {
-        addPacketToBuffer(assembleSensorPacket());
+        SensorPacket packet;
+        packet.sensor_id = i + 1;
+        packet.sensor_timestamp = millis();
+        packet.temperature = 20.0 + i; // example temperatures
+        packet.humidity = 40.0 + i;    // example humidity
+        packet.server_package_id = 100;
+        packet.package_sequence_number = i + 1;
+
+        addPacketToBuffer(packet);
     }
 
     Serial.println("BLE Transfer Test Started");
@@ -18,18 +26,35 @@ void setup()
 
 void loop()
 {
-    // --- TEST MODE: force BLE transfer ---
-    current_sensor_state = sensor_state::TRANSFER_PACKET_BATCH;
+    // --- TEST MODE: wait for central to connect and subscribe ---
+    if (BLE.connected() && getSensorCharacteristic().subscribed())
+    {
 
-    // Attempt to send one packet per loop
-    state_TransferPacketBatch();
+        static unsigned long lastTransferTime = 0;
 
-    // Debug: show how many packets remain
-    Serial.print("Buffer count: ");
-    Serial.println(queue_count);
+        // Only send one packet per interval
+        if (millis() - lastTransferTime >= 10 && queue_count > 0)
+        {
 
-    // Small delay for Serial & BLE stability
-    delay(50);
+            // Set state to transfer
+            current_sensor_state = sensor_state::TRANSFER_PACKET_BATCH;
+
+            // Attempt to send one packet
+            state_TransferPacketBatch();
+
+            lastTransferTime = millis();
+
+            // Debug: show how many packets remain
+            Serial.print("Buffer count: ");
+            Serial.println(queue_count);
+        }
+    }
+    else
+    {
+        // Central not connected or not subscribed yet
+        Serial.println("Waiting for central to connect & subscribe...");
+        delay(500); // small delay to avoid spamming Serial
+    }
 
     /*determineSensorState();
 
