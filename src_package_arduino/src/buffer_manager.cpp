@@ -36,6 +36,27 @@ bool getPacketFromBuffer(SensorPacket &packet)
     return false; // buffer is empty
 }
 
+// Peek at the next packet without removing it
+bool peekPacketFromBuffer(SensorPacket &packet)
+{
+    if (queue_count > 0)
+    {
+        packet = buffer[queue_head]; // Copy the oldest packet
+        return true;
+    }
+    return false; // Buffer is empty
+}
+
+// Commit the removal of the last peeked packet
+void commitPacketRemoval()
+{
+    if (queue_count > 0)
+    {
+        queue_head = (queue_head + 1) % QUEUE_SIZE; // Move head forward
+        queue_count--;                              // Reduce count
+    }
+}
+
 // Properly cleans the buffer.
 void flushBuffer()
 {

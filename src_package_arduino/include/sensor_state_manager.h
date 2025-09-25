@@ -2,9 +2,12 @@
 #define SENSOR_STATE_MANAGER_H
 
 #include "DHT_handler.h"
+#include "bluetooth_manager.h"
 #include "buffer_manager.h"
 #include "sensor_package_manager.h"
 #include <Arduino.h>
+
+constexpr int MAX_FAILED_ATTEMPTS = 3;
 
 // Defines the states of the sensor
 enum class sensor_state
