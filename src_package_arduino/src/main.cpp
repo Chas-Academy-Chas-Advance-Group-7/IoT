@@ -4,9 +4,10 @@
 void setup()
 {
     Serial.begin(9600);
-    // initializeDHT();
+    initializeDHT();
     setupBluetooth();
 
+    /* BLUETOOTH TEST VALUES
     // Pre-fill buffer with a few test packets
     for (int i = 0; i < 5; i++)
     {
@@ -22,10 +23,12 @@ void setup()
     }
 
     Serial.println("BLE Transfer Test Started");
+    */
 }
 
 void loop()
 {
+    /* START OF BLUETOOTH TEST CODE
     // --- TEST MODE: wait for central to connect and subscribe ---
     if (BLE.connected() && getSensorCharacteristic().subscribed())
     {
@@ -55,8 +58,9 @@ void loop()
         Serial.println("Waiting for central to connect & subscribe...");
         delay(500); // small delay to avoid spamming Serial
     }
+        END OF BLUETOOTH TEST CODE*/
 
-    /*determineSensorState();
+    determineSensorState();
 
     switch (current_sensor_state)
     {
@@ -79,22 +83,10 @@ void loop()
         break;
 
         // case sensor_state::WRITE_FLASH_MEMORY_BUFFER_BATCH:
-            // break;
+        // break;
 
     case sensor_state::ERROR_STATE:
         state_ErrorState();
         break;
-    } */
-
-    /*Serial.println("Hello, Arduino!");
-
-    temperature = dht.readTemperature();
-    humidity = dht.readHumidity();
-
-    Serial.print("Temp: ");
-    Serial.print(temperature);
-    Serial.print(" °C, Humidity: ");
-    Serial.print(humidity);
-    Serial.println(" %");
-    delay(1000);*/
+    }
 }
