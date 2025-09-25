@@ -64,7 +64,7 @@ void state_TransferPacketBatch()
                 Serial.println(failed_transmission_attempts_counter);
 
                 // Switch to ERROR_STATE if failed repeatedly
-                if (failed_transmission_attempts_counter > MAX_FAILED_ATTEMPTS)
+                if (failed_transmission_attempts_counter >= MAX_FAILED_ATTEMPTS)
                 {
                     current_sensor_state = sensor_state::ERROR_STATE;
                     Serial.println("ERROR: failed BLE transmission repeatedly.");
