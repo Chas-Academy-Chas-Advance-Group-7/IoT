@@ -4,13 +4,34 @@
 void setup()
 {
     Serial.begin(9600);
-    initializeDHT();
+    // initializeDHT();
     setupBluetooth();
+
+    // Pre-fill buffer with a few test packets
+    for (int i = 0; i < 5; i++)
+    {
+        addPacketToBuffer(assembleSensorPacket());
+    }
+
+    Serial.println("BLE Transfer Test Started");
 }
 
 void loop()
 {
-    determineSensorState();
+    // --- TEST MODE: force BLE transfer ---
+    current_sensor_state = sensor_state::TRANSFER_PACKET_BATCH;
+
+    // Attempt to send one packet per loop
+    state_TransferPacketBatch();
+
+    // Debug: show how many packets remain
+    Serial.print("Buffer count: ");
+    Serial.println(queue_count);
+
+    // Small delay for Serial & BLE stability
+    delay(50);
+
+    /*determineSensorState();
 
     switch (current_sensor_state)
     {
@@ -32,13 +53,13 @@ void loop()
     case sensor_state::READ_FLASH_MEMORY:
         break;
 
-        /*case sensor_state::WRITE_FLASH_MEMORY_BUFFER_BATCH:
-            break;*/
+        // case sensor_state::WRITE_FLASH_MEMORY_BUFFER_BATCH:
+            // break;
 
     case sensor_state::ERROR_STATE:
         state_ErrorState();
         break;
-    }
+    } */
 
     /*Serial.println("Hello, Arduino!");
 
