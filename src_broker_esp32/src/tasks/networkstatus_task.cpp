@@ -1,8 +1,14 @@
 #include "tasks/networkstatus_task.h"
-#include "WiFi_secrets.h"
 #include "utils/threadsafe_serial.h"
 #include <Arduino.h>
 #include <WiFi.h>
+
+// Include Wi-Fi credentials with fallback
+#if __has_include("WiFi_secrets.h")
+#include "WiFi_secrets.h" // User-provided credentials take priority
+#else
+#include "WiFi_secrets_example.h" // Fallback defaults for compilation
+#endif
 
 extern EventGroupHandle_t networkEventGroup;
 extern SemaphoreHandle_t networkEventMutex;
