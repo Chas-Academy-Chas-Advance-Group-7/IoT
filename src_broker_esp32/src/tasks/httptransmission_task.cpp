@@ -8,4 +8,9 @@
 extern EventGroupHandle_t networkEventGroup;
 extern SemaphoreHandle_t networkEventMutex;
 
-void httpTransmissionTask(void *pvParameters) {}
+#define NETWORK_CONNECTED_BIT BIT0
+
+void httpTransmissionTask(void *pvParameters)
+{
+    safePrintf("http transmission task started.\n");
+}
