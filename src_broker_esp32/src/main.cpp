@@ -35,10 +35,10 @@ void setup()
     networkQueue = xQueueCreate(10, sizeof(processed_data_t));
 
     // measure needed stack size at a later time
-    // Most likely bluetooth task
-    xTaskCreate(backendTask, "Communication Task", 8192, NULL, 1, NULL);
-    // Process and create payloads
-    xTaskCreate(brokerTask, "Processing Task", 8192, NULL, 1, NULL);
+    // Handle backend/server communication
+    xTaskCreate(backendTask, "Backend Communication Task", 8192, NULL, 1, NULL);
+    // Handle BLE scanning and sensor data reception
+    xTaskCreate(brokerTask, "BLE Broker Task", 8192, NULL, 1, NULL);
     // Handle network connection (pin to core?)
     xTaskCreate(networkStatusTask, "Network Status Task", 8192, NULL, 1, NULL);
 
