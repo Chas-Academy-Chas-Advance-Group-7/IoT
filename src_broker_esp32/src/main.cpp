@@ -2,6 +2,7 @@
 #include "sensor_data.h"
 #include "tasks/backend_task.h"
 #include "tasks/broker_task.h"
+#include "tasks/httptransmission_task.h"
 #include "tasks/networkstatus_task.h"
 #include "utils/threadsafe_serial.h"
 #include <Arduino.h>
@@ -35,12 +36,18 @@ void setup()
     networkQueue = xQueueCreate(10, sizeof(processed_data_t));
 
     // measure needed stack size at a later time
-    // Handle backend/server communication
+
+    // handles processing sensor data and queuing it
     xTaskCreate(backendTask, "Backend Communication Task", 8192, NULL, 1, NULL);
+
     // Handle BLE scanning and sensor data reception
     xTaskCreate(brokerTask, "BLE Broker Task", 8192, NULL, 1, NULL);
-    // Handle network connection (pin to core?)
+
+    // Connects and monitors Wi-Fi status and sets/clears network bit.
     xTaskCreate(networkStatusTask, "Network Status Task", 8192, NULL, 1, NULL);
+
+    // Handle communication to the server by sending queued JSON messages via HTTP
+    xTaskCreate(httpTransmissionTask, "http Transmission Task", 8192, NULL, 1, NULL);
 
     if (xSemaphoreTake(networkEventMutex, pdMS_TO_TICKS(1000)) == pdTRUE)
     {
