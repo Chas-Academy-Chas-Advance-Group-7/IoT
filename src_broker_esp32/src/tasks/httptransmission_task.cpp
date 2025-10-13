@@ -5,65 +5,93 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 
+// Extern references from other modules
 extern EventGroupHandle_t networkEventGroup;
 extern SemaphoreHandle_t networkEventMutex;
-
 extern QueueHandle_t networkQueue;
 
 #define NETWORK_CONNECTED_BIT BIT0
 
-#define BACKEND_URL ""
+#define BACKEND_URL "" // Replace with actual backend endpoint
+
+// Retry configuration
+#define MAX_RETRIES 3
+#define RETRY_DELAY_MS 3000
 
 void httpTransmissionTask(void *pvParameters)
 {
-    safePrintf("http transmission task started.\n");
+    safePrintf("HTTP Transmission task started.\n");
 
     processed_data_t transferData;
+
+    // Static clients to reduce heap allocation on each loop
+    static WiFiClientSecure client;
+    static HTTPClient http;
+    client.setInsecure(); // ⚠️ For testing only (disables certificate validation)
 
     while (1)
     {
         // Wait for Wi-Fi connection
         EventBits_t bits = xEventGroupWaitBits(networkEventGroup, NETWORK_CONNECTED_BIT,
-                                               pdFALSE, // Don't clear bit
+                                               pdFALSE, // Don't clear the bit
                                                pdTRUE,  // Wait for all bits (just one in this case)
                                                pdMS_TO_TICKS(10000));
 
         if ((bits & NETWORK_CONNECTED_BIT) == 0)
         {
-            safePrintf("WiFi not connected, waiting.....\n");
+            safePrintf("Wi-Fi not connected, waiting...\n");
             vTaskDelay(pdMS_TO_TICKS(5000));
             continue;
         }
 
-        // Check if there’s data ready to send
+        // Check if there's data ready to send
         if (xQueueReceive(networkQueue, &transferData, pdMS_TO_TICKS(5000)) == pdTRUE)
         {
-            safePrintf("Preparing to send data to backend:\n%s\n", transferData.json);
+            safePrintf("Preparing to send data:\n%s\n", transferData.json);
 
-            static WiFiClientSecure client;
-            client.setInsecure(); // For testing only (Disables certificate validation)
+            bool success = false;
 
-            static HTTPClient http;
-            http.begin(client, BACKEND_URL);
-            http.addHeader("Content-Type", "application/json");
-
-            int httpResponseCode = http.POST(transferData.json);
-
-            if (httpResponseCode > 0)
+            for (int attempt = 1; attempt <= MAX_RETRIES; ++attempt)
             {
-                safePrintf("Data sent! Server response: %d\n", httpResponseCode);
-                String response = http.getString();
-                safePrintf("Response body: %s\n", response.c_str());
+                http.begin(client, BACKEND_URL);
+                http.addHeader("Content-Type", "application/json");
+
+                int httpResponseCode = http.POST(transferData.json);
+
+                if (httpResponseCode > 0)
+                {
+                    safePrintf("✅ Data sent on attempt %d. Server response: %d\n", attempt,
+                               httpResponseCode);
+                    String response = http.getString();
+                    safePrintf("Response body: %s\n", response.c_str());
+                    success = true;
+                    http.end();
+                    break; // Exit retry loop
+                }
+                else
+                {
+                    safePrintf("Attempt %d failed. Error: %d\n", attempt, httpResponseCode);
+                    http.end();
+
+                    if (attempt < MAX_RETRIES)
+                    {
+                        safePrintf("Retrying in %d ms...\n", RETRY_DELAY_MS);
+                        vTaskDelay(pdMS_TO_TICKS(RETRY_DELAY_MS));
+                    }
+                }
             }
 
-            else
+            // If all retries fail, re-queue the message
+            if (!success)
             {
-                safePrintf("Failed to send data. Error: %d\n", httpResponseCode);
+                safePrintf("Failed to send data after %d attempts. Re-queueing message.\n",
+                           MAX_RETRIES);
+                if (xQueueSendToFront(networkQueue, &transferData, pdMS_TO_TICKS(100)) != pdTRUE)
+                {
+                    safePrintf("Failed to re-queue message. Data may be lost!\n");
+                }
             }
-
-            http.end();
         }
-
         else
         {
             // No data in queue
