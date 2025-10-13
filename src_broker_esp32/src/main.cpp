@@ -38,16 +38,16 @@ void setup()
     // measure needed stack size at a later time
 
     // handles processing sensor data and queuing it
-    xTaskCreate(backendTask, "Backend Communication Task", 8192, NULL, 1, NULL);
+    xTaskCreate(backendTask, "Backend Communication Task", 3072, NULL, 1, NULL);
 
     // Handle BLE scanning and sensor data reception
-    xTaskCreate(brokerTask, "BLE Broker Task", 8192, NULL, 1, NULL);
+    xTaskCreate(brokerTask, "BLE Broker Task", 4096, NULL, 1, NULL);
 
     // Connects and monitors Wi-Fi status and sets/clears network bit.
-    xTaskCreate(networkStatusTask, "Network Status Task", 8192, NULL, 1, NULL);
+    xTaskCreate(networkStatusTask, "Network Status Task", 3072, NULL, 1, NULL);
 
     // Handle communication to the server by sending queued JSON messages via HTTP
-    xTaskCreate(httpTransmissionTask, "http Transmission Task", 8192, NULL, 1, NULL);
+    xTaskCreate(httpTransmissionTask, "http Transmission Task", 4096, NULL, 1, NULL);
 
     if (xSemaphoreTake(networkEventMutex, pdMS_TO_TICKS(1000)) == pdTRUE)
     {
