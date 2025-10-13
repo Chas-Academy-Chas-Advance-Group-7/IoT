@@ -27,7 +27,7 @@ void httpTransmissionTask(void *pvParameters)
     // Static clients to reduce heap allocation on each loop
     static WiFiClientSecure client;
     static HTTPClient http;
-    client.setInsecure(); // ⚠️ For testing only (disables certificate validation)
+    client.setInsecure(); // For testing only (disables certificate validation)
 
     while (1)
     {
@@ -60,8 +60,8 @@ void httpTransmissionTask(void *pvParameters)
 
                 if (httpResponseCode > 0)
                 {
-                    safePrintf("✅ Data sent on attempt %d. Server response: %d\n", attempt,
-                               httpResponseCode);
+                    safePrintf("Data successfully sent on attempt %d. Server response: %d\n",
+                               attempt, httpResponseCode);
                     String response = http.getString();
                     safePrintf("Response body: %s\n", response.c_str());
                     success = true;
