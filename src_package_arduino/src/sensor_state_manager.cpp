@@ -50,7 +50,7 @@ void state_TransferPacketBatch()
             // Only send if the central has subscribed to notifications
             if (charRef.subscribed())
             {
-                bool success = charRef.setValue(buffer, sizeof(SensorPacket));
+                bool success = charRef.writeValue(buffer, sizeof(SensorPacket));
 
                 if (success)
                 {
