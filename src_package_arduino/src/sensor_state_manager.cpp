@@ -34,7 +34,7 @@ void state_TransferPacketBatch()
     // Static variables to persist across calls
     static int failed_transmission_attempts_counter = 0;
     static unsigned long lastTransferTime = 0;
-    const unsigned long TRANSFER_INTERVAL = 25; // ms between packets
+    const unsigned long TRANSFER_INTERVAL = 150; // ms between packets
 
     // Connected to central unit and there's things in the buffer
     // Only run in accordance with transfer interval
