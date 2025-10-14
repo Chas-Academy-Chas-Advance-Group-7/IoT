@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 // Sensor packet structure
-typedef struct
+typedef struct __attribute__((packed))
 {
     uint8_t sensor_id;
     uint32_t sensor_timestamp;

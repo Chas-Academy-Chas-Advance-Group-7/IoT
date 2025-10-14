@@ -4,10 +4,10 @@
 void setup()
 {
     Serial.begin(9600);
-    initializeDHT();
+    // initializeDHT();
     setupBluetooth();
 
-    /* BLUETOOTH TEST VALUES
+    // BLUETOOTH TEST VALUES
     // Pre-fill buffer with a few test packets
     for (int i = 0; i < 5; i++)
     {
@@ -23,22 +23,26 @@ void setup()
     }
 
     Serial.println("BLE Transfer Test Started");
-    */
 }
 
 void loop()
 {
-    /* START OF BLUETOOTH TEST CODE
+    // Debug: print connection & subscription status
+    Serial.print("Central connected? ");
+    Serial.println(BLE.connected());
+
+    Serial.print("Central subscribed? ");
+    Serial.println(getSensorCharacteristic().subscribed());
+
+    // START OF BLUETOOTH TEST CODE
     // --- TEST MODE: wait for central to connect and subscribe ---
     if (BLE.connected() && getSensorCharacteristic().subscribed())
     {
-
         static unsigned long lastTransferTime = 0;
 
         // Only send one packet per interval
-        if (millis() - lastTransferTime >= 10 && queue_count > 0)
+        if (millis() - lastTransferTime >= 200 && queue_count > 0)
         {
-
             // Set state to transfer
             current_sensor_state = sensor_state::TRANSFER_PACKET_BATCH;
 
@@ -55,13 +59,19 @@ void loop()
     else
     {
         // Central not connected or not subscribed yet
-        Serial.println("Waiting for central to connect & subscribe...");
+        static bool printed = false;
+        if (!printed)
+        {
+            Serial.println("Waiting for central to connect & subscribe...");
+            printed = true;
+        }
         delay(500); // small delay to avoid spamming Serial
     }
-        END OF BLUETOOTH TEST CODE*/
+    // END OF BLUETOOTH TEST CODE
 
     determineSensorState();
 
+    /*
     switch (current_sensor_state)
     {
     case sensor_state::IDLE:
@@ -89,4 +99,5 @@ void loop()
         state_ErrorState();
         break;
     }
+    */
 }

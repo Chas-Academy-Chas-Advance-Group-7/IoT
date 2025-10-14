@@ -1,5 +1,6 @@
 #include "freertos/projdefs.h"
 #include "sensor_data.h"
+#include "sensor_packet_from_sensor.h"
 #include "tasks/backend_task.h"
 #include "tasks/broker_task.h"
 #include "tasks/httptransmission_task.h"
@@ -32,7 +33,7 @@ void setup()
 
     networkEventGroup = xEventGroupCreate();
 
-    dataQueue = xQueueCreate(10, sizeof(sensor_message_t));
+    dataQueue = xQueueCreate(10, sizeof(SensorPacket));
     networkQueue = xQueueCreate(10, sizeof(processed_data_t));
 
     // measure needed stack size at a later time
