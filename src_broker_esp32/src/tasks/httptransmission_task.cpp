@@ -3,18 +3,18 @@
 #include "utils/threadsafe_serial.h"
 #include <HTTPClient.h>
 #include <WiFi.h>
-#include <WiFiClientSecure.h>
+// #include <WiFiClientSecure.h> // Old secure client
 
-// Extern references from other modules
 extern EventGroupHandle_t networkEventGroup;
 extern SemaphoreHandle_t networkEventMutex;
 extern QueueHandle_t networkQueue;
 
 #define NETWORK_CONNECTED_BIT BIT0
 
-#define BACKEND_URL "" // Replace with actual backend endpoint
+#define BACKEND_URL                                                                                \
+    "http://anabel-unconnived-subcreatively.ngrok-free.dev" // Replace with your actual ngrok HTTP
+                                                            // URL
 
-// Retry configuration
 #define MAX_RETRIES 3
 #define RETRY_DELAY_MS 3000
 
@@ -24,18 +24,20 @@ void httpTransmissionTask(void *pvParameters)
 
     processed_data_t transferData;
 
-    // Static clients to reduce heap allocation on each loop
-    static WiFiClientSecure client;
-    static HTTPClient http;
-    client.setInsecure(); // For testing only (disables certificate validation)
+    // --- Old secure client setup (commented out) ---
+    // static WiFiClientSecure clientSecure;
+    // static HTTPClient http;
+    // clientSecure.setInsecure(); // disables certificate validation
+
+    // New plain HTTP client for testing
+    WiFiClient client;
+    HTTPClient http;
 
     while (1)
     {
         // Wait for Wi-Fi connection
-        EventBits_t bits = xEventGroupWaitBits(networkEventGroup, NETWORK_CONNECTED_BIT,
-                                               pdFALSE, // Don't clear the bit
-                                               pdTRUE,  // Wait for all bits (just one in this case)
-                                               pdMS_TO_TICKS(10000));
+        EventBits_t bits = xEventGroupWaitBits(networkEventGroup, NETWORK_CONNECTED_BIT, pdFALSE,
+                                               pdTRUE, pdMS_TO_TICKS(10000));
 
         if ((bits & NETWORK_CONNECTED_BIT) == 0)
         {
@@ -53,7 +55,7 @@ void httpTransmissionTask(void *pvParameters)
 
             for (int attempt = 1; attempt <= MAX_RETRIES; ++attempt)
             {
-                http.begin(client, BACKEND_URL);
+                http.begin(client, BACKEND_URL); // Plain HTTP client
                 http.addHeader("Content-Type", "application/json");
 
                 int httpResponseCode = http.POST(transferData.json);
@@ -66,7 +68,7 @@ void httpTransmissionTask(void *pvParameters)
                     safePrintf("Response body: %s\n", response.c_str());
                     success = true;
                     http.end();
-                    break; // Exit retry loop
+                    break;
                 }
                 else
                 {
@@ -81,7 +83,7 @@ void httpTransmissionTask(void *pvParameters)
                 }
             }
 
-            // If all retries fail, re-queue the message
+            // Re-queue message if all retries fail
             if (!success)
             {
                 safePrintf("Failed to send data after %d attempts. Re-queueing message.\n",
@@ -94,8 +96,7 @@ void httpTransmissionTask(void *pvParameters)
         }
         else
         {
-            // No data in queue
-            vTaskDelay(pdMS_TO_TICKS(2000));
+            vTaskDelay(pdMS_TO_TICKS(2000)); // No data, wait a bit
         }
     }
 }

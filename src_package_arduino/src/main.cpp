@@ -28,11 +28,11 @@ void setup()
 void loop()
 {
     // Debug: print connection & subscription status
-    Serial.print("Central connected? ");
-    Serial.println(BLE.connected());
+    // Serial.print("Central connected? ");
+    // Serial.println(BLE.connected());
 
-    Serial.print("Central subscribed? ");
-    Serial.println(getSensorCharacteristic().subscribed());
+    // Serial.print("Central subscribed? ");
+    // Serial.println(getSensorCharacteristic().subscribed());
 
     // START OF BLUETOOTH TEST CODE
     // --- TEST MODE: wait for central to connect and subscribe ---

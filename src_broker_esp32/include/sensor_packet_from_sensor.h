@@ -4,6 +4,7 @@
 #include <Arduino.h> // For standard types like uint8_t, uint32_t, float
 
 // Sensor packet structure received from Arduino sensors
+#pragma pack(push, 1)
 typedef struct __attribute__((packed))
 {
     uint8_t sensor_id;
@@ -13,5 +14,6 @@ typedef struct __attribute__((packed))
     uint32_t server_package_id;
     uint16_t package_sequence_number;
 } SensorPacket;
+#pragma pack(pop)
 
 #endif

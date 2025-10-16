@@ -1,53 +1,44 @@
 #include "tasks/backend_task.h"
 #include "sensor_data.h"
+#include "sensor_packet_from_sensor.h"
 #include "utils/threadsafe_serial.h"
-#include <Arduino.h>
+#include <ArduinoJson.h>
 
 extern QueueHandle_t dataQueue;
 extern QueueHandle_t networkQueue;
 
 void backendTask(void *parameter)
 {
-    safePrintf("Backend task started - waiting for processed sensor data\n");
+    safePrintf("Backend task started - waiting for sensor packets\n");
 
-    sensor_message_t receivedData;
+    SensorPacket packet;
     processed_data_t processedData;
 
-    while (1)
+    while (true)
     {
-        if (xQueueReceive(dataQueue, &receivedData, pdMS_TO_TICKS(1000)) == pdTRUE)
+        if (xQueueReceive(dataQueue, &packet, pdMS_TO_TICKS(1000)) == pdTRUE)
         {
-            safePrintf("Processing sensor data from %s\n", receivedData.device_id);
+            safePrintf("Processing packet from Sensor ID %u\n", packet.sensor_id);
 
-            if (receivedData.is_valid)
-            {
-                snprintf(processedData.json, sizeof(processedData.json),
-                         "{"
-                         "\"device_id\":\"%s\","
-                         "\"sensor_type\":%d,"
-                         "\"sensor_name\":\"%s\","
-                         "\"value\":%.2f,"
-                         "\"timestamp\":%lu,"
-                         "\"rssi\":%d"
-                         "}",
-                         receivedData.device_id, receivedData.sensor_type, receivedData.sensor_name,
-                         receivedData.value, receivedData.timestamp, receivedData.rssi);
+            // Only backend task handles JSON
+            DynamicJsonDocument doc(512);
+            doc["sensor_id"] = packet.sensor_id;
+            doc["server_package_id"] = packet.server_package_id;
+            doc["timestamp"] = packet.sensor_timestamp;
+            doc["temperature"] = packet.temperature;
+            doc["humidity"] = packet.humidity;
+            doc["sequence_number"] = packet.package_sequence_number;
 
-                safePrintf("Generated JSON: %s\n", processedData.json);
+            size_t len = serializeJson(doc, processedData.json, sizeof(processedData.json));
+            if (len == sizeof(processedData.json))
+                safePrintf("⚠️ JSON truncated\n");
 
-                if (xQueueSend(networkQueue, &processedData, pdMS_TO_TICKS(100)) != pdTRUE)
-                {
-                    safePrintf("Failed to queue processed data\n");
-                }
-                else
-                {
-                    safePrintf("Data queued for backend transmission\n");
-                }
-            }
+            safePrintf("Generated JSON: %s\n", processedData.json);
+
+            if (xQueueSend(networkQueue, &processedData, pdMS_TO_TICKS(100)) != pdTRUE)
+                safePrintf("❌ Failed to queue processed data\n");
             else
-            {
-                safePrintf("Received invalid sensor data from %s\n", receivedData.device_id);
-            }
+                safePrintf("✅ Data queued for backend transmission\n");
         }
     }
 }
