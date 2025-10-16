@@ -12,8 +12,8 @@ extern QueueHandle_t networkQueue;
 #define NETWORK_CONNECTED_BIT BIT0
 
 #define BACKEND_URL                                                                                \
-    "http://anabel-unconnived-subcreatively.ngrok-free.dev" // Replace with your actual ngrok HTTP
-                                                            // URL
+    "" // Replace with your actual ngrok HTTP
+       // URL
 
 #define MAX_RETRIES 3
 #define RETRY_DELAY_MS 3000

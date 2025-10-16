@@ -20,8 +20,8 @@ void backendTask(void *parameter)
         {
             safePrintf("Processing packet from Sensor ID %u\n", packet.sensor_id);
 
-            // Only backend task handles JSON
-            DynamicJsonDocument doc(512);
+            // Build JSON document
+            JsonDocument doc;
             doc["sensor_id"] = packet.sensor_id;
             doc["server_package_id"] = packet.server_package_id;
             doc["timestamp"] = packet.sensor_timestamp;
@@ -29,8 +29,11 @@ void backendTask(void *parameter)
             doc["humidity"] = packet.humidity;
             doc["sequence_number"] = packet.package_sequence_number;
 
+            // Serialize to buffer
             size_t len = serializeJson(doc, processedData.json, sizeof(processedData.json));
-            if (len == sizeof(processedData.json))
+
+            // Proper truncation check
+            if (len >= sizeof(processedData.json) - 1)
                 safePrintf("⚠️ JSON truncated\n");
 
             safePrintf("Generated JSON: %s\n", processedData.json);
