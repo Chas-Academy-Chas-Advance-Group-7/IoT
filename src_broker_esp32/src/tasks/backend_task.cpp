@@ -78,15 +78,20 @@ void backendTask(void *parameter)
 
             // Check if the output was truncated
             if (len >= sizeof(processedData.json) - 1)
+<<<<<<< HEAD
                 safePrintf("JSON truncated\n");
-
-            safePrintf("Generated JSON: %s\n", processedData.json);
-
-            // Send processed data to the network queue
-            if (xQueueSend(networkQueue, &processedData, pdMS_TO_TICKS(100)) != pdTRUE)
-                safePrintf("Failed to queue processed data\n");
-            else
-                safePrintf("Data queued for backend transmission\n");
+            == == == = { safePrintf("⚠️ JSON truncated\n");
+            continue; // Skip queuing truncated data
         }
+>>>>>>> a07b624b4b044f1ecb3d827d7a0a7ebc259a91a2
+
+        safePrintf("Generated JSON: %s\n", processedData.json);
+
+        // Send processed data to the network queue
+        if (xQueueSend(networkQueue, &processedData, pdMS_TO_TICKS(100)) != pdTRUE)
+            safePrintf("Failed to queue processed data\n");
+        else
+            safePrintf("Data queued for backend transmission\n");
     }
+}
 }
