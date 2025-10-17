@@ -1,13 +1,14 @@
 name: Generate Doxygen documentation
 
-# Trigger the workflow on:
-# - Any push to the `develop` branch
-# - Manual dispatch (click "Run workflow" in Actions tab)
+# Give workflow permission to push changes back to the repository
+permissions:
+  contents: write
+
+# Trigger workflow on pushes to develop branch or manual dispatch
 on:
   push:
     branches:
       - develop
-      - feature/*
   workflow_dispatch:
 
 jobs:
@@ -16,44 +17,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository so we have access to the source files
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Fetch all commit history (needed for cache key hash)
+          fetch-depth: 0  # Full history needed for cache key hashing
 
-      # Cache the Doxygen HTML output
-      # This saves time if source files haven't changed since last run
+      # Step 2: Cache previously generated Doxygen HTML output
       - name: Cache Doxygen output
         uses: actions/cache@v3
         id: doxygen-cache
         with:
-          # Folder to cache
           path: docs/html
-          # Cache key based on hash of all source files (.h and .cpp)
+          # Hash all .h and .cpp files to determine if cache is still valid
           key: doxygen-cache-${{ hashFiles('**/*.h', '**/*.cpp') }}
-          # Optional: restore previous cache on key mismatch
           restore-keys: |
             doxygen-cache-
 
-      # Install Doxygen and Graphviz (needed to generate docs)
-      # This runs every time since we're using a fresh GitHub VM
+      # Step 3: Install Doxygen and Graphviz (needed to generate documentation)
       - name: Install Doxygen & Graphviz
         run: |
           sudo apt-get update
           sudo apt-get install -y doxygen graphviz
 
-      # Generate Doxygen documentation
-      # Only runs if cache was not hit (i.e., files changed or cache missing)
+      # Step 4: Generate Doxygen docs if cache was not hit
       - name: Generate Doxygen documentation
         if: steps.doxygen-cache.outputs.cache-hit != 'true'
         run: doxygen Doxyfile
 
-      # Deploy generated HTML docs to `doxygen-documentation` branch
+      # Step 5: Deploy generated docs to the doxygen-documentation branch
       - name: Deploy to doxygen-documentation branch
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for authentication
-          publish_dir: ./docs/html                  # Folder containing the generated docs
-          publish_branch: doxygen-documentation     # Branch to push docs to
-          force_orphan: true                        # Start branch fresh every time
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Provided automatically
+          publish_dir: ./docs/html                  # Doxygen output folder
+          publish_branch: doxygen-documentation     # Target branch
+          force_orphan: true                        # Replace previous branch history
