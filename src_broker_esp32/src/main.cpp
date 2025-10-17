@@ -56,18 +56,16 @@ EventGroupHandle_t networkEventGroup;
 SemaphoreHandle_t serialMutex;
 
 /// Mutex for safely accessing networkEventGroup
-SemaphoreHandle_t networkEventMutex
+SemaphoreHandle_t networkEventMutex;
 
-    /**
-     * @brief Arduino setup function.
-     *
-     * Initializes Serial, creates mutexes and event groups, initializes queues,
-     * and starts FreeRTOS tasks for BLE sensor aggregation and HTTP transmission.
-     * Sets the `SYSTEM_READY_BIT` when initialization completes.
-     */
-
-    void
-    setup()
+/**
+ * @brief Arduino setup function.
+ *
+ * Initializes Serial, creates mutexes and event groups, initializes queues,
+ * and starts FreeRTOS tasks for BLE sensor aggregation and HTTP transmission.
+ * Sets the `SYSTEM_READY_BIT` when initialization completes.
+ */
+void setup()
 {
     Serial.begin(115200);
 
