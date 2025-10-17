@@ -1,7 +1,43 @@
+/**
+ * @file sensor_data.cpp
+ * @brief Functions for parsing, validating, and logging sensor data from BLE devices.
+ *
+ * This module provides utilities for handling BLE manufacturer data:
+ * - `parseBLEData` parses raw manufacturer data into structured `sensor_message_t`.
+ * - `validateSensorData` checks sensor readings for plausibility.
+ * - `logSensorReading` prints structured sensor data to the thread-safe Serial.
+ * - `logParseError` prints parsing errors with device context.
+ *
+ * Thread-safe logging is provided through `safePrintf` and `safePrintln`.
+ */
+
 #include "sensor_data.h"
 #include "utils/threadsafe_serial.h"
 #include <Arduino.h>
 
+/**
+ * @brief Parses BLE manufacturer data into a structured sensor message.
+ *
+ * Extracts sensor type, value, RSSI, timestamp, and device ID from the
+ * manufacturer data. Validates the reading using `validateSensorData`.
+ *
+ * @param manufacturerData Pointer to the raw manufacturer data.
+ * @param dataLength Length of the manufacturer data.
+ * @param deviceAddress Optional BLE device address (used for logging).
+ * @param rssi RSSI value of the received packet.
+ * @return A `parse_result_t` containing the parsed sensor message,
+ *         success flag, and error message if parsing failed.
+ *
+ * @code
+ * const char *rawData = ...;
+ * parse_result_t result = parseBLEData(rawData, length, "AA:BB:CC:DD:EE:FF", -65);
+ * if (result.parse_success) {
+ *     logSensorReading(&result.sensor_data);
+ * } else {
+ *     logParseError("AA:BB:CC:DD:EE:FF", result.error_message);
+ * }
+ * @endcode
+ */
 parse_result_t parseBLEData(const char *manufacturerData, size_t dataLength,
                             const char *deviceAddress, int8_t rssi)
 {
@@ -91,6 +127,20 @@ parse_result_t parseBLEData(const char *manufacturerData, size_t dataLength,
     return result;
 }
 
+/**
+ * @brief Validates a sensor reading for plausibility.
+ *
+ * Checks that temperature and humidity readings are within acceptable ranges.
+ *
+ * @param data Pointer to the sensor message to validate.
+ * @return True if the sensor reading is valid, false otherwise.
+ *
+ * @code
+ * if (validateSensorData(&sensor)) {
+ *     logSensorReading(&sensor);
+ * }
+ * @endcode
+ */
 bool validateSensorData(const sensor_message_t *data)
 {
     if (!data)
@@ -107,6 +157,17 @@ bool validateSensorData(const sensor_message_t *data)
     }
 }
 
+/**
+ * @brief Logs a sensor reading to the thread-safe Serial.
+ *
+ * Displays device ID, sensor type, value, RSSI, timestamp, and validation status.
+ *
+ * @param data Pointer to the sensor message to log.
+ *
+ * @code
+ * logSensorReading(&sensor);
+ * @endcode
+ */
 void logSensorReading(const sensor_message_t *data)
 {
     if (!data)
@@ -139,6 +200,18 @@ void logSensorReading(const sensor_message_t *data)
     safePrintf("=====================\n");
 }
 
+/**
+ * @brief Logs a parsing error for a given device.
+ *
+ * Prints the device address and a descriptive error message.
+ *
+ * @param deviceAddress BLE device address (or NULL if unknown).
+ * @param error Error message string.
+ *
+ * @code
+ * logParseError("AA:BB:CC:DD:EE:FF", "Manufacturer data too short");
+ * @endcode
+ */
 void logParseError(const char *deviceAddress, const char *error)
 {
     safePrintf("=== Parse Error ===\n");

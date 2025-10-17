@@ -1,96 +1,162 @@
+/**
+ * @file sensor_state_manager.cpp
+ * @brief Manages the state machine of the sensor unit for packet creation, buffering, and BLE
+ * transfer.
+ *
+ * Implements state-based behavior for the sensor unit, including:
+ * - Creating and buffering sensor packets
+ * - Transferring packets over BLE
+ * - Handling errors and state transitions
+ *
+ * Example usage:
+ * @code
+ * // Create and buffer a packet
+ * state_CreateAndBufferPacket();
+ *
+ * // Periodically call to transfer packets over BLE
+ * state_TransferPacketBatch();
+ * @endcode
+ */
+
 #include "sensor_state_manager.h"
 
-// Define the current state
+/** Current state of the sensor */
 sensor_state current_sensor_state = sensor_state::IDLE;
 
-// Implement later
-// Manage and handle switching between different states
+/**
+ * @brief Determine and handle transitions between sensor states.
+ *
+ * Currently a placeholder for future state machine logic.
+ */
 void determineSensorState() {}
 
-// Create a new packets and adds it to the buffer
+/**
+ * @brief Create a new SensorPacket and add it to the circular buffer.
+ *
+ * Updates the `current_sensor_state` depending on success:
+ * - IDLE if packet added successfully
+ * - ERROR_STATE if buffer is full or failed to add
+ *
+ * @code
+ * state_CreateAndBufferPacket();
+ * @endcode
+ */
 void state_CreateAndBufferPacket()
 {
-    // Create new packet and add current data
     SensorPacket newPacket = assembleSensorPacket();
 
-    // Try to add the packet to the buffer
     if (!addPacketToBuffer(newPacket))
     {
-        // Buffer full or other error
         current_sensor_state = sensor_state::ERROR_STATE;
+        Serial.println("Buffer full or error while adding packet!");
     }
-
     else
     {
-        // Added succesfully to the buffer
         current_sensor_state = sensor_state::IDLE;
+        Serial.println("Packet added to buffer.");
     }
 }
 
-// Sends one packet from the buffer via BLE. Uses peek/commit to avoid loss,
-// respects a per-packet interval, tracks failures, and sets IDLE or ERROR state.
+/**
+ * @brief Send one packet from the buffer via BLE.
+ *
+ * Uses peek/commit strategy to avoid data loss, respects a per-packet
+ * interval, tracks failed attempts, and updates `current_sensor_state`.
+ *
+ * @note Only sends packets if a central is connected and subscribed.
+ *
+ * @code
+ * state_TransferPacketBatch(); // Call periodically in main loop or task
+ * @endcode
+ */
 void state_TransferPacketBatch()
 {
-    // Static variables to persist across calls
     static int failed_transmission_attempts_counter = 0;
     static unsigned long lastTransferTime = 0;
-    const unsigned long TRANSFER_INTERVAL = 25; // ms between packets
+    const unsigned long TRANSFER_INTERVAL = 150; // ms between packets
 
-    // Connected to central unit and there's things in the buffer
-    // Only run in accordance with transfer interval
     if (isCentralConnected() && queue_count > 0 && millis() - lastTransferTime >= TRANSFER_INTERVAL)
     {
         SensorPacket packet;
 
-        // Copy oldest value from buffer
         if (peekPacketFromBuffer(packet))
         {
             BLECharacteristic &charRef = getSensorCharacteristic();
             uint8_t buffer[sizeof(SensorPacket)];
             memcpy(buffer, &packet, sizeof(SensorPacket));
 
-            // Attempt to send packet
-            if (charRef.writeValue(buffer, sizeof(SensorPacket)))
+            if (charRef.subscribed())
             {
-                commitPacketRemoval(); // Succeeded: erase packet from buffer
-                failed_transmission_attempts_counter = 0;
+                bool success = charRef.writeValue(buffer, sizeof(SensorPacket));
+
+                if (success)
+                {
+                    commitPacketRemoval();
+                    failed_transmission_attempts_counter = 0;
+
+                    Serial.print("Sent packet to central: ");
+                    Serial.print("Sensor ID: ");
+                    Serial.print(packet.sensor_id);
+                    Serial.print(", Temp: ");
+                    Serial.print(packet.temperature);
+                    Serial.print(", Hum: ");
+                    Serial.print(packet.humidity);
+                    Serial.print(", Seq: ");
+                    Serial.println(packet.package_sequence_number);
+                }
+                else
+                {
+                    failed_transmission_attempts_counter++;
+
+                    Serial.print("Failed BLE setValue (attempt ");
+                    Serial.print(failed_transmission_attempts_counter);
+                    Serial.println(")");
+
+                    if (failed_transmission_attempts_counter >= MAX_FAILED_ATTEMPTS)
+                    {
+                        current_sensor_state = sensor_state::ERROR_STATE;
+                        Serial.println("ERROR: BLE transmission failed too many times!");
+                    }
+                }
             }
             else
             {
-                failed_transmission_attempts_counter++;
-
-                // Debug: show current fail count
-                Serial.print("Failed attempts: ");
-                Serial.println(failed_transmission_attempts_counter);
-
-                // Switch to ERROR_STATE if failed repeatedly
-                if (failed_transmission_attempts_counter >= MAX_FAILED_ATTEMPTS)
-                {
-                    current_sensor_state = sensor_state::ERROR_STATE;
-                    Serial.println("ERROR: failed BLE transmission repeatedly.");
-                }
+                Serial.println("Central not subscribed — skipping send");
             }
 
-            // Updates for next interval
             lastTransferTime = millis();
         }
     }
 
-    // Returns to idle if no error occurred and buffer is empty
     if (queue_count == 0 && current_sensor_state != sensor_state::ERROR_STATE)
     {
         current_sensor_state = sensor_state::IDLE;
     }
 }
 
-// Implement later
+/**
+ * @brief Update the server package ID.
+ *
+ * Placeholder for future implementation.
+ */
 void state_UpdateServerId() {}
 
-// Implement later
-void state_ErrorState() {}
+/**
+ * @brief Handle the ERROR_STATE.
+ *
+ * Prints diagnostic message and can include recovery logic.
+ */
+void state_ErrorState()
+{
+    Serial.println("Entered ERROR_STATE. Check BLE or buffer.");
+}
 
-// Implement later
+/**
+ * @brief Read sensor state from flash memory.
+ *
+ * Placeholder for future implementation.
+ */
 void state_ReadFlashMemory() {}
 
-// Implement later
+// Placeholder for future batch write functionality
 // void state_WriteFlashMemoryBufferBatch() {}
