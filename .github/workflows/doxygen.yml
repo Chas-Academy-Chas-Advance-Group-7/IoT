@@ -51,7 +51,7 @@ jobs:
 
       # Deploy generated HTML docs to `doxygen-documentation` branch
       - name: Deploy to doxygen-documentation branch
-        uses: peaceiris/actions-gh-pages@v6
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for authentication
           publish_dir: ./docs/html                  # Folder containing the generated docs

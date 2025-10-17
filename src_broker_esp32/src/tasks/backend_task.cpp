@@ -78,7 +78,6 @@ void backendTask(void *parameter)
 
             // Check if the output was truncated
             if (len >= sizeof(processedData.json) - 1)
-                safePrintf("JSON truncated\n");
             {
                 safePrintf("JSON truncated\n");
                 continue; // Skip queuing truncated data
