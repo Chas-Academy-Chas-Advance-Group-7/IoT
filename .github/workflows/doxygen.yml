@@ -1,0 +1,58 @@
+name: Generate Doxygen documentation
+
+# Trigger the workflow on:
+# - Any push to the `develop` branch
+# - Manual dispatch (click "Run workflow" in Actions tab)
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  Doxygen:
+    name: Build and deploy Doxygen docs
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository so we have access to the source files
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all commit history (needed for cache key hash)
+
+      # Cache the Doxygen HTML output
+      # This saves time if source files haven't changed since last run
+      - name: Cache Doxygen output
+        uses: actions/cache@v3
+        id: doxygen-cache
+        with:
+          # Folder to cache
+          path: docs/html
+          # Cache key based on hash of all source files (.h and .cpp)
+          key: doxygen-cache-${{ hashFiles('**/*.h', '**/*.cpp') }}
+          # Optional: restore previous cache on key mismatch
+          restore-keys: |
+            doxygen-cache-
+
+      # Install Doxygen and Graphviz (needed to generate docs)
+      # This runs every time since we're using a fresh GitHub VM
+      - name: Install Doxygen & Graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+
+      # Generate Doxygen documentation
+      # Only runs if cache was not hit (i.e., files changed or cache missing)
+      - name: Generate Doxygen documentation
+        if: steps.doxygen-cache.outputs.cache-hit != 'true'
+        run: doxygen Doxyfile
+
+      # Deploy generated HTML docs to `doxygen-documentation` branch
+      - name: Deploy to doxygen-documentation branch
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for authentication
+          publish_dir: ./docs/html                  # Folder containing the generated docs
+          publish_branch: doxygen-documentation     # Branch to push docs to
+          force_orphan: true                        # Start branch fresh every time
