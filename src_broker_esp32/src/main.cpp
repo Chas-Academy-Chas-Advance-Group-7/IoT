@@ -65,6 +65,7 @@ SemaphoreHandle_t networkEventMutex
      * and starts FreeRTOS tasks for BLE sensor aggregation and HTTP transmission.
      * Sets the `SYSTEM_READY_BIT` when initialization completes.
      */
+
     void
     setup()
 {
