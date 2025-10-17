@@ -2969,20 +2969,20 @@ MSCGEN_TOOL            =
 
 MSCFILE_DIRS           =
 
-# Doxyfile 1.9.8
+# Doxyfile for ESP32 Sensor Firmware
 
-# Project information
+# Project info
 PROJECT_NAME           = "ESP32 Sensor Firmware"
 PROJECT_BRIEF          = "Documentation for sensor unit, BLE, DHT, and state management."
 PROJECT_NUMBER         = 1.0
 OUTPUT_DIRECTORY       = docs
 
 # Input
-INPUT                  = ./                  # Root folder of your repo
+INPUT                  = ./
 FILE_PATTERNS          = *.h *.cpp
 RECURSIVE              = YES
 
-# Exclude external libraries and system headers
+# Exclude external headers
 EXCLUDE_PATTERNS       = */Arduino.h \
                          */DHT.h \
                          */ArduinoBLE.h \
@@ -2992,17 +2992,19 @@ EXCLUDE_PATTERNS       = */Arduino.h \
                          */freertos/* \
                          */lwip/*
 
-# Extract settings
+# Extraction settings
 EXTRACT_ALL            = YES
 EXTRACT_PRIVATE        = YES
 EXTRACT_STATIC         = YES
 EXTRACT_LOCAL_CLASSES  = YES
 
-# Build documentation options
+# HTML output
 GENERATE_HTML          = YES
 GENERATE_LATEX         = NO
 GENERATE_TREEVIEW      = YES
 FULL_PATH_NAMES        = NO
+SOURCE_BROWSER         = YES          # Links to source files in HTML
+INLINE_SOURCES         = YES          # Show source code inline
 
 # Graphs and diagrams
 HAVE_DOT               = YES
@@ -3011,10 +3013,11 @@ CALL_GRAPH             = YES
 CALLER_GRAPH           = YES
 DOT_IMAGE_FORMAT       = svg
 
-# Use README.md as main page
-# USE_MDFILE_AS_MAINPAGE = README.md
-
-# Miscellaneous
+# Warnings
 QUIET                  = NO
 WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = YES
+
+# Markdown support (optional)
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
