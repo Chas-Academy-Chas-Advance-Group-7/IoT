@@ -25,12 +25,6 @@ float temperature = 0.0;
 /** Last read humidity value (%) */
 float humidity = 0.0;
 
-/** Server package ID counter */
-uint32_t server_package_id = 0;
-
-/** Sequence number for each packet sent */
-uint16_t package_sequence_number = 0;
-
 /**
  * @brief Assemble a SensorPacket using current sensor data.
  *
@@ -39,8 +33,6 @@ uint16_t package_sequence_number = 0;
  * - Timestamp
  * - Temperature
  * - Humidity
- * - Server package ID
- * - Packet sequence number
  *
  * @return SensorPacket Filled with current sensor data.
  *
@@ -61,9 +53,6 @@ SensorPacket assembleSensorPacket()
         Serial.println("Failed to read sensor, invalid package!");
         return packet;
     }
-
-    packet.server_package_id = server_package_id;
-    packet.package_sequence_number = ++package_sequence_number;
 
     return packet;
 }

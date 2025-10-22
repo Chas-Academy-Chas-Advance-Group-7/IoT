@@ -118,10 +118,6 @@ void loop()
         state_TransferPacketBatch();
         break;
 
-    case sensor_state::UPDATE_SERVER_PACKAGE_ID:
-        state_UpdateServerId();
-        break;
-
     case sensor_state::READ_FLASH_MEMORY:
         break;
 
