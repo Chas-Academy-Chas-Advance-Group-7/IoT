@@ -133,13 +133,6 @@ void state_TransferPacketBatch()
 }
 
 /**
- * @brief Update the server package ID.
- *
- * Placeholder for future implementation.
- */
-void state_UpdateServerId() {}
-
-/**
  * @brief Handle the ERROR_STATE.
  *
  * Prints diagnostic message and can include recovery logic.
