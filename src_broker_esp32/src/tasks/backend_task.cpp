@@ -54,42 +54,107 @@ void backendTask(void *parameter)
 {
     safePrintf("Backend task started - waiting for sensor packets\n");
 
-    SensorPacket packet;
     processed_data_t processedData;
+
+    const int truckId = 7; // your truck ID
+
+    // Storage for latest sensor data
+    const int MAX_SENSORS = 10; // adjust based on your system
+    SensorPacket latestSensors[MAX_SENSORS];
+    int sensorIds[MAX_SENSORS]; // tracks which sensor is in which slot
+    for (int i = 0; i < MAX_SENSORS; i++)
+        sensorIds[i] = -1; // -1 = empty slot
+
+    const TickType_t AGGREGATION_INTERVAL_MS = 2000; // aggregate every 2 seconds
+    static TickType_t lastSendTick = 0;
 
     while (true)
     {
-        // Wait up to 1000 ms for incoming sensor data
-        if (xQueueReceive(dataQueue, &packet, pdMS_TO_TICKS(1000)) == pdTRUE)
+        SensorPacket packet;
+
+        // Non-blocking check for incoming sensor packets
+        if (xQueueReceive(dataQueue, &packet, pdMS_TO_TICKS(500)) == pdTRUE)
         {
-            safePrintf("Processing packet from Sensor ID %u\n", packet.sensor_id);
+            // Find existing slot or first free slot
+            int slot = -1;
+            for (int i = 0; i < MAX_SENSORS; i++)
+            {
+                if (sensorIds[i] == packet.sensor_id)
+                {
+                    slot = i; // update existing sensor
+                    break;
+                }
+                else if (sensorIds[i] == -1 && slot == -1)
+                {
+                    slot = i; // first free slot
+                }
+            }
 
-            // Build a JSON document from the sensor packet
-            JsonDocument doc;
-            doc["sensor_id"] = packet.sensor_id;
-            doc["server_package_id"] = packet.server_package_id;
-            doc["timestamp"] = packet.sensor_timestamp;
-            doc["temperature"] = packet.temperature;
-            doc["humidity"] = packet.humidity;
-            doc["sequence_number"] = packet.package_sequence_number;
+            if (slot != -1)
+            {
+                latestSensors[slot] = packet;
+                sensorIds[slot] = packet.sensor_id;
+                safePrintf("Stored packet for sensor ID %d in slot %d\n", packet.sensor_id, slot);
+            }
+            else
+            {
+                safePrintf("No free slot for sensor ID %d - packet dropped\n", packet.sensor_id);
+            }
+        }
 
-            // Serialize JSON into a character buffer
+        // Aggregate and send JSON periodically
+        if (xTaskGetTickCount() - lastSendTick >= pdMS_TO_TICKS(AGGREGATION_INTERVAL_MS))
+        {
+            lastSendTick = xTaskGetTickCount();
+
+            // Check if any sensor has data
+            bool hasData = false;
+            for (int i = 0; i < MAX_SENSORS; i++)
+            {
+                if (sensorIds[i] != -1)
+                {
+                    hasData = true;
+                    break;
+                }
+            }
+            if (!hasData)
+                continue;
+
+            // Build aggregated JSON
+            StaticJsonDocument<1024> doc; // adjust size as needed
+            doc["truck_id"] = truckId;
+
+            JsonArray sensors = doc.createNestedArray("sensors");
+
+            for (int i = 0; i < MAX_SENSORS; i++)
+            {
+                if (sensorIds[i] == -1)
+                    continue;
+
+                JsonObject sensor = sensors.createNestedObject();
+                sensor["sensor_id"] = sensorIds[i];
+
+                JsonObject data = sensor.createNestedObject("data");
+                data["timestamp"] = latestSensors[i].sensor_timestamp;
+                data["temperature"] = latestSensors[i].temperature;
+                data["humidity"] = latestSensors[i].humidity;
+            }
+
+            // Serialize JSON into processedData
             size_t len = serializeJson(doc, processedData.json, sizeof(processedData.json));
-
-            // Check if the output was truncated
             if (len >= sizeof(processedData.json) - 1)
             {
                 safePrintf("JSON truncated\n");
-                continue; // Skip queuing truncated data
+                continue;
             }
 
-            safePrintf("Generated JSON: %s\n", processedData.json);
+            safePrintf("Aggregated JSON: %s\n", processedData.json);
 
-            // Send processed data to the network queue
+            // Send aggregated JSON to network queue
             if (xQueueSend(networkQueue, &processedData, pdMS_TO_TICKS(100)) != pdTRUE)
-                safePrintf("Failed to queue processed data\n");
+                safePrintf("Failed to queue aggregated data\n");
             else
-                safePrintf("Data queued for backend transmission\n");
+                safePrintf("Aggregated data queued for transmission\n");
         }
     }
 }
