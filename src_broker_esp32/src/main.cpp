@@ -87,7 +87,7 @@ void setup()
     // TODO: measure needed stack size for each task
 
     // Create FreeRTOS tasks
-    xTaskCreate(backendTask, "Backend Communication Task", 3072, NULL, 1, NULL);
+    xTaskCreate(backendTask, "Backend Communication Task", 4096, NULL, 1, NULL);
     xTaskCreate(brokerTask, "BLE Broker Task", 8192, NULL, 1, NULL);
     xTaskCreate(networkStatusTask, "Network Status Task", 3072, NULL, 1, NULL);
     xTaskCreate(httpTransmissionTask, "HTTP Transmission Task", 8192, NULL, 1, NULL);

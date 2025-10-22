@@ -101,7 +101,7 @@ void httpTransmissionTask(void *pvParameters)
     static WiFiClientSecure client;
     client.setCACert(digicertG2);
 
-    HTTPClient http;
+    static HTTPClient http;
 
     while (true)
     {
