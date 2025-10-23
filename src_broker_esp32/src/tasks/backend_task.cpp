@@ -121,9 +121,11 @@ void backendTask(void *parameter)
                 continue;
 
             // Build aggregated JSON
-            StaticJsonDocument<1024> doc; // adjust size as needed
+            StaticJsonDocument<2048> doc; // Static is fine for fixed size
+
             doc["truck_id"] = truckId;
 
+            // Create "sensors" array
             JsonArray sensors = doc.createNestedArray("sensors");
 
             for (int i = 0; i < MAX_SENSORS; i++)
@@ -131,9 +133,11 @@ void backendTask(void *parameter)
                 if (sensorIds[i] == -1)
                     continue;
 
-                JsonObject sensor = sensors.createNestedObject();
+                // Add a sensor object
+                JsonObject sensor = sensors.add<JsonObject>();
                 sensor["sensor_id"] = sensorIds[i];
 
+                // Add "data" object
                 JsonObject data = sensor.createNestedObject("data");
                 data["timestamp"] = latestSensors[i].sensor_timestamp;
                 data["temperature"] = latestSensors[i].temperature;

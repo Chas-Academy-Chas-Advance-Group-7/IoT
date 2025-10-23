@@ -62,7 +62,7 @@ typedef struct
  */
 typedef struct
 {
-    char json[512]; /**< JSON string representation of sensor data */
+    char json[2048]; /**< JSON string representation of sensor data */
 } processed_data_t;
 
 /**
