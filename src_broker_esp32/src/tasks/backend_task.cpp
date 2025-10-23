@@ -54,18 +54,31 @@ void backendTask(void *parameter)
 {
     safePrintf("Backend task started - waiting for sensor packets\n");
 
-    processed_data_t processedData;
+    // Make processedData static to prevent stack overflow
+    static processed_data_t processedData;
 
     const int truckId = 7; // your truck ID
 
     // Storage for latest sensor data
     const int MAX_SENSORS = 10; // adjust based on your system
-    SensorPacket latestSensors[MAX_SENSORS];
-    int sensorIds[MAX_SENSORS]; // tracks which sensor is in which slot
-    for (int i = 0; i < MAX_SENSORS; i++)
-        sensorIds[i] = -1; // -1 = empty slot
 
-    const TickType_t AGGREGATION_INTERVAL_MS = 2000; // aggregate every 2 seconds
+    // These arrays are large and persistent, so make them static
+    static SensorPacket latestSensors[MAX_SENSORS];
+    static int sensorIds[MAX_SENSORS]; // tracks which sensor is in which slot
+
+    // Initialize sensorIds to -1 (empty)
+    static bool initialized = false;
+    if (!initialized)
+    {
+        for (int i = 0; i < MAX_SENSORS; i++)
+            sensorIds[i] = -1;
+        initialized = true;
+    }
+
+    // Static JSON document reduces stack usage; size increased for larger payloads
+    static StaticJsonDocument<6144> doc;
+
+    // Track last aggregation tick
     static TickType_t lastSendTick = 0;
 
     while (true)
@@ -103,7 +116,7 @@ void backendTask(void *parameter)
         }
 
         // Aggregate and send JSON periodically
-        if (xTaskGetTickCount() - lastSendTick >= pdMS_TO_TICKS(AGGREGATION_INTERVAL_MS))
+        if (xTaskGetTickCount() - lastSendTick >= pdMS_TO_TICKS(2000))
         {
             lastSendTick = xTaskGetTickCount();
 
@@ -120,9 +133,8 @@ void backendTask(void *parameter)
             if (!hasData)
                 continue;
 
-            // Build aggregated JSON
-            StaticJsonDocument<2048> doc; // Static is fine for fixed size
-
+            // Clear the JSON document before reuse
+            doc.clear();
             doc["truck_id"] = truckId;
 
             // Create "sensors" array
@@ -133,11 +145,9 @@ void backendTask(void *parameter)
                 if (sensorIds[i] == -1)
                     continue;
 
-                // Add a sensor object
                 JsonObject sensor = sensors.add<JsonObject>();
                 sensor["sensor_id"] = sensorIds[i];
 
-                // Add "data" object
                 JsonObject data = sensor.createNestedObject("data");
                 data["timestamp"] = latestSensors[i].sensor_timestamp;
                 data["temperature"] = latestSensors[i].temperature;
@@ -146,12 +156,18 @@ void backendTask(void *parameter)
 
             // Serialize JSON into processedData
             size_t len = serializeJson(doc, processedData.json, sizeof(processedData.json));
+
+            // Check if JSON was truncated
             if (len >= sizeof(processedData.json) - 1)
             {
-                safePrintf("JSON truncated\n");
-                continue;
+                safePrintf("Warning: JSON truncated, increase buffer size may help\n");
+                processedData.json[sizeof(processedData.json) - 1] =
+                    '\0'; // ensure null termination
+                len = sizeof(processedData.json) - 1;
             }
 
+            safePrintf("Serialized JSON length: %zu / %zu bytes\n", len,
+                       sizeof(processedData.json));
             safePrintf("Aggregated JSON: %s\n", processedData.json);
 
             // Send aggregated JSON to network queue

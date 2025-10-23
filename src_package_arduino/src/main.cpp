@@ -26,29 +26,25 @@ void setup()
     Serial.begin(9600);
 
     // Initialize DHT sensor
-    initializeDHT();
+    // initializeDHT();
 
     // Initialize BLE peripheral
     setupBluetooth();
 
-    /*
     // BLUETOOTH TEST VALUES
     // Pre-fill buffer with test packets
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 10; i++)
     {
         SensorPacket packet;
         packet.sensor_id = i + 1;
         packet.sensor_timestamp = millis();
         packet.temperature = 20.0 + i; // example temperatures
         packet.humidity = 40.0 + i;    // example humidity
-        packet.server_package_id = 100;
-        packet.package_sequence_number = i + 1;
 
         addPacketToBuffer(packet);
     }
 
     Serial.println("BLE Transfer Test Started");
-    */
 }
 
 /**
@@ -68,7 +64,6 @@ void loop()
     // Serial.print("Central connected? "); Serial.println(BLE.connected());
     // Serial.print("Central subscribed? "); Serial.println(getSensorCharacteristic().subscribed());
 
-    /*
     // START OF BLUETOOTH TEST CODE
     if (BLE.connected() && getSensorCharacteristic().subscribed())
     {
@@ -99,11 +94,11 @@ void loop()
         delay(500); // small delay to avoid spamming Serial
     }
     // END OF BLUETOOTH TEST CODE
-    */
 
     // Update state machine
     determineSensorState();
 
+    /*
     // Execute logic for the current sensor state
     switch (current_sensor_state)
     {
@@ -128,4 +123,5 @@ void loop()
         state_ErrorState();
         break;
     }
+    */
 }
