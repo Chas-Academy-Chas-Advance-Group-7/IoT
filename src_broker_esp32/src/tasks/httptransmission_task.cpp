@@ -100,7 +100,7 @@ void httpTransmissionTask(void *pvParameters)
     processed_data_t transferData;
 
     static WiFiClientSecure client;
-    client.setInsecure(); // temporarily disables certificate checking
+    client.setCACert(digicertG2);
     static HTTPClient http;
 
     safePrintf("[HTTP] Task stack watermark: %u bytes\n",
