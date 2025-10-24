@@ -23,12 +23,27 @@
 /** Current state of the sensor */
 sensor_state current_sensor_state = sensor_state::IDLE;
 
+/** Previous state before entering ERROR_STATE */
+sensor_state previous_state_to_error_state = current_sensor_state;
+
 /**
  * @brief Determine and handle transitions between sensor states.
  *
  * Currently a placeholder for future state machine logic.
  */
 void determineSensorState() {}
+
+/**
+ * @brief Transition to the ERROR_STATE.
+ *
+ * Call this function to handle error transitions.
+ * It updates the previous state and sets the current state to ERROR_STATE.
+ */
+void transitionToErrorState()
+{
+    previous_state_to_error_state = current_sensor_state;
+    current_sensor_state = sensor_state::ERROR_STATE;
+}
 
 /**
  * @brief Create a new SensorPacket and add it to the circular buffer.
@@ -47,26 +62,24 @@ void state_CreateAndBufferPacket()
 
     if (!addPacketToBuffer(newPacket))
     {
-        current_sensor_state = sensor_state::ERROR_STATE;
         Serial.println("Buffer full or error while adding packet!");
+        transitionToErrorState();
     }
     else
     {
-        current_sensor_state = sensor_state::IDLE;
         Serial.println("Packet added to buffer.");
+        current_sensor_state = sensor_state::IDLE;
     }
 }
 
 /**
- * @brief Send one packet from the buffer via BLE.
+ * @brief Transfer a batch of packets from the buffer via BLE.
  *
- * Uses peek/commit strategy to avoid data loss, respects a per-packet
- * interval, tracks failed attempts, and updates `current_sensor_state`.
- *
- * @note Only sends packets if a central is connected and subscribed.
+ * Attempts to send packets if a central device is connected and subscribed.
+ * On repeated transmission failures, transitions to ERROR_STATE.
  *
  * @code
- * state_TransferPacketBatch(); // Call periodically in main loop or task
+ * state_TransferPacketBatch();
  * @endcode
  */
 void state_TransferPacketBatch()
@@ -75,6 +88,14 @@ void state_TransferPacketBatch()
     static unsigned long lastTransferTime = 0;
     const unsigned long TRANSFER_INTERVAL = 150; // ms between packets
 
+    // Reset counters if recovering from an error
+    if (previous_state_to_error_state == sensor_state::TRANSFER_PACKET_BATCH)
+    {
+        failed_transmission_attempts_counter = 0;
+        lastTransferTime = millis();
+    }
+
+    // Only attempt send if BLE central is connected
     if (isCentralConnected() && queue_count > 0 && millis() - lastTransferTime >= TRANSFER_INTERVAL)
     {
         SensorPacket packet;
@@ -91,6 +112,7 @@ void state_TransferPacketBatch()
 
                 if (success)
                 {
+                    // Commit removal and reset fail counter
                     commitPacketRemoval();
                     failed_transmission_attempts_counter = 0;
 
@@ -100,32 +122,36 @@ void state_TransferPacketBatch()
                     Serial.print(", Temp: ");
                     Serial.print(packet.temperature);
                     Serial.print(", Hum: ");
-                    Serial.print(packet.humidity);
+                    Serial.println(packet.humidity);
                 }
                 else
                 {
                     failed_transmission_attempts_counter++;
 
-                    Serial.print("Failed BLE setValue (attempt ");
+                    Serial.print("Failed BLE write (attempt ");
                     Serial.print(failed_transmission_attempts_counter);
                     Serial.println(")");
 
+                    // Escalate to ERROR_STATE if repeated failures exceed threshold
                     if (failed_transmission_attempts_counter >= MAX_FAILED_ATTEMPTS)
                     {
-                        current_sensor_state = sensor_state::ERROR_STATE;
                         Serial.println("ERROR: BLE transmission failed too many times!");
+                        transitionToErrorState();
+                        return; // Stop further processing
                     }
                 }
             }
             else
             {
-                Serial.println("Central not subscribed — skipping send");
+                // Temporary condition; just log and retry next loop
+                Serial.println("Central not subscribed — skipping send.");
             }
 
             lastTransferTime = millis();
         }
     }
 
+    // If nothing in the buffer, move to IDLE (but only if no error)
     if (queue_count == 0 && current_sensor_state != sensor_state::ERROR_STATE)
     {
         current_sensor_state = sensor_state::IDLE;
@@ -139,9 +165,40 @@ void state_TransferPacketBatch()
  */
 void state_ErrorState()
 {
-    Serial.println("Entered ERROR_STATE. Check BLE or buffer.");
-}
+    Serial.println("=== ERROR_STATE entered ===");
 
+    // Log previous state
+    switch (previous_state_to_error_state)
+    {
+    case sensor_state::IDLE:
+        Serial.println("From IDLE: Issue occurred while idle.");
+        break;
+
+    case sensor_state::CREATE_AND_BUFFER_PACKET:
+        Serial.println(
+            "From CREATE_AND_BUFFER_PACKET: Issue occurred while creating/buffering packet.");
+        break;
+
+    case sensor_state::TRANSFER_PACKET_BATCH:
+        Serial.println(
+            "From TRANSFER_PACKET_BATCH: Issue occurred while transferring packet batch.");
+        break;
+
+    case sensor_state::READ_FLASH_MEMORY:
+        Serial.println("From READ_FLASH_MEMORY: Issue occurred while reading flash memory.");
+        break;
+
+    default:
+        Serial.println("From unknown state.");
+        break;
+    }
+
+    // Reset state to IDLE
+    current_sensor_state = sensor_state::IDLE;
+    previous_state_to_error_state = sensor_state::IDLE;
+
+    Serial.println("System recovered: back to IDLE state.");
+}
 /**
  * @brief Read sensor state from flash memory.
  *

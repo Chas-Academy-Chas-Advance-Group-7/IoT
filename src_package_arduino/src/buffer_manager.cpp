@@ -36,30 +36,58 @@ size_t queue_tail = 0;
 size_t queue_count = 0;
 
 /**
- * @brief Add a packet to the circular buffer.
+ * @brief Add a SensorPacket to the circular buffer with automatic recovery and overflow handling.
  *
- * @param packet SensorPacket to add.
- * @return true if the packet was added successfully.
- * @return false if the buffer is full.
+ * This function adds a new packet to the circular buffer and ensures buffer integrity.
+ * It includes safety checks to detect and repair buffer corruption, and gracefully handles
+ * buffer overflows by automatically dropping the oldest packet instead of rejecting new data.
+ *
+ * Behavior:
+ * - If the buffer state is invalid (`isBufferValid()` returns false), it is flushed to prevent
+ * corruption.
+ * - If the buffer is full, the oldest packet is dropped (`dropOldestPacket()`) before inserting the
+ * new one.
+ * - The function always attempts to insert the new packet afterward.
+ *
+ * @param packet The SensorPacket to add to the buffer.
+ *
+ * @return true Always returns true once the packet has been successfully added
+ *         (even if the oldest packet had to be dropped to make room).
+ *
+ * @note This function ensures that the buffer remains valid and operational even
+ *       in the presence of transient memory corruption or full-buffer conditions.
+ * @note If frequent warnings about buffer fullness appear, consider increasing `QUEUE_SIZE`.
  *
  * @code
- * SensorPacket packet = {...};
- * if (!addPacketToBuffer(packet)) {
- *     Serial.println("Buffer full");
+ * SensorPacket packet;
+ * packet.sensor_id = 1;
+ * packet.temperature = 22.5;
+ * packet.humidity = 45.0;
+ *
+ * if (addPacketToBuffer(packet)) {
+ *     Serial.println("Packet added safely to buffer");
  * }
  * @endcode
  */
 bool addPacketToBuffer(const SensorPacket &packet)
 {
-    if (queue_count < QUEUE_SIZE)
+    if (!isBufferValid())
     {
-        buffer[queue_tail] = packet;
-        queue_tail = (queue_tail + 1) % QUEUE_SIZE;
-        queue_count++;
-        return true;
+        Serial.println("ERROR: Buffer corruption detected. Flushing...");
+        flushBuffer();
     }
 
-    return false; // buffer is full
+    if (queue_count >= QUEUE_SIZE)
+    {
+        Serial.println("WARNING: Buffer full — dropping oldest packet.");
+        dropOldestPacket();
+    }
+
+    buffer[queue_tail] = packet;
+    queue_tail = (queue_tail + 1) % QUEUE_SIZE;
+    queue_count++;
+
+    return true;
 }
 
 /**
@@ -132,6 +160,48 @@ void commitPacketRemoval()
         queue_head = (queue_head + 1) % QUEUE_SIZE;
         queue_count--;
     }
+}
+
+/**
+ * @brief Drop the oldest packet from the circular buffer.
+ *
+ * @return true if a packet was successfully dropped.
+ * @return false if the buffer is empty.
+ *
+ * @code
+ * if (!dropOldestPacket()) {
+ *     Serial.println("Buffer empty");
+ * }
+ * @endcode
+ */
+bool dropOldestPacket()
+{
+    if (queue_count > 0)
+    {
+        queue_head = (queue_head + 1) % QUEUE_SIZE;
+        queue_count--;
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @brief Validate the integrity of the buffer state.
+ *
+ * Ensures head, tail, and count are within valid ranges.
+ *
+ * @return true if the buffer state is valid.
+ * @return false if the buffer state is invalid.
+ *
+ * @code
+ * if (!isBufferValid()) {
+ *     Serial.println("Buffer state invalid!");
+ * }
+ * @endcode
+ */
+bool isBufferValid()
+{
+    return (queue_count <= QUEUE_SIZE) && (queue_head < QUEUE_SIZE) && (queue_tail < QUEUE_SIZE);
 }
 
 /**

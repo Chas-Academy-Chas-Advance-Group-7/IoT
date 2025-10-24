@@ -81,6 +81,36 @@ bool peekPacketFromBuffer(SensorPacket &packet);
 void commitPacketRemoval();
 
 /**
+ * @brief Drop the oldest packet from the circular buffer.
+ *
+ * @return true if a packet was successfully dropped.
+ * @return false if the buffer is empty.
+ *
+ * @code
+ * if (!dropOldestPacket()) {
+ *     Serial.println("Buffer empty");
+ * }
+ * @endcode
+ */
+bool dropOldestPacket();
+
+/**
+ * @brief Validate the integrity of the buffer state.
+ *
+ * Ensures head, tail, and count are within valid ranges.
+ *
+ * @return true if the buffer state is valid.
+ * @return false if the buffer state is invalid.
+ *
+ * @code
+ * if (!isBufferValid()) {
+ *     Serial.println("Buffer state invalid!");
+ * }
+ * @endcode
+ */
+bool isBufferValid();
+
+/**
  * @brief Clear the entire circular buffer.
  *
  * Resets head, tail, and count, and clears all stored packets.
