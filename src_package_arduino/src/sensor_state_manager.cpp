@@ -159,6 +159,84 @@ void state_TransferPacketBatch()
 }
 
 /**
+ * @brief Manage BLE connections and advertising.
+ *
+ * Initializes BLE if not already done, handles reconnections,
+ * and manages advertising state.
+ *
+ * @code
+ * state_BLEManagement();
+ * @endcode
+ */
+void state_BLEManagement()
+{
+    static bool bleInitialized = false;
+    static int bleFailCounter = 0;
+    const int MAX_BLE_FAILS = 5;
+
+    // Initialize BLE once
+    if (!bleInitialized)
+    {
+        if (setupBluetooth())
+        {
+            Serial.println("BLE initialized successfully.");
+            bleInitialized = true;
+            bleFailCounter = 0;
+
+            // Move to IDLE after successful init
+            current_sensor_state = sensor_state::IDLE;
+        }
+        else
+        {
+            bleFailCounter++;
+            Serial.print("BLE initialization failed. Attempt ");
+            Serial.println(bleFailCounter);
+
+            if (bleFailCounter >= MAX_BLE_FAILS)
+            {
+                Serial.println("Too many BLE init failures! Escalating to ERROR_STATE.");
+                transitionToErrorState();
+            }
+            return; // Skip further processing until successful init
+        }
+    }
+
+    // Reconnection logic
+    if (!isCentralConnected())
+    {
+        Serial.println("Central disconnected. Re-advertising BLE service...");
+        if (!BLE.advertise())
+        {
+            bleFailCounter++;
+            Serial.print("BLE advertise failed. Attempt ");
+            Serial.println(bleFailCounter);
+
+            if (bleFailCounter >= MAX_BLE_FAILS)
+            {
+                Serial.println("Too many BLE advertise failures! Escalating to ERROR_STATE.");
+                transitionToErrorState();
+            }
+        }
+        else
+        {
+            // Successfully started advertising, reset fail counter
+            Serial.println("BLE advertising restarted successfully.");
+            bleFailCounter = 0;
+        }
+    }
+    else
+    {
+        // Central is connected; reset fail counter and optionally move to IDLE
+        bleFailCounter = 0;
+        if (current_sensor_state == sensor_state::BLE_MANAGEMENT)
+        {
+            current_sensor_state = sensor_state::IDLE;
+            Serial.println("Central connected. Returning to IDLE state.");
+        }
+    }
+}
+
+/**
  * @brief Handle the ERROR_STATE.
  *
  * Prints diagnostic message and can include recovery logic.
@@ -182,6 +260,10 @@ void state_ErrorState()
     case sensor_state::TRANSFER_PACKET_BATCH:
         Serial.println(
             "From TRANSFER_PACKET_BATCH: Issue occurred while transferring packet batch.");
+        break;
+
+    case sensor_state::BLE_MANAGEMENT:
+        Serial.println("From BLE_MANAGEMENT: Issue occurred while managing BLE.");
         break;
 
     case sensor_state::READ_FLASH_MEMORY:
