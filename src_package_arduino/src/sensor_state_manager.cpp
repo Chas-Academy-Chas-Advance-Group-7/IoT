@@ -26,13 +26,62 @@ sensor_state current_sensor_state = sensor_state::IDLE;
 /** Previous state before entering ERROR_STATE */
 sensor_state previous_state_to_error_state = current_sensor_state;
 
+/** BLE initialization flag */
+static bool bleInitialized = false;
+
 /**
  * @brief Determine and handle transitions between sensor states.
  *
- * Currently a placeholder for future state machine logic.
+ * Call periodically in the main loop or task.
  */
-void determineSensorState() {}
+void determineSensorState()
+{
+    // Do nothing if in error state — error handler manages recovery
+    if (current_sensor_state == sensor_state::ERROR_STATE)
+    {
+        return;
+    }
 
+    // --- 1. BLE management priority ---
+    // Check if BLE is initialized or central is disconnected
+    if (!bleInitialized || !isCentralConnected())
+    {
+        current_sensor_state = sensor_state::BLE_MANAGEMENT;
+        return;
+    }
+
+    // --- 2. Packet transfer priority ---
+    // Only try sending if there are packets in the buffer
+    if (queue_count > 0)
+    {
+        current_sensor_state = sensor_state::TRANSFER_PACKET_BATCH;
+        return;
+    }
+
+    // --- 3. Sensor packet creation timing ---
+    static unsigned long lastPacketTime = 0;
+    const unsigned long PACKET_INTERVAL = 1000; // e.g., create a packet every 1 second
+
+    if (millis() - lastPacketTime >= PACKET_INTERVAL)
+    {
+        lastPacketTime = millis();
+        current_sensor_state = sensor_state::CREATE_AND_BUFFER_PACKET;
+        return;
+    }
+
+    // --- 4. Flash memory read condition ---
+    // Example placeholder — implement your own condition if needed
+    /*
+    if (shouldReadFlashMemory())
+    {
+        current_sensor_state = sensor_state::READ_FLASH_MEMORY;
+        return;
+    }
+    */
+
+    // --- 5. Otherwise remain idle ---
+    current_sensor_state = sensor_state::IDLE;
+}
 /**
  * @brief Transition to the ERROR_STATE.
  *
@@ -170,7 +219,6 @@ void state_TransferPacketBatch()
  */
 void state_BLEManagement()
 {
-    static bool bleInitialized = false;
     static int bleFailCounter = 0;
     const int MAX_BLE_FAILS = 5;
 
