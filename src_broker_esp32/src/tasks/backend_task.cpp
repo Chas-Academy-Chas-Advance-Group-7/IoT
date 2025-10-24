@@ -58,13 +58,11 @@ void backendTask(void *parameter)
     static processed_data_t processedData;
 
     const int truckId = 7; // your truck ID
+    const int MAX_SENSORS = 10;
 
-    // Storage for latest sensor data
-    const int MAX_SENSORS = 10; // adjust based on your system
-
-    // These arrays are large and persistent, so make them static
+    // Large persistent arrays
     static SensorPacket latestSensors[MAX_SENSORS];
-    static int sensorIds[MAX_SENSORS]; // tracks which sensor is in which slot
+    static int sensorIds[MAX_SENSORS];
 
     // Initialize sensorIds to -1 (empty)
     static bool initialized = false;
@@ -75,31 +73,28 @@ void backendTask(void *parameter)
         initialized = true;
     }
 
-    // Static JSON document reduces stack usage; size increased for larger payloads
+    // Stack-allocated JSON document (modern usage)
     static StaticJsonDocument<6144> doc;
 
-    // Track last aggregation tick
     static TickType_t lastSendTick = 0;
 
     while (true)
     {
         SensorPacket packet;
 
-        // Non-blocking check for incoming sensor packets
         if (xQueueReceive(dataQueue, &packet, pdMS_TO_TICKS(500)) == pdTRUE)
         {
-            // Find existing slot or first free slot
             int slot = -1;
             for (int i = 0; i < MAX_SENSORS; i++)
             {
                 if (sensorIds[i] == packet.sensor_id)
                 {
-                    slot = i; // update existing sensor
+                    slot = i;
                     break;
                 }
                 else if (sensorIds[i] == -1 && slot == -1)
                 {
-                    slot = i; // first free slot
+                    slot = i;
                 }
             }
 
@@ -115,12 +110,10 @@ void backendTask(void *parameter)
             }
         }
 
-        // Aggregate and send JSON periodically
         if (xTaskGetTickCount() - lastSendTick >= pdMS_TO_TICKS(2000))
         {
             lastSendTick = xTaskGetTickCount();
 
-            // Check if any sensor has data
             bool hasData = false;
             for (int i = 0; i < MAX_SENSORS; i++)
             {
@@ -133,12 +126,11 @@ void backendTask(void *parameter)
             if (!hasData)
                 continue;
 
-            // Clear the JSON document before reuse
             doc.clear();
             doc["truck_id"] = truckId;
 
-            // Create "sensors" array
-            JsonArray sensors = doc.createNestedArray("sensors");
+            // --- Modernized: createNestedArray replaced ---
+            JsonArray sensors = doc["sensors"].to<JsonArray>();
 
             for (int i = 0; i < MAX_SENSORS; i++)
             {
@@ -148,21 +140,19 @@ void backendTask(void *parameter)
                 JsonObject sensor = sensors.add<JsonObject>();
                 sensor["sensor_id"] = sensorIds[i];
 
-                JsonObject data = sensor.createNestedObject("data");
+                // --- Modernized: createNestedObject replaced ---
+                JsonObject data = sensor["data"].to<JsonObject>();
                 data["timestamp"] = latestSensors[i].sensor_timestamp;
                 data["temperature"] = latestSensors[i].temperature;
                 data["humidity"] = latestSensors[i].humidity;
             }
 
-            // Serialize JSON into processedData
             size_t len = serializeJson(doc, processedData.json, sizeof(processedData.json));
 
-            // Check if JSON was truncated
             if (len >= sizeof(processedData.json) - 1)
             {
                 safePrintf("Warning: JSON truncated, increase buffer size may help\n");
-                processedData.json[sizeof(processedData.json) - 1] =
-                    '\0'; // ensure null termination
+                processedData.json[sizeof(processedData.json) - 1] = '\0';
                 len = sizeof(processedData.json) - 1;
             }
 
@@ -170,7 +160,6 @@ void backendTask(void *parameter)
                        sizeof(processedData.json));
             safePrintf("Aggregated JSON: %s\n", processedData.json);
 
-            // Send aggregated JSON to network queue
             if (xQueueSend(networkQueue, &processedData, pdMS_TO_TICKS(100)) != pdTRUE)
                 safePrintf("Failed to queue aggregated data\n");
             else
