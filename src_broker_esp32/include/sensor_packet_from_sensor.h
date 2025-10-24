@@ -14,8 +14,6 @@
  * packet.temperature = 23.5;
  * packet.humidity = 45.0;
  * packet.sensor_timestamp = millis();
- * packet.server_package_id = 1001;
- * packet.package_sequence_number = 42;
  * @endcode
  */
 
@@ -33,12 +31,10 @@
 #pragma pack(push, 1)
 typedef struct __attribute__((packed))
 {
-    uint8_t sensor_id;                /**< Unique sensor identifier */
-    uint32_t sensor_timestamp;        /**< Timestamp from the sensor (milliseconds) */
-    float temperature;                /**< Temperature reading (Celsius) */
-    float humidity;                   /**< Humidity reading (%) */
-    uint32_t server_package_id;       /**< ID assigned by the server for this packet */
-    uint16_t package_sequence_number; /**< Sequence number of the packet */
+    uint8_t sensor_id;         /**< Unique sensor identifier */
+    uint32_t sensor_timestamp; /**< Timestamp from the sensor (milliseconds) */
+    float temperature;         /**< Temperature reading (Celsius) */
+    float humidity;            /**< Humidity reading (%) */
 } SensorPacket;
 #pragma pack(pop)
 

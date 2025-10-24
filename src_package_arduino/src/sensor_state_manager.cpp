@@ -101,8 +101,6 @@ void state_TransferPacketBatch()
                     Serial.print(packet.temperature);
                     Serial.print(", Hum: ");
                     Serial.print(packet.humidity);
-                    Serial.print(", Seq: ");
-                    Serial.println(packet.package_sequence_number);
                 }
                 else
                 {
@@ -133,13 +131,6 @@ void state_TransferPacketBatch()
         current_sensor_state = sensor_state::IDLE;
     }
 }
-
-/**
- * @brief Update the server package ID.
- *
- * Placeholder for future implementation.
- */
-void state_UpdateServerId() {}
 
 /**
  * @brief Handle the ERROR_STATE.

@@ -33,7 +33,6 @@ enum class sensor_state
     IDLE,                     /**< Waiting or idle state */
     CREATE_AND_BUFFER_PACKET, /**< Creating a sensor packet and buffering it */
     TRANSFER_PACKET_BATCH,    /**< Sending buffered packets via BLE */
-    UPDATE_SERVER_PACKAGE_ID, /**< Update server package ID (placeholder) */
     READ_FLASH_MEMORY,        /**< Read state or data from flash memory (placeholder) */
     // WRITE_FLASH_MEMORY_BUFFER_BATCH, /**< Write buffer batch to flash (placeholder) */
     ERROR_STATE /**< Error state due to transmission or buffer failure */
@@ -63,13 +62,6 @@ void state_CreateAndBufferPacket();
  * and updates `current_sensor_state`.
  */
 void state_TransferPacketBatch();
-
-/**
- * @brief Update the server package ID.
- *
- * Placeholder for future implementation.
- */
-void state_UpdateServerId();
 
 /**
  * @brief Handle the ERROR_STATE.

@@ -28,17 +28,13 @@
  * - Timestamp
  * - Temperature
  * - Humidity
- * - Server package ID
- * - Packet sequence number
  */
 typedef struct __attribute__((packed))
 {
-    uint8_t sensor_id;                /**< Unique sensor ID */
-    uint32_t sensor_timestamp;        /**< Timestamp in milliseconds */
-    float temperature;                /**< Temperature in °C */
-    float humidity;                   /**< Relative humidity in % */
-    uint32_t server_package_id;       /**< ID assigned by server */
-    uint16_t package_sequence_number; /**< Sequential packet number */
+    uint8_t sensor_id;         /**< Unique sensor ID */
+    uint32_t sensor_timestamp; /**< Timestamp in milliseconds */
+    float temperature;         /**< Temperature in °C */
+    float humidity;            /**< Relative humidity in % */
 } SensorPacket;
 
 /** Unique ID of this sensor unit */

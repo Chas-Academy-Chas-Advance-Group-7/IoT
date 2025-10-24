@@ -78,8 +78,6 @@ static void notificationCallback(BLERemoteCharacteristic *pCharacteristic, uint8
     safePrintf("Timestamp: %lu\n", (unsigned long)packet.sensor_timestamp);
     safePrintf("Temperature: %.2f C\n", packet.temperature);
     safePrintf("Humidity: %.2f %%\n", packet.humidity);
-    safePrintf("ServerPkgID: %lu\n", (unsigned long)packet.server_package_id);
-    safePrintf("Seq #: %u\n", packet.package_sequence_number);
     safePrintf("--------------------\n");
 
     xQueueSend(dataQueue, &packet, pdMS_TO_TICKS(100));
