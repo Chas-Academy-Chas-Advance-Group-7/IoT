@@ -158,7 +158,7 @@ void backendTask(void *parameter)
                 JsonObject sensor = sensors.add<JsonObject>();
                 sensor["sensor_id"] = sensorIds[i];
                 JsonObject data = sensor["data"].to<JsonObject>();
-                data["timestamp"] = latestSensors[i].sensor_timestamp;
+                // data["timestamp"] = latestSensors[i].sensor_timestamp;
                 data["temperature"] = latestSensors[i].temperature;
                 data["humidity"] = latestSensors[i].humidity;
 

@@ -75,7 +75,7 @@ static void notificationCallback(BLERemoteCharacteristic *pCharacteristic, uint8
 
     safePrintf("\n--- Sensor Packet ---\n");
     safePrintf("Sensor ID: %u\n", packet.sensor_id);
-    safePrintf("Timestamp: %lu\n", (unsigned long)packet.sensor_timestamp);
+    // safePrintf("Timestamp: %lu\n", (unsigned long)packet.sensor_timestamp);
     safePrintf("Temperature: %.2f C\n", packet.temperature);
     safePrintf("Humidity: %.2f %%\n", packet.humidity);
     safePrintf("--------------------\n");
