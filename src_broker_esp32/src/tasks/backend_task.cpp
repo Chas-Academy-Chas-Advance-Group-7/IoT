@@ -57,34 +57,35 @@ void backendTask(void *parameter)
 {
     safePrintf("Backend task started - waiting for sensor packets\n");
 
-    // Make processedData static to prevent stack overflow
     static processed_data_t processedData;
-
     const int truckId = 7; // your truck ID
     const int MAX_SENSORS = 10;
 
-    // Large persistent arrays
-    static SensorPacket latestSensors[MAX_SENSORS];
-    static int sensorIds[MAX_SENSORS];
+    static SensorPacket latestSensors[MAX_SENSORS]; // last received packets
+    static int sensorIds[MAX_SENSORS];              // sensor IDs per slot
+    static bool sensorUpdated[MAX_SENSORS];         // tracks which sensors reported
 
-    // Initialize sensorIds to -1 (empty)
     static bool initialized = false;
     if (!initialized)
     {
         for (int i = 0; i < MAX_SENSORS; i++)
+        {
             sensorIds[i] = -1;
+            sensorUpdated[i] = false;
+        }
         initialized = true;
     }
 
-    // Stack-allocated JSON document (modern usage)
     static StaticJsonDocument<6144> doc;
 
-    static TickType_t lastSendTick = 0;
+    static TickType_t aggregationStartTick = 0;
+    const TickType_t TIMEOUT_MS = pdMS_TO_TICKS(60000); // 60s timeout
 
     while (true)
     {
         SensorPacket packet;
 
+        // --- Receive sensor packets ---
         if (xQueueReceive(dataQueue, &packet, pdMS_TO_TICKS(500)) == pdTRUE)
         {
             int slot = -1;
@@ -103,8 +104,9 @@ void backendTask(void *parameter)
 
             if (slot != -1)
             {
-                latestSensors[slot] = packet;
+                latestSensors[slot] = packet; // store packet
                 sensorIds[slot] = packet.sensor_id;
+                sensorUpdated[slot] = true; // mark as reported
                 safePrintf("Stored packet for sensor ID %d in slot %d\n", packet.sensor_id, slot);
             }
             else
@@ -113,29 +115,36 @@ void backendTask(void *parameter)
             }
         }
 
-        if (xTaskGetTickCount() - lastSendTick >= pdMS_TO_TICKS(2000))
-        {
-            lastSendTick = xTaskGetTickCount();
+        // --- Start aggregation timer if not started ---
+        if (aggregationStartTick == 0)
+            aggregationStartTick = xTaskGetTickCount();
 
-            bool hasData = false;
-            for (int i = 0; i < MAX_SENSORS; i++)
+        // --- Check which sensors have reported ---
+        bool allUpdated = true;
+        bool hasData = false;
+        int activeSensors = 0;
+
+        for (int i = 0; i < MAX_SENSORS; i++)
+        {
+            if (sensorIds[i] != -1)
             {
-                if (sensorIds[i] != -1)
-                {
-                    hasData = true;
-                    break;
-                }
+                hasData = true;
+                activeSensors++;
+                if (!sensorUpdated[i])
+                    allUpdated = false;
             }
-            if (!hasData)
-                continue;
+        }
+
+        // --- Send JSON if all active sensors updated OR timeout ---
+        if (hasData && (allUpdated || (xTaskGetTickCount() - aggregationStartTick) >= TIMEOUT_MS))
+        {
+            aggregationStartTick = 0; // reset timer
 
             doc.clear();
             doc["access_key"] = ACCESS_KEY;
             doc["truck_id"] = truckId;
 
-            // --- Modernized: createNestedArray replaced ---
             JsonArray sensors = doc["sensors"].to<JsonArray>();
-
             for (int i = 0; i < MAX_SENSORS; i++)
             {
                 if (sensorIds[i] == -1)
@@ -143,16 +152,16 @@ void backendTask(void *parameter)
 
                 JsonObject sensor = sensors.add<JsonObject>();
                 sensor["sensor_id"] = sensorIds[i];
-
-                // --- Modernized: createNestedObject replaced ---
                 JsonObject data = sensor["data"].to<JsonObject>();
                 data["timestamp"] = latestSensors[i].sensor_timestamp;
                 data["temperature"] = latestSensors[i].temperature;
                 data["humidity"] = latestSensors[i].humidity;
+
+                sensorUpdated[i] = false;          // reset updated flag
+                latestSensors[i] = SensorPacket{}; // NEW: clear last packet
             }
 
             size_t len = serializeJson(doc, processedData.json, sizeof(processedData.json));
-
             if (len >= sizeof(processedData.json) - 1)
             {
                 safePrintf("Warning: JSON truncated, increase buffer size may help\n");
@@ -162,7 +171,8 @@ void backendTask(void *parameter)
 
             safePrintf("Serialized JSON length: %zu / %zu bytes\n", len,
                        sizeof(processedData.json));
-            safePrintf("Aggregated JSON: %s\n", processedData.json);
+            safePrintf("Aggregated JSON (active sensors: %d): %s\n", activeSensors,
+                       processedData.json);
 
             if (xQueueSend(networkQueue, &processedData, pdMS_TO_TICKS(100)) != pdTRUE)
                 safePrintf("Failed to queue aggregated data\n");
