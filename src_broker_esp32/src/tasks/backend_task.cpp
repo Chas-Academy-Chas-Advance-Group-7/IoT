@@ -33,7 +33,8 @@ extern QueueHandle_t dataQueue;
 /// Queue handle for outgoing processed JSON data.
 extern QueueHandle_t networkQueue;
 
-const char API_KEY[] = "your_api_key_here";
+/** Access key for API authentication */
+const char ACCESS_KEY[] = "your_access_key_here";
 
 /**
  * @brief Backend task function responsible for processing sensor data.
@@ -129,8 +130,8 @@ void backendTask(void *parameter)
                 continue;
 
             doc.clear();
+            doc["access_key"] = ACCESS_KEY;
             doc["truck_id"] = truckId;
-            doc["api_key"] = API_KEY;
 
             // --- Modernized: createNestedArray replaced ---
             JsonArray sensors = doc["sensors"].to<JsonArray>();
