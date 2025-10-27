@@ -167,7 +167,7 @@ void backendTask(void *parameter)
                 if (age >= STALE_THRESHOLD_MS)
                 {
                     safePrintf("Warning: Sensor ID %d has stale data (%lu ms old)\n", sensorIds[i],
-                               age);
+                               (unsigned long)pdTICKS_TO_MS(age));
                     sensor["stale"] = true; // mark stale in JSON
                 }
                 else
