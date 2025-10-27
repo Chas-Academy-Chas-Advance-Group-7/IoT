@@ -24,7 +24,7 @@
 sensor_state current_sensor_state = sensor_state::IDLE;
 
 /** Previous state before entering ERROR_STATE */
-sensor_state previous_state_to_error_state = current_sensor_state;
+sensor_state previous_state_to_error_state = sensor_state::IDLE;
 
 /** BLE initialization flag */
 static bool bleInitialized = false;
@@ -148,10 +148,13 @@ void state_TransferPacketBatch()
     const unsigned long TRANSFER_INTERVAL = 150; // ms between packets
 
     // Reset counters if recovering from an error
-    if (previous_state_to_error_state == sensor_state::TRANSFER_PACKET_BATCH)
+    static bool recovering_from_error = false;
+
+    if (recovering_from_error)
     {
         failed_transmission_attempts_counter = 0;
         lastTransferTime = millis();
+        recovering_from_error = false;
     }
 
     // Only attempt send if BLE central is connected
@@ -195,6 +198,7 @@ void state_TransferPacketBatch()
                     if (failed_transmission_attempts_counter >= MAX_FAILED_ATTEMPTS)
                     {
                         Serial.println("ERROR: BLE transmission failed too many times!");
+                        recovering_from_error = true;
                         transitionToErrorState();
                         return; // Stop further processing
                     }

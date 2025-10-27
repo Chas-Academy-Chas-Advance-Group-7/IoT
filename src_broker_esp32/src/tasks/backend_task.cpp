@@ -58,12 +58,13 @@ void backendTask(void *parameter)
     safePrintf("Backend task started - waiting for sensor packets\n");
 
     static processed_data_t processedData;
-    const int truckId = 7; // your truck ID
+    const int truckId = 7;
     const int MAX_SENSORS = 10;
 
-    static SensorPacket latestSensors[MAX_SENSORS]; // last received packets
-    static int sensorIds[MAX_SENSORS];              // sensor IDs per slot
-    static bool sensorUpdated[MAX_SENSORS];         // tracks which sensors reported
+    static SensorPacket latestSensors[MAX_SENSORS];
+    static int sensorIds[MAX_SENSORS];
+    static bool sensorUpdated[MAX_SENSORS];
+    static TickType_t lastUpdateTick[MAX_SENSORS]; // NEW: track last packet time
 
     static bool initialized = false;
     if (!initialized)
@@ -72,6 +73,7 @@ void backendTask(void *parameter)
         {
             sensorIds[i] = -1;
             sensorUpdated[i] = false;
+            lastUpdateTick[i] = 0;
         }
         initialized = true;
     }
@@ -79,7 +81,8 @@ void backendTask(void *parameter)
     static StaticJsonDocument<6144> doc;
 
     static TickType_t aggregationStartTick = 0;
-    const TickType_t TIMEOUT_MS = pdMS_TO_TICKS(60000); // 60s timeout
+    const TickType_t TIMEOUT_MS = pdMS_TO_TICKS(60000);         // 60s aggregation timeout
+    const TickType_t STALE_THRESHOLD_MS = pdMS_TO_TICKS(60000); // 60s stale sensor threshold
 
     while (true)
     {
@@ -104,9 +107,10 @@ void backendTask(void *parameter)
 
             if (slot != -1)
             {
-                latestSensors[slot] = packet; // store packet
+                latestSensors[slot] = packet;
                 sensorIds[slot] = packet.sensor_id;
-                sensorUpdated[slot] = true; // mark as reported
+                sensorUpdated[slot] = true;
+                lastUpdateTick[slot] = xTaskGetTickCount();
                 safePrintf("Stored packet for sensor ID %d in slot %d\n", packet.sensor_id, slot);
             }
             else
@@ -119,7 +123,7 @@ void backendTask(void *parameter)
         if (aggregationStartTick == 0)
             aggregationStartTick = xTaskGetTickCount();
 
-        // --- Check which sensors have reported ---
+        // --- Check active sensors ---
         bool allUpdated = true;
         bool hasData = false;
         int activeSensors = 0;
@@ -145,6 +149,7 @@ void backendTask(void *parameter)
             doc["truck_id"] = truckId;
 
             JsonArray sensors = doc["sensors"].to<JsonArray>();
+
             for (int i = 0; i < MAX_SENSORS; i++)
             {
                 if (sensorIds[i] == -1)
@@ -157,8 +162,20 @@ void backendTask(void *parameter)
                 data["temperature"] = latestSensors[i].temperature;
                 data["humidity"] = latestSensors[i].humidity;
 
-                sensorUpdated[i] = false;          // reset updated flag
-                latestSensors[i] = SensorPacket{}; // NEW: clear last packet
+                // --- Check for stale sensors ---
+                TickType_t age = xTaskGetTickCount() - lastUpdateTick[i];
+                if (age >= STALE_THRESHOLD_MS)
+                {
+                    safePrintf("Warning: Sensor ID %d has stale data (%lu ms old)\n", sensorIds[i],
+                               age);
+                    sensor["stale"] = true; // mark stale in JSON
+                }
+                else
+                {
+                    sensor["stale"] = false;
+                }
+
+                sensorUpdated[i] = false; // reset flag
             }
 
             size_t len = serializeJson(doc, processedData.json, sizeof(processedData.json));

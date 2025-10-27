@@ -51,11 +51,12 @@ size_t queue_count = 0;
  *
  * @param packet The SensorPacket to add to the buffer.
  *
- * @return true Always returns true once the packet has been successfully added
- *         (even if the oldest packet had to be dropped to make room).
+  @return true Always returns true as long as the packet is added to the buffer,
+ *         even if the buffer was flushed due to corruption or the oldest packet had to be dropped.
  *
- * @note This function ensures that the buffer remains valid and operational even
- *       in the presence of transient memory corruption or full-buffer conditions.
+ * @note This function never returns false; it will always attempt to recover from
+ *       buffer corruption (by flushing) or overflow (by dropping the oldest packet)
+ *       before adding the new packet, and will always return true after the attempt.
  * @note If frequent warnings about buffer fullness appear, consider increasing `QUEUE_SIZE`.
  *
  * @code
