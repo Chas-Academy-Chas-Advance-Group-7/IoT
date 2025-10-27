@@ -133,7 +133,7 @@ void httpTransmissionTask(void *pvParameters)
 
                 http.begin(client, BACKEND_URL);
                 http.addHeader("Content-Type", "application/json");
-                http.addHeader("X-API-Key", "Test_key");
+                // http.addHeader("X-API-Key", "Test_key");
                 http.addHeader("User-Agent", "ESP32Client/1.0");
 
                 int httpResponseCode = http.POST(String(transferData.json));
