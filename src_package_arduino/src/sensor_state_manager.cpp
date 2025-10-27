@@ -29,6 +29,18 @@ sensor_state previous_state_to_error_state = current_sensor_state;
 /** BLE initialization flag */
 static bool bleInitialized = false;
 
+/** Last time a packet transfer was attempted */
+static unsigned long lastTransferCheck = 0;
+
+/** Period between transfer attempts */
+const unsigned long TRANSFER_PERIOD = 30000; // e.g. every 30s
+
+/** Last time packet creation was attempted */
+static unsigned long lastPacketTime = 0;
+
+/** Period between packet creation attempts */
+const unsigned long PACKET_INTERVAL = 10000; // e.g., create a packet every 10 seconds
+
 /**
  * @brief Determine and handle transitions between sensor states.
  *
@@ -52,16 +64,14 @@ void determineSensorState()
 
     // --- 2. Packet transfer priority ---
     // Only try sending if there are packets in the buffer
-    if (queue_count > 0)
+    if (millis() - lastTransferCheck >= TRANSFER_PERIOD && queue_count > 0)
     {
+        lastTransferCheck = millis();
         current_sensor_state = sensor_state::TRANSFER_PACKET_BATCH;
         return;
     }
 
     // --- 3. Sensor packet creation timing ---
-    static unsigned long lastPacketTime = 0;
-    const unsigned long PACKET_INTERVAL = 1000; // e.g., create a packet every 1 second
-
     if (millis() - lastPacketTime >= PACKET_INTERVAL)
     {
         lastPacketTime = millis();
