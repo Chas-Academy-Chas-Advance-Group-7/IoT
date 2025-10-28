@@ -54,12 +54,11 @@ void determineSensorState()
         return;
     }
 
-    // --- 1. Packet transfer priority ---
-    // Only try sending if there are packets in the buffer
-    if (millis() - lastTransferCheck >= TRANSFER_PERIOD && queue_count > 0)
+    // --- 1. Sensor packet creation timing ---
+    if (millis() - lastPacketTime >= PACKET_INTERVAL)
     {
-        lastTransferCheck = millis();
-        current_sensor_state = sensor_state::TRANSFER_PACKET_BATCH;
+        lastPacketTime = millis();
+        current_sensor_state = sensor_state::CREATE_AND_BUFFER_PACKET;
         return;
     }
 
@@ -71,11 +70,12 @@ void determineSensorState()
         return;
     }
 
-    // --- 3. Sensor packet creation timing ---
-    if (millis() - lastPacketTime >= PACKET_INTERVAL)
+    // --- 3. Packet transfer priority ---
+    // Only try sending if there are packets in the buffer
+    if (millis() - lastTransferCheck >= TRANSFER_PERIOD && queue_count > 0)
     {
-        lastPacketTime = millis();
-        current_sensor_state = sensor_state::CREATE_AND_BUFFER_PACKET;
+        lastTransferCheck = millis();
+        current_sensor_state = sensor_state::TRANSFER_PACKET_BATCH;
         return;
     }
 
