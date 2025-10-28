@@ -151,7 +151,7 @@ void backendTask(void *parameter)
             aggregationStartTick = 0; // reset timer
 
             doc.clear();
-            doc["access_key"] = ACCESS_KEY;
+            doc["accessKey"] = ACCESS_KEY;
             doc["truck_id"] = truckId;
 
             JsonArray sensors = doc["sensors"].to<JsonArray>();
