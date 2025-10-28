@@ -27,6 +27,12 @@
 #include "utils/threadsafe_serial.h"
 #include <ArduinoJson.h>
 
+#if __has_include("backend_server_secrets.h")
+#include "backend_server_secrets.h" // User-provided credentials
+#else
+#include "backend_server_secrets_example.h" // Default fallback
+#endif
+
 /// Queue handle for incoming sensor packets.
 extern QueueHandle_t dataQueue;
 
@@ -34,7 +40,7 @@ extern QueueHandle_t dataQueue;
 extern QueueHandle_t networkQueue;
 
 /** Access key for API authentication */
-const char ACCESS_KEY[] = "your_access_key_here";
+const char ACCESS_KEY[] = BACKEND_API_KEY;
 
 /**
  * @brief Backend task function responsible for processing sensor data.

@@ -25,6 +25,12 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 
+#if __has_include("backend_server_secrets.h")
+#include "backend_server_secrets.h" // User-provided credentials
+#else
+#include "backend_server_secrets_example.h" // Default fallback
+#endif
+
 /// Event group used to track Wi-Fi connection state.
 extern EventGroupHandle_t networkEventGroup;
 
@@ -35,7 +41,7 @@ extern QueueHandle_t networkQueue;
 #define NETWORK_CONNECTED_BIT BIT0
 
 /// Backend URL to which JSON payloads are sent.
-#define BACKEND_URL "https://your_URL_here"
+const char BACKEND_URL[] = BACKEND_SERVER_URL;
 
 /// Maximum number of retry attempts for failed transmissions.
 #define MAX_HTTP_RETRIES 3
