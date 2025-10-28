@@ -33,6 +33,7 @@ enum class sensor_state
     IDLE,                     /**< Waiting or idle state */
     CREATE_AND_BUFFER_PACKET, /**< Creating a sensor packet and buffering it */
     TRANSFER_PACKET_BATCH,    /**< Sending buffered packets via BLE */
+    BLE_MANAGEMENT,           /**< Manage BLE connections (placeholder) */
     READ_FLASH_MEMORY,        /**< Read state or data from flash memory (placeholder) */
     // WRITE_FLASH_MEMORY_BUFFER_BATCH, /**< Write buffer batch to flash (placeholder) */
     ERROR_STATE /**< Error state due to transmission or buffer failure */
@@ -41,12 +42,22 @@ enum class sensor_state
 /** Current state of the sensor unit */
 extern sensor_state current_sensor_state;
 
+extern sensor_state previous_state_to_error_state;
+
 /**
  * @brief Determine and handle transitions between sensor states.
  *
  * Call periodically in the main loop or task.
  */
 void determineSensorState();
+
+/**
+ * @brief Transition to the ERROR_STATE.
+ *
+ * Call this function to handle error transitions.
+ * Updates `current_sensor_state` to ERROR_STATE.
+ */
+void transitionToErrorState();
 
 /**
  * @brief Create a new SensorPacket and add it to the circular buffer.
@@ -62,6 +73,18 @@ void state_CreateAndBufferPacket();
  * and updates `current_sensor_state`.
  */
 void state_TransferPacketBatch();
+
+/**
+ * @brief Manage BLE connections and advertising.
+ *
+ * Initializes BLE if not already done, handles reconnections,
+ * and manages advertising state.
+ *
+ * @code
+ * state_BLEManagement();
+ * @endcode
+ */
+void state_BLEManagement();
 
 /**
  * @brief Handle the ERROR_STATE.

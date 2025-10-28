@@ -30,7 +30,6 @@ float humidity = 0.0;
  *
  * Reads the DHT sensor and fills a SensorPacket with:
  * - Sensor ID
- * - Timestamp
  * - Temperature
  * - Humidity
  *
@@ -46,7 +45,7 @@ SensorPacket assembleSensorPacket()
     SensorPacket packet;
 
     packet.sensor_id = sensor_id;
-    packet.sensor_timestamp = getTimestamp();
+    // packet.sensor_timestamp = getTimestamp();
 
     if (!readDHT(packet))
     {
@@ -64,4 +63,4 @@ SensorPacket assembleSensorPacket()
  *
  * @return uint32_t Current timestamp (ms). Placeholder function.
  */
-uint32_t getTimestamp() {}
+// uint32_t getTimestamp() {}

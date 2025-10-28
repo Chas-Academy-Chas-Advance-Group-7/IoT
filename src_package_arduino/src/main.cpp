@@ -28,9 +28,6 @@ void setup()
     // Initialize DHT sensor
     initializeDHT();
 
-    // Initialize BLE peripheral
-    setupBluetooth();
-
     // BLUETOOTH TEST VALUES
     // Pre-fill buffer with test packets
     /*for (int i = 0; i < 10; i++)
@@ -110,6 +107,10 @@ void loop()
 
     case sensor_state::TRANSFER_PACKET_BATCH:
         state_TransferPacketBatch();
+        break;
+
+    case sensor_state::BLE_MANAGEMENT:
+        state_BLEManagement();
         break;
 
     case sensor_state::READ_FLASH_MEMORY:

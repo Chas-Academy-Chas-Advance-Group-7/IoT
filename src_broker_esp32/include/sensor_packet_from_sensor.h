@@ -31,10 +31,10 @@
 #pragma pack(push, 1)
 typedef struct __attribute__((packed))
 {
-    uint8_t sensor_id;         /**< Unique sensor identifier */
-    uint32_t sensor_timestamp; /**< Timestamp from the sensor (milliseconds) */
-    float temperature;         /**< Temperature reading (Celsius) */
-    float humidity;            /**< Humidity reading (%) */
+    uint8_t sensor_id; /**< Unique sensor identifier */
+    // uint32_t sensor_timestamp; /**< Timestamp from the sensor (milliseconds) */
+    float temperature; /**< Temperature reading (Celsius) */
+    float humidity;    /**< Humidity reading (%) */
 } SensorPacket;
 #pragma pack(pop)
 

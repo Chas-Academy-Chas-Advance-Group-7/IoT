@@ -27,11 +27,20 @@
 #include "utils/threadsafe_serial.h"
 #include <ArduinoJson.h>
 
+#if __has_include("backend_server_secrets.h")
+#include "backend_server_secrets.h" // User-provided credentials
+#else
+#include "backend_server_secrets_example.h" // Default fallback
+#endif
+
 /// Queue handle for incoming sensor packets.
 extern QueueHandle_t dataQueue;
 
 /// Queue handle for outgoing processed JSON data.
 extern QueueHandle_t networkQueue;
+
+/** Access key for API authentication */
+const char ACCESS_KEY[] = BACKEND_API_KEY;
 
 /**
  * @brief Backend task function responsible for processing sensor data.
@@ -54,34 +63,38 @@ void backendTask(void *parameter)
 {
     safePrintf("Backend task started - waiting for sensor packets\n");
 
-    // Make processedData static to prevent stack overflow
     static processed_data_t processedData;
-
-    const int truckId = 7; // your truck ID
+    const int truckId = 7;
     const int MAX_SENSORS = 10;
 
-    // Large persistent arrays
     static SensorPacket latestSensors[MAX_SENSORS];
     static int sensorIds[MAX_SENSORS];
+    static bool sensorUpdated[MAX_SENSORS];
+    static TickType_t lastUpdateTick[MAX_SENSORS]; // NEW: track last packet time
 
-    // Initialize sensorIds to -1 (empty)
     static bool initialized = false;
     if (!initialized)
     {
         for (int i = 0; i < MAX_SENSORS; i++)
+        {
             sensorIds[i] = -1;
+            sensorUpdated[i] = false;
+            lastUpdateTick[i] = 0;
+        }
         initialized = true;
     }
 
-    // Stack-allocated JSON document (modern usage)
     static StaticJsonDocument<6144> doc;
 
-    static TickType_t lastSendTick = 0;
+    static TickType_t aggregationStartTick = 0;
+    const TickType_t TIMEOUT_MS = pdMS_TO_TICKS(60000);         // 60s aggregation timeout
+    const TickType_t STALE_THRESHOLD_MS = pdMS_TO_TICKS(60000); // 60s stale sensor threshold
 
     while (true)
     {
         SensorPacket packet;
 
+        // --- Receive sensor packets ---
         if (xQueueReceive(dataQueue, &packet, pdMS_TO_TICKS(500)) == pdTRUE)
         {
             int slot = -1;
@@ -102,6 +115,8 @@ void backendTask(void *parameter)
             {
                 latestSensors[slot] = packet;
                 sensorIds[slot] = packet.sensor_id;
+                sensorUpdated[slot] = true;
+                lastUpdateTick[slot] = xTaskGetTickCount();
                 safePrintf("Stored packet for sensor ID %d in slot %d\n", packet.sensor_id, slot);
             }
             else
@@ -110,26 +125,35 @@ void backendTask(void *parameter)
             }
         }
 
-        if (xTaskGetTickCount() - lastSendTick >= pdMS_TO_TICKS(2000))
-        {
-            lastSendTick = xTaskGetTickCount();
+        // --- Start aggregation timer if not started ---
+        if (aggregationStartTick == 0)
+            aggregationStartTick = xTaskGetTickCount();
 
-            bool hasData = false;
-            for (int i = 0; i < MAX_SENSORS; i++)
+        // --- Check active sensors ---
+        bool allUpdated = true;
+        bool hasData = false;
+        int activeSensors = 0;
+
+        for (int i = 0; i < MAX_SENSORS; i++)
+        {
+            if (sensorIds[i] != -1)
             {
-                if (sensorIds[i] != -1)
-                {
-                    hasData = true;
-                    break;
-                }
+                hasData = true;
+                activeSensors++;
+                if (!sensorUpdated[i])
+                    allUpdated = false;
             }
-            if (!hasData)
-                continue;
+        }
+
+        // --- Send JSON if all active sensors updated OR timeout ---
+        if (hasData && (allUpdated || (xTaskGetTickCount() - aggregationStartTick) >= TIMEOUT_MS))
+        {
+            aggregationStartTick = 0; // reset timer
 
             doc.clear();
+            doc["accessKey"] = ACCESS_KEY;
             doc["truck_id"] = truckId;
 
-            // --- Modernized: createNestedArray replaced ---
             JsonArray sensors = doc["sensors"].to<JsonArray>();
 
             for (int i = 0; i < MAX_SENSORS; i++)
@@ -139,16 +163,28 @@ void backendTask(void *parameter)
 
                 JsonObject sensor = sensors.add<JsonObject>();
                 sensor["sensor_id"] = sensorIds[i];
-
-                // --- Modernized: createNestedObject replaced ---
                 JsonObject data = sensor["data"].to<JsonObject>();
-                data["timestamp"] = latestSensors[i].sensor_timestamp;
+                // data["timestamp"] = latestSensors[i].sensor_timestamp;
                 data["temperature"] = latestSensors[i].temperature;
                 data["humidity"] = latestSensors[i].humidity;
+
+                // --- Check for stale sensors ---
+                TickType_t age = xTaskGetTickCount() - lastUpdateTick[i];
+                if (age >= STALE_THRESHOLD_MS)
+                {
+                    safePrintf("Warning: Sensor ID %d has stale data (%lu ms old)\n", sensorIds[i],
+                               (unsigned long)pdTICKS_TO_MS(age));
+                    sensor["stale"] = true; // mark stale in JSON
+                }
+                else
+                {
+                    sensor["stale"] = false;
+                }
+
+                sensorUpdated[i] = false; // reset flag
             }
 
             size_t len = serializeJson(doc, processedData.json, sizeof(processedData.json));
-
             if (len >= sizeof(processedData.json) - 1)
             {
                 safePrintf("Warning: JSON truncated, increase buffer size may help\n");
@@ -158,7 +194,8 @@ void backendTask(void *parameter)
 
             safePrintf("Serialized JSON length: %zu / %zu bytes\n", len,
                        sizeof(processedData.json));
-            safePrintf("Aggregated JSON: %s\n", processedData.json);
+            safePrintf("Aggregated JSON (active sensors: %d): %s\n", activeSensors,
+                       processedData.json);
 
             if (xQueueSend(networkQueue, &processedData, pdMS_TO_TICKS(100)) != pdTRUE)
                 safePrintf("Failed to queue aggregated data\n");
