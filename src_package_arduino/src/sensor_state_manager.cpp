@@ -54,20 +54,20 @@ void determineSensorState()
         return;
     }
 
-    // --- 1. BLE management priority ---
-    // Check if BLE is initialized or central is disconnected
-    if (!bleInitialized || !isCentralConnected())
-    {
-        current_sensor_state = sensor_state::BLE_MANAGEMENT;
-        return;
-    }
-
-    // --- 2. Packet transfer priority ---
+    // --- 1. Packet transfer priority ---
     // Only try sending if there are packets in the buffer
     if (millis() - lastTransferCheck >= TRANSFER_PERIOD && queue_count > 0)
     {
         lastTransferCheck = millis();
         current_sensor_state = sensor_state::TRANSFER_PACKET_BATCH;
+        return;
+    }
+
+    // --- 2. BLE management priority ---
+    // Check if BLE is initialized or central is disconnected
+    if (!bleInitialized || !isCentralConnected())
+    {
+        current_sensor_state = sensor_state::BLE_MANAGEMENT;
         return;
     }
 
@@ -121,12 +121,21 @@ void state_CreateAndBufferPacket()
 
     if (!addPacketToBuffer(newPacket))
     {
-        Serial.println("Buffer full or error while adding packet!");
+        Serial.println("Error while adding packet!");
         transitionToErrorState();
     }
     else
     {
         Serial.println("Packet added to buffer.");
+        Serial.print("Sensor ID: ");
+        Serial.print(newPacket.sensor_id);
+        Serial.print(", Temp: ");
+        Serial.print(newPacket.temperature);
+        Serial.print(", Hum: ");
+        Serial.println(newPacket.humidity);
+
+        Serial.print("Buffer count: ");
+        Serial.println(queue_count);
         current_sensor_state = sensor_state::IDLE;
     }
 }
@@ -236,6 +245,9 @@ void state_BLEManagement()
     static int bleFailCounter = 0;
     const int MAX_BLE_FAILS = 5;
 
+    // --- Added flag to prevent repeated advertising ---
+    static bool isAdvertising = false;
+
     // Initialize BLE once
     if (!bleInitialized)
     {
@@ -266,30 +278,42 @@ void state_BLEManagement()
     // Reconnection logic
     if (!isCentralConnected())
     {
-        Serial.println("Central disconnected. Re-advertising BLE service...");
-        if (!BLE.advertise())
+        // --- Only re-advertise once per disconnect ---
+        if (!isAdvertising)
         {
-            bleFailCounter++;
-            Serial.print("BLE advertise failed. Attempt ");
-            Serial.println(bleFailCounter);
-
-            if (bleFailCounter >= MAX_BLE_FAILS)
+            Serial.println("Central disconnected. Re-advertising BLE service...");
+            if (!BLE.advertise())
             {
-                Serial.println("Too many BLE advertise failures! Escalating to ERROR_STATE.");
-                transitionToErrorState();
+                bleFailCounter++;
+                Serial.print("BLE advertise failed. Attempt ");
+                Serial.println(bleFailCounter);
+
+                if (bleFailCounter >= MAX_BLE_FAILS)
+                {
+                    Serial.println("Too many BLE advertise failures! Escalating to ERROR_STATE.");
+                    transitionToErrorState();
+                }
             }
-        }
-        else
-        {
-            // Successfully started advertising, reset fail counter
-            Serial.println("BLE advertising restarted successfully.");
-            bleFailCounter = 0;
+            else
+            {
+                // Successfully started advertising, reset fail counter
+                Serial.println("BLE advertising restarted successfully.");
+                bleFailCounter = 0;
+                isAdvertising = true; // <-- prevent repeated spam
+            }
         }
     }
     else
     {
         // Central is connected; reset fail counter and optionally move to IDLE
         bleFailCounter = 0;
+
+        // --- Reset flag when central connects ---
+        if (isAdvertising)
+        {
+            isAdvertising = false;
+        }
+
         if (current_sensor_state == sensor_state::BLE_MANAGEMENT)
         {
             current_sensor_state = sensor_state::IDLE;
