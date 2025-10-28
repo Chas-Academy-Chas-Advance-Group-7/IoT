@@ -74,6 +74,16 @@ void state_CreateAndBufferPacket();
  */
 void state_TransferPacketBatch();
 
+/**
+ * @brief Manage BLE connections and advertising.
+ *
+ * Initializes BLE if not already done, handles reconnections,
+ * and manages advertising state.
+ *
+ * @code
+ * state_BLEManagement();
+ * @endcode
+ */
 void state_BLEManagement();
 
 /**
