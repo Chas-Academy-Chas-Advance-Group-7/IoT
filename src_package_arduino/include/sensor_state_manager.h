@@ -60,7 +60,7 @@
  *   state_ErrorState();
  *   break;
  *
- *   default: /* IDLE / no-op
+ *   default: IDLE / no-op
  *   break;
  * }
  * @endcode
