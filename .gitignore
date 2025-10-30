@@ -47,3 +47,4 @@
 **/compile_commands.json*
 
 **/.vscode/
+src_broker_esp32/include/backend_server_secrets.h
