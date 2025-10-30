@@ -72,6 +72,59 @@ Testing and debugging tips
 * Enable verbose thread-safe serial logs to trace transitions and failure counters.
 * Use the broker's logging (`broker_task` / `backend_task`) to verify packet delivery and JSON mapping.
 
+### State Machine Diagram
+
+Below are two representations of the sensor unit state machine: a Mermaid diagram (rendered on GitHub and many Markdown viewers) and an ASCII-art fallback for environments that don't render Mermaid.
+
+Mermaid (preferred):
+
+```mermaid
+stateDiagram-v2
+	[*] --> IDLE
+	IDLE --> CREATE_AND_BUFFER_PACKET: PACKET_INTERVAL
+	CREATE_AND_BUFFER_PACKET --> TRANSFER_PACKET_BATCH: packet enqueued
+	CREATE_AND_BUFFER_PACKET --> ERROR_STATE: buffer full / unrecoverable
+	TRANSFER_PACKET_BATCH --> IDLE: buffer empty
+	TRANSFER_PACKET_BATCH --> TRANSFER_PACKET_BATCH: success & more packets
+	TRANSFER_PACKET_BATCH --> ERROR_STATE: failed > MAX_FAILED_ATTEMPTS
+	IDLE --> BLE_MANAGEMENT: BLE not initialized / disconnected
+	BLE_MANAGEMENT --> IDLE: BLE ready / connected
+	READ_FLASH_MEMORY --> IDLE: restore complete
+	ANY_STATE --> ERROR_STATE: critical error detected
+	ERROR_STATE --> IDLE: recovery success (or manual reset)
+```
+
+ASCII art (fallback):
+
+```
+			+----------------+
+			|      IDLE      |
+			+----------------+
+			 ^    ^        ^
+			 |    |        |
+  PACKET_INTERVAL |   BLE not init |
+			 |    |        |
+ +----------------+ |        |
+ | CREATE_AND_BUFFER|        |
+ |     _PACKET_    |-------->|
+ +-----------------+         |
+		|    |                |
+		|    | packet enqueued |
+		|    v                |
+		| +----------------+  |
+		| | TRANSFER_PACKET|<- |
+		| |    _BATCH_     |   |
+		| +----------------+   |
+		|    |   ^   |         |
+		|    |   |   |         |
+		|    v   |   v         |
+		|  (success)  (fail)   |
+		+-----> IDLE   ---> ERROR_STATE
+```
+
+Notes:
+* The Mermaid diagram is the recommended view if your Markdown renderer supports it (GitHub does). The ASCII diagram is an easy-to-read fallback for simple viewers or plain-text contexts.
+* Keep the diagram in sync with `src_package_arduino/include/sensor_state_manager.h` if you update states or transitions.
 
 ### Data Flow
 
