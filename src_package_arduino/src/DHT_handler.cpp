@@ -2,8 +2,15 @@
  * @file DHT_handler.cpp
  * @brief Handles reading temperature and humidity from a DHT sensor.
  *
- * Provides functions to initialize a DHT sensor and read its temperature
- * and humidity values into a `SensorPacket` structure.
+ * Implementation notes:
+ * - The DHT sensor is relatively slow and must not be polled aggressively.
+ *   Respect the sensor's minimum sampling interval (typically ~2 seconds
+ *   depending on model) to avoid invalid reads.
+ * - `readDHT()` may block while waiting for the sensor response; keep
+ *   calls infrequent and avoid calling from time-critical contexts.
+ * - The function returns a boolean success indicator; failed reads do not
+ *   attempt complex recovery and are left to higher-level logic to handle
+ *   (retry, drop, or escalate to ERROR_STATE).
  *
  * Example usage:
  * @code
@@ -11,8 +18,10 @@
  * initializeDHT();
  *
  * if (readDHT(packet)) {
- *     Serial.printf("Temperature: %.2f C, Humidity: %.2f %%\n", packet.temperature,
- * packet.humidity); } else { Serial.println("Failed to read DHT sensor");
+ *     Serial.printf("Temperature: %.2f C, Humidity: %.2f %%\n",
+ *                   packet.temperature, packet.humidity);
+ * } else {
+ *     Serial.println("Failed to read DHT sensor");
  * }
  * @endcode
  */

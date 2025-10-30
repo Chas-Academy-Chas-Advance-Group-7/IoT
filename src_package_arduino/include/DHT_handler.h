@@ -36,14 +36,30 @@ extern const uint8_t DHT_TYPE;
 /**
  * @brief Initialize the DHT sensor for readings.
  *
- * Must be called before attempting to read temperature or humidity.
+ * Responsibilities:
+ * - Call `dht.begin()` and perform any board-specific setup.
+ * - Should be invoked once during `setup()` before calling `readDHT()`.
+ *
+ * Note: DHT sensors require a minimum interval between readings (commonly
+ * ~2 seconds for DHT11/DHT22). Do not call `readDHT()` more frequently than
+ * the sensor supports — the function does not internally throttle calls.
  */
 void initializeDHT();
 
 /**
- * @brief Read temperature and humidity from the DHT sensor.
+ * @brief Read temperature and humidity from the DHT sensor and store in a packet.
  *
- * Stores the readings into a provided `SensorPacket`.
+ * Behaviour and contract:
+ * - Attempts to read temperature and humidity via the `DHT` object.
+ * - If the read is successful (values are not NaN) the function fills
+ *   `packet.temperature` and `packet.humidity` and returns true.
+ * - On failure the function returns false and leaves the provided `packet`
+ *   in an indeterminate or previously-set state; callers should handle
+ *   failures explicitly (e.g., retry later or abort packet creation).
+ *
+ * Timing/Blocking:
+ * - DHT reads can block for the sensor's response time. Keep calls
+ *   infrequent and avoid using in time-critical or high-frequency loops.
  *
  * @param packet Reference to a SensorPacket to store readings.
  * @return true if the reading succeeded.
