@@ -34,6 +34,8 @@ For detailed information, refer to the following Markdown files:
 Full API documentation generated with **Doxygen** is also available online:  
 [GitHub Pages Doxygen Docs](https://chas-academy-chas-advance-group-7.github.io/IoT/)
 
+If you want to understand how our GitHub Actions workflows automate builds, tests, and deployments, refer to [CI/CD Workflows](docs/CICD.md).
+
 ---
 
 ## Quick Start
