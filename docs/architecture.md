@@ -17,6 +17,62 @@ The architecture ensures reliable, real-time data acquisition, BLE communication
 * **Sensor_state_manager**: Implements a state machine that controls the sensor’s reading, packet creation, buffering, and BLE transmission.
 * **Main Loop**: Continuously runs the state machine and handles BLE transmission logic.
 
+### State Machine (detailed)
+
+The sensor unit uses a deterministic state machine to separate concerns and
+to make the device behaviour explicit and testable. The implementation lives
+in `src_package_arduino/include/sensor_state_manager.h` and
+`src_package_arduino/src/sensor_state_manager.cpp`.
+
+States
+* IDLE — waiting for timers or external triggers; no heavy work should execute here.
+* CREATE_AND_BUFFER_PACKET — sample sensors, assemble a `SensorPacket` and enqueue it
+	into the circular buffer (`buffer_manager`). Uses `assembleSensorPacket()`.
+* TRANSFER_PACKET_BATCH — attempt to send the next buffered packet via BLE using a
+	peek/commit pattern: `peekPacketFromBuffer()` -> write BLE characteristic -> on
+	success `commitPacketRemoval()`; on transient failure retry up to
+	`MAX_FAILED_ATTEMPTS` then escalate.
+* BLE_MANAGEMENT — ensure BLE stack lifecycle (advertise, accept connections,
+	re-advertise on disconnect). Keep this state lightweight and idempotent.
+* READ_FLASH_MEMORY — reserved for restoring queued packets or config after
+	boot/power-loss. Placeholder in current implementation.
+* ERROR_STATE — collect diagnostics and perform safe recovery or await manual
+	intervention.
+
+Transition table (high level)
+| From State | Trigger / Condition | To State | Notes |
+|---|---|---|---|
+| IDLE | Packet interval elapsed | CREATE_AND_BUFFER_PACKET | Controlled by `PACKET_INTERVAL` timer |
+| CREATE_AND_BUFFER_PACKET | Packet assembled and enqueued | IDLE or TRANSFER_PACKET_BATCH | Depending on policy/timing |
+| CREATE_AND_BUFFER_PACKET | Buffer full / unrecoverable failure | ERROR_STATE | Call `transitionToErrorState()` |
+| IDLE / BLE_MANAGEMENT | Central connected & buffer has data & transfer timer | TRANSFER_PACKET_BATCH | Controlled by `TRANSFER_PERIOD` |
+| TRANSFER_PACKET_BATCH | BLE write success | commit & continue or IDLE | Commit removes packet from buffer |
+| TRANSFER_PACKET_BATCH | BLE repeated failure > MAX_FAILED_ATTEMPTS | ERROR_STATE | Save previous state for recovery |
+| Any | Critical error detected | ERROR_STATE | Error handler may attempt recovery |
+
+Timing and invariants
+* Sampling cadence: `PACKET_INTERVAL` controls when new sensor samples should be created.
+* Transfer cadence: `TRANSFER_PERIOD` and `TRANSFER_INTERVAL` control how often transfers
+	are attempted and spacing between individual packets respectively.
+* Buffer contract: use peek/commit pattern — peek leaves packet in buffer for retries; commit
+	removes it only on confirmed success. `queue_count`, `queue_head`, and `queue_tail`
+	must remain consistent (see `buffer_manager` docs for invariants).
+
+Error handling and recovery
+* Transient failures (temporary BLE unavailability, single read failure) should be retried
+	within the same state where safe.
+* Repeated failures escalate to `ERROR_STATE` where diagnostics are logged and safe recovery
+	steps may run. `previous_state_to_error_state` records where the error originated.
+* For persistent buffer overflow, either increase `QUEUE_SIZE` or implement persistence to flash
+	(not currently implemented).
+
+Testing and debugging tips
+* Use the `native` test environment (sensor project `env:native`) to unit-test `determineSensorState()`
+	and state transitions.
+* Enable verbose thread-safe serial logs to trace transitions and failure counters.
+* Use the broker's logging (`broker_task` / `backend_task`) to verify packet delivery and JSON mapping.
+
+
 ### Data Flow
 
 1. Read temperature and humidity via `DHT_handler`.
