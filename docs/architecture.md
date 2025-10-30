@@ -59,7 +59,7 @@ The architecture ensures reliable, real-time data acquisition, BLE communication
 
 ## Notes & Best Practices
 
-* Ensure consistent `SensorPacket` structure between Sensor Unit and Central Hub. Any changes require updates in both `sensor_package_manager` and `sensor_packet_from_sensor.h`.
+* Ensure consistent `SensorPacket` structure between Sensor Unit and Central Hub. Any changes require updates in both [`sensor_package_manager.h`](../src_package_arduino/include/sensor_package_manager.h) and [`sensor_packet_from_sensor.h`](../src_broker_esp32/include/sensor_packet_from_sensor.h).
 * Verify BLE UUIDs (`SENSOR_SERVICE_UUID` and `SENSOR_CHAR_UUID`) match between the Arduino and ESP32.
 * Adjust queue sizes (`dataQueue` and `networkQueue`) in ESP32 if packet drop is observed under high sensor frequency.
 * Use serial monitor and thread-safe utilities to debug runtime behavior on ESP32.

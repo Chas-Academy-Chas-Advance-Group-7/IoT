@@ -25,7 +25,7 @@ The ESP32 broker converts `SensorPacket`s to JSON before sending to the backend.
 }
 ```
 
-> Derived from `backend_task.cpp` in `src_broker_esp32/src/tasks/`.
+> Derived from [`backend_task.cpp`](../src_broker_esp32/src/tasks/backend_task.cpp) in `src_broker_esp32/src/tasks/`.
 
 ---
 
@@ -33,7 +33,7 @@ The ESP32 broker converts `SensorPacket`s to JSON before sending to the backend.
 
 * **Backend task**: converts `SensorPacket` → JSON. (`backend_task.cpp`)
 * **HTTP Transmission task**: sends JSON via HTTPS to the backend. (`httptransmission_task.cpp`)
-* **Backend URL constant**: `BACKEND_URL` defined in `httptransmission_task.cpp`
+* **Backend URL constant**: `BACKEND_URL` in `httptransmission_task.cpp` require `backend_server_secrets.h`
 * **TLS & credentials**: loaded from `backend_server_secrets.h` and `WiFi_secrets.h`
 
 ### Notes
@@ -48,7 +48,7 @@ The ESP32 broker converts `SensorPacket`s to JSON before sending to the backend.
 
 * `dataQueue` stores incoming BLE packets.
 * `networkQueue` stores JSON objects ready to transmit.
-* Increase queue sizes in `src_broker_esp32/src/main.cpp` if experiencing packet drops.
+* Increase queue sizes in [`src_broker_esp32/src/main.cpp`](../src_broker_esp32/src/main.cpp) if experiencing packet drops.
 
 ---
 
