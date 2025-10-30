@@ -42,9 +42,20 @@ static unsigned long lastPacketTime = 0;
 const unsigned long PACKET_INTERVAL = 10000; // e.g., create a packet every 10 seconds
 
 /**
- * @brief Determine and handle transitions between sensor states.
+ * @brief Re-evaluate timers, flags and inputs to select the next state.
  *
- * Call periodically in the main loop or task.
+ * Responsibilities:
+ * - Inspect sampling timers, buffer occupancy and BLE availability.
+ * - Set `current_sensor_state` to the next state. This function must be
+ *   fast and non-blocking: it only decides the next step and does not
+ *   perform long-running operations.
+ *
+ * When to call: from `loop()` or the scheduler at a regular cadence
+ * (for example every 50-200 ms). The real state handler (e.g.
+ * `state_CreateAndBufferPacket`) performs the actual work.
+ *
+ * Side-effects: updates `current_sensor_state` and internal timing
+ * variables such as `lastPacketTime` and `lastTransferCheck`.
  */
 void determineSensorState()
 {
@@ -93,10 +104,15 @@ void determineSensorState()
     current_sensor_state = sensor_state::IDLE;
 }
 /**
- * @brief Transition to the ERROR_STATE.
+ * @brief Enter the `ERROR_STATE` and capture context for diagnostics.
  *
- * Call this function to handle error transitions.
- * It updates the previous state and sets the current state to ERROR_STATE.
+ * This helper records the state the system was in prior to the error
+ * (in `previous_state_to_error_state`) and sets `current_sensor_state`
+ * to `ERROR_STATE`. Use this instead of directly assigning the enum so
+ * that diagnostic context is preserved for the error handler.
+ *
+ * Side-effects: may also be used to increment persistent error counters
+ * or capture timestamps (extend as needed in implementations).
  */
 void transitionToErrorState()
 {
@@ -105,15 +121,19 @@ void transitionToErrorState()
 }
 
 /**
- * @brief Create a new SensorPacket and add it to the circular buffer.
+ * @brief Sample sensors, build a `SensorPacket`, and enqueue it.
  *
- * Updates the `current_sensor_state` depending on success:
- * - IDLE if packet added successfully
- * - ERROR_STATE if buffer is full or failed to add
+ * Contract and behavior:
+ * - Calls `assembleSensorPacket()` which uses `DHT_handler` to sample
+ *   temperature/humidity and populates a `SensorPacket`.
+ * - Calls `addPacketToBuffer()` to enqueue the packet using the
+ *   circular-buffer API. The buffer uses a peek/commit workflow so
+ *   callers should expect `queue_count` to reflect current occupancy.
+ * - On success: logs the sample and typically transitions the state
+ *   machine to `IDLE` or lets `determineSensorState()` pick the next state.
+ * - On buffer failure: logs the error and calls `transitionToErrorState()`.
  *
- * @code
- * state_CreateAndBufferPacket();
- * @endcode
+ * Timing: this function should be called only when sampling is due.
  */
 void state_CreateAndBufferPacket()
 {
@@ -141,14 +161,22 @@ void state_CreateAndBufferPacket()
 }
 
 /**
- * @brief Transfer a batch of packets from the buffer via BLE.
+ * @brief Attempt to transmit the next buffered packet over BLE.
  *
- * Attempts to send packets if a central device is connected and subscribed.
- * On repeated transmission failures, transitions to ERROR_STATE.
+ * Implementation notes and contract:
+ * - Uses a peek/commit pattern: `peekPacketFromBuffer()` reads the packet
+ *   into a local `SensorPacket` instance. Only after a successful BLE
+ *   write is `commitPacketRemoval()` called to remove it from the buffer.
+ * - Respects inter-packet spacing via `TRANSFER_INTERVAL` to avoid
+ *   overwhelming the BLE stack. Do not block inside this function.
+ * - Tracks transient failures with `failed_transmission_attempts_counter`.
+ *   When consecutive failures for the same packet exceed
+ *   `MAX_FAILED_ATTEMPTS`, `transitionToErrorState()` is called.
+ * - If the central is not subscribed or not connected, this function
+ *   logs and returns, allowing `BLE_MANAGEMENT` to restore connectivity.
  *
- * @code
- * state_TransferPacketBatch();
- * @endcode
+ * Side-effects: may modify `queue_count`, `lastTransferTime` and the
+ * local static failure counters.
  */
 void state_TransferPacketBatch()
 {
@@ -231,14 +259,20 @@ void state_TransferPacketBatch()
 }
 
 /**
- * @brief Manage BLE connections and advertising.
+ * @brief Ensure the BLE stack is initialized and the peripheral is
+ * advertising or connected as required.
  *
- * Initializes BLE if not already done, handles reconnections,
- * and manages advertising state.
+ * Responsibilities:
+ * - Initialize BLE exactly once on boot (`setupBluetooth()`).
+ * - Start advertising on disconnect and manage a simple back-off for
+ *   repeated advertise failures.
+ * - Keep this function lightweight and idempotent: it may be called
+ *   frequently from the main loop without side-effects beyond managing
+ *   BLE lifecycle state.
  *
- * @code
- * state_BLEManagement();
- * @endcode
+ * Non-goals: do not implement application-level packet logic here. That
+ * responsibility belongs to `state_TransferPacketBatch()` and related
+ * routines. Use `BLE_MANAGEMENT` to ensure the stack is ready.
  */
 void state_BLEManagement()
 {
@@ -323,9 +357,18 @@ void state_BLEManagement()
 }
 
 /**
- * @brief Handle the ERROR_STATE.
+ * @brief Run diagnostics and attempt recovery for unrecoverable errors.
  *
- * Prints diagnostic message and can include recovery logic.
+ * Typical flow:
+ * - Inspect `previous_state_to_error_state` and log contextual information.
+ * - Attempt low-risk recovery steps (reset BLE, clear transient counters,
+ *   persist diagnostics) if applicable.
+ * - On successful minimal recovery, return to `IDLE` or the previous
+ *   state. If recovery repeatedly fails, remain in `ERROR_STATE` so the
+ *   problem can be surfaced to the operator.
+ *
+ * Note: current implementation prints diagnostics and resets to IDLE.
+ * Extend with non-blocking, safe recovery steps as needed.
  */
 void state_ErrorState()
 {
@@ -368,9 +411,11 @@ void state_ErrorState()
     Serial.println("System recovered: back to IDLE state.");
 }
 /**
- * @brief Read sensor state from flash memory.
+ * @brief Restore state from flash memory (placeholder).
  *
- * Placeholder for future implementation.
+ * Implementation should carefully consider atomicity and power-loss
+ * scenarios when reading queued packets or configuration from flash.
+ * For now this is a no-op.
  */
 void state_ReadFlashMemory() {}
 
