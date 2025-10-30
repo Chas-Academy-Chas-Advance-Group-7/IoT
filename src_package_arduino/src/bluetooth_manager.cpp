@@ -2,21 +2,23 @@
  * @file bluetooth_manager.cpp
  * @brief BLE peripheral setup and management for sensor units.
  *
- * Provides functions to initialize the BLE peripheral, check central connections,
- * and access the BLE characteristic used to send `SensorPacket` data.
+ * Implementation notes and contract:
+ * - The characteristic `sensorChar` carries raw binary `SensorPacket`
+ *   payloads (see `sensor_package_manager.h`). The central (broker)
+ *   must parse the incoming bytes according to that packed layout.
+ * - Before attempting to write notifications check `charRef.subscribed()`;
+ *   if the central is not subscribed, do not attempt to send payloads.
+ * - Keep writes rate-limited (see `TRANSFER_INTERVAL` in state manager).
+ * - The code uses `BLE.begin()` and `BLE.advertise()` from ArduinoBLE; some
+ *   boards may behave differently with advertising calls — guard against
+ *   repeated advertise attempts (the state manager uses an `isAdvertising`
+ *   flag for this purpose).
  *
- * This code allows the sensor device to advertise itself and send sensor readings
- * to a connected BLE central (e.g., an ESP32 broker).
- *
- * Example usage:
+ * Example usage (non-blocking notification):
  * @code
- * if (setupBluetooth()) {
- *     Serial.println("BLE initialized.");
- * }
- *
- * while (1) {
- *     if (isCentralConnected()) {
- *         BLECharacteristic &charRef = getSensorCharacteristic();
+ * if (isCentralConnected()) {
+ *     BLECharacteristic &charRef = getSensorCharacteristic();
+ *     if (charRef.subscribed()) {
  *         charRef.writeValue(&packet, sizeof(packet));
  *     }
  * }
