@@ -25,11 +25,11 @@ The system ensures reliable, real-time data acquisition using:
 
 For detailed information, refer to the following Markdown files:
 
-* [Setup & Configuration](setup.md) — hardware, software, wiring, secrets, and build instructions
-* [System Architecture](architecture.md) — components, tasks, and data flow
-* [Developer Guide](developer.md) — developer workflows, testing, and contribution guidelines
-* [Backend & JSON Format](backend.md) — backend communication, payload structure, and reliability notes
-* [Troubleshooting & Common Pitfalls](troubleshooting.md) — debugging tips and runtime issues
+* [Setup & Configuration](docs/setup.md) — hardware, software, wiring, secrets, and build instructions
+* [System Architecture](docs/architecture.md) — components, tasks, and data flow
+* [Developer Guide](docs/developer.md) — developer workflows, testing, and contribution guidelines
+* [Backend & JSON Format](docs/backend.md) — backend communication, payload structure, and reliability notes
+* [Troubleshooting & Common Pitfalls](docs/troubleshooting.md) — debugging tips and runtime issues
 
 Full API documentation generated with **Doxygen** is also available online:  
 [GitHub Pages Doxygen Docs](https://chas-academy-chas-advance-group-7.github.io/IoT/)
