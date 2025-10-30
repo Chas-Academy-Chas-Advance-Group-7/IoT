@@ -31,6 +31,9 @@ For detailed information, refer to the following Markdown files:
 * [Backend & JSON Format](backend.md) — backend communication, payload structure, and reliability notes
 * [Troubleshooting & Common Pitfalls](troubleshooting.md) — debugging tips and runtime issues
 
+Full API documentation generated with **Doxygen** is also available online:  
+[GitHub Pages Doxygen Docs](https://chas-academy-chas-advance-group-7.github.io/IoT/)
+
 ---
 
 ## Quick Start
