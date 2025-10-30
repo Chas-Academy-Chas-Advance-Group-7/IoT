@@ -115,6 +115,23 @@ This project uses GitHub Actions for continuous integration and deployment with 
    pio test -e native
    ```
 
+### 4. Doxygen Documentation (`doxygen.yml`)
+
+**File:** `.github/workflows/doxygen.yml` — generates and deploys Doxygen HTML output.
+
+**Purpose:** Builds API documentation with Doxygen and deploys to the `doxygen-documentation` branch (GitHub Pages).
+
+**Triggers:** pushes to `develop` and `feature/*`, and manual dispatch.
+
+**Key steps:**
+1. Checkout repository.
+2. Cache previously generated docs.
+3. Install Doxygen and Graphviz.
+4. Run `doxygen Doxyfile`.
+5. Deploy the generated HTML from `./docs/html` to the `doxygen-documentation` branch.
+
+See the workflow: [.github/workflows/doxygen.yml](.github/workflows/doxygen.yml) and the Doxygen config: [Doxyfile](Doxyfile).
+
 ## Custom Actions
 
 ### Setup PlatformIO Environment

@@ -2,7 +2,7 @@
 
 This document describes the hardware, software and step-by-step setup required to run the **IoT Sensor System** (Sensor Unit: Arduino Uno WiFi Rev 4; Central Hub: ESP32).
 
-> **Warning — secrets:** do **not** commit `WiFi_secrets.h` or `backend_server_secrets.h` to version control. Keep them local and add them to `.gitignore`.
+> **Warning — secrets:** do **not** commit `WiFi_secrets.h` or `backend_server_secrets.h` to version control. Keep them local and make sure they are added if they somehow are missing to [.gitignore](../src_broker_esp32/.gitignore).
 
 ---
 
@@ -11,7 +11,7 @@ This document describes the hardware, software and step-by-step setup required t
 ### Sensor Unit
 
 * Arduino Uno WiFi Rev 4
-* DHT11 sensor (or compatible DHTxx)
+* DHT11 sensor (or compatible DHTxx **NOTE:** May require additional code changes not covered) 
 * Wires / breadboard / connectors
 
 ### Central Hub
@@ -76,15 +76,19 @@ pio run -e esp32_broker -t upload
 
 1. **Connect the DHT11 sensor**
 
-   * Connect VCC to 5V (or 3.3V depending on sensor variant and board wiring), GND to GND, and DATA to the digital pin defined as `DHT_PIN` in the source: `src_package_arduino/src/DHT_handler.cpp`.
+   * Connect VCC to 5V (or 3.3V depending on sensor variant and board wiring), GND to GND, and DATA to the digital pin defined as `DHT_PIN` in the source: [`src_package_arduino/src/DHT_handler.cpp`](../src_package_arduino/src/DHT_handler.cpp). 
    * If using pull-up resistor, follow the DHT11 wiring recommendations (typically 4.7k–10kΩ between VCC and DATA).
+   
+   **NOTE:** The `DHT_PIN` is set to pin `2` as a default.
 
 2. **Sensor ID and packet settings**
 
    * Edit `sensor_id` and any packet-related constants in:
 
-     * `src_package_arduino/include/sensor_package_manager.h`
-   * Verify `assembleSensorPacket` behavior in the same header/source if you change fields.
+     * [`src_package_arduino/include/sensor_package_manager.cpp`](../src_package_arduino/src/sensor_package_manager.cpp)
+   * Verify `assembleSensorPacket` behavior in the same source if you change fields.
+
+   **NOTE:** The `sensor_id` is set to `0` as a default.
 
 3. **Libraries**
 
@@ -92,7 +96,7 @@ pio run -e esp32_broker -t upload
 
 4. **Upload firmware**
 
-   * Use PlatformIO or Arduino IDE to flash the sensor code. After upload, the Arduino will begin advertising the sensor BLE service (see BLE section in `bluetooth_manager.h`).
+   * Use PlatformIO or Arduino IDE to flash the sensor code. After upload, the Arduino will begin advertising the sensor BLE service (see BLE section in [`bluetooth_manager.h`](../src_package_arduino/include/bluetooth_manager.h)).
 
 ---
 
@@ -108,7 +112,7 @@ pio run -e esp32_broker -t upload
 
 3. **Adjust queue sizes & runtime params** (optional)
 
-   * Default queue depths (e.g. `dataQueue`, `networkQueue`) are defined in `src_broker_esp32/src/main.cpp`. Increase them if you expect bursts of data.
+   * Default queue depths (e.g. `dataQueue`, `networkQueue`) are defined in [`src_broker_esp32/src/main.cpp`](../src_broker_esp32/src/main.cpp). Increase them if you expect bursts of data.
 
 4. **Upload firmware**
 
@@ -116,14 +120,14 @@ pio run -e esp32_broker -t upload
 
 5. **Verify runtime logs**
 
-   * Open serial monitor (baud rate as defined in `src_broker_esp32/src/main.cpp`) and verify that the broker scans for BLE advertisements and connects to sensors.
+   * Open serial monitor (baud rate as defined in [`src_broker_esp32/src/main.cpp`](../src_broker_esp32/src/main.cpp)) and verify that the broker scans for BLE advertisements and connects to sensors.
 
 ---
 
 ## Wiring & Pinout References
 
-* **DHT sensor pin:** the pin used by the sensor is defined in `src_package_arduino/src/DHT_handler.cpp` as `DHT_PIN`.
-* **BLE UUIDs:** the sensor advertises the service/characteristic defined by `SENSOR_SERVICE_UUID` and `SENSOR_CHAR_UUID` in `src_package_arduino/include/bluetooth_manager.h`.
+* **DHT sensor pin:** the pin used by the sensor is defined in [`src_package_arduino/src/DHT_handler.cpp`](../src_package_arduino/src/DHT_handler.cpp) as `DHT_PIN`.
+* **BLE UUIDs:** the sensor advertises the service/characteristic defined by `SENSOR_SERVICE_UUID` and `SENSOR_CHAR_UUID` in [`src_package_arduino/include/bluetooth_manager.h`](../src_package_arduino/include/bluetooth_manager.h).
 
 Refer to the source files for exact symbol names and pin numbers before wiring.
 
