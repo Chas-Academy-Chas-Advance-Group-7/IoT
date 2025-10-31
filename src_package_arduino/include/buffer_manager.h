@@ -2,26 +2,51 @@
  * @file buffer_manager.h
  * @brief Circular buffer interface for storing SensorPacket data.
  *
- * Declares the fixed-size circular buffer and functions to:
- * - Add packets
- * - Retrieve packets
- * - Peek at packets
- * - Commit packet removal
- * - Flush the buffer
+ * This module implements a fixed-size circular buffer used by the sensor
+ * firmware to queue outgoing `SensorPacket`s prior to transmission. The
+ * API intentionally exposes simple operations (add/peek/commit/get/drop)
+ * so that higher-level logic can implement retry, persistence, and
+ * transmission flows.
  *
- * Example usage:
+ * Contract / invariants:
+ * - The buffer is sized by `QUEUE_SIZE` and stores up to that many
+ *   `SensorPacket` elements.
+ * - `queue_count` always holds the number of valid elements in the buffer
+ *   (0 <= queue_count <= QUEUE_SIZE).
+ * - `queue_head` points to the index of the oldest valid packet (if any).
+ * - `queue_tail` points to the next free slot where a packet will be
+ *   written when adding.
+ * - After a successful `peekPacketFromBuffer()` the caller must call
+ *   `commitPacketRemoval()` to remove that packet or call `dropOldestPacket()`
+ *   if the packet should be discarded. Peeking without committing leaves the
+ *   packet in the buffer for subsequent attempts.
+ *
+ * Threading / safety notes:
+ * - The sensor firmware runs on a single-threaded Arduino environment by
+ *   default. These APIs are NOT safe for concurrent access from multiple
+ *   threads or ISRs. If you plan to call these functions from interrupt
+ *   contexts or multiple tasks, protect access with a mutex or disable
+ *   interrupts around buffer operations.
+ *
+ * Error behaviours:
+ * - `addPacketToBuffer()` returns false when the buffer is full; callers
+ *   should handle this as a recoverable or fatal condition depending on
+ *   the application (e.g. retry, drop oldest, or escalate to ERROR_STATE).
+ * - `getPacketFromBuffer()` / `peekPacketFromBuffer()` return false when
+ *   the buffer is empty.
+ *
+ * Example usage (peek/commit pattern):
  * @code
- * SensorPacket packet;
- * if (addPacketToBuffer(packet)) {
- *     Serial.println("Packet added");
+ * SensorPacket pkt;
+ * if (peekPacketFromBuffer(pkt)) {
+ *   // try to transmit pkt over BLE
+ *   if (sendOverBLE(pkt)) {
+ *     // only remove when transmission confirmed
+ *     commitPacketRemoval();
+ *   } else {
+ *     // leave the packet in the buffer for retry
+ *   }
  * }
- *
- * if (peekPacketFromBuffer(packet)) {
- *     // Inspect packet
- *     commitPacketRemoval(); // Remove after processing
- * }
- *
- * flushBuffer(); // Clear the buffer
  * @endcode
  */
 

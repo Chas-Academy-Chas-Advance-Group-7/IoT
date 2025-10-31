@@ -2,8 +2,18 @@
  * @file sensor_package_manager.cpp
  * @brief Manages sensor data and assembly of SensorPacket structures.
  *
- * Provides global sensor variables, functions to assemble sensor packets
- * with readings (e.g., from DHT sensor), and a placeholder for timestamp retrieval.
+ * Implementation notes:
+ * - The `SensorPacket` returned by `assembleSensorPacket()` is a packed
+ *   binary struct and forms the on-the-wire contract with the broker.
+ *   Any changes to the fields or ordering require coordinated updates to
+ *   the broker parsing code.
+ * - Floating point representation (IEEE-754 single precision) is assumed
+ *   by both sensor and broker; if you target architectures with differing
+ *   float ABIs, consider encoding as fixed-point integers instead.
+ * - `assembleSensorPacket()` should be lightweight and tolerant of sensor
+ *   read failures (it returns the packet filled with available data and
+ *   logs failures). Higher-level logic decides how to handle incomplete
+ *   packets (e.g., drop, retry, or send with sentinel values).
  *
  * Example usage:
  * @code

@@ -2,11 +2,23 @@
  * @file main.cpp
  * @brief Main entry point for the sensor firmware.
  *
- * Initializes the sensor system, including DHT sensor and BLE,
- * and runs the main loop to manage the sensor state machine,
- * packet creation, and BLE transfer.
+ * Responsibilities and behaviour:
+ * - Performs global initialization (serial, sensors and peripherals) in
+ *   `setup()`.
+ * - Runs the sensor state machine in `loop()` by calling
+ *   `determineSensorState()` and invoking the appropriate state handler.
+ * - The `loop()` is designed to be cooperative and non-blocking: heavy or
+ *   slow operations should live inside state handlers but still avoid
+ *   blocking the loop for long periods.
  *
- * Example usage:
+ * Timing and power considerations:
+ * - The state machine uses timers such as `PACKET_INTERVAL` and
+ *   `TRANSFER_PERIOD` (defined in the state manager) to schedule periodic
+ *   work. Avoid adding your own busy-wait loops inside `loop()`.
+ * - For battery-powered devices consider adding low-power sleep between
+ *   state checks where appropriate.
+ *
+ * Example flow:
  * @code
  * // Main automatically calls determineSensorState() and executes the appropriate state functions.
  * @endcode

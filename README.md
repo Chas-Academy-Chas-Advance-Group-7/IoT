@@ -1,100 +1,106 @@
 # IoT Sensor System
 
+This document provides an overview of the **IoT Sensor System**, which consists of a **Sensor Unit** (Arduino Uno WiFi Rev 4) and a **Central Hub** (ESP32). It serves as the main entry point for developers and users.
+
+---
+
 ## Overview
 
-This project implements a complete IoT sensor system with **two units**:
+The system implements two primary units:
 
-1. **Sensor Unit:** Arduino Uno WiFi Rev 4 equipped with a DHT11 sensor, broadcasting temperature and humidity data via **BLE**.  
-2. **Central Hub:** ESP32 device that scans for BLE sensors, processes data, and sends it to a backend server via **Wi-Fi HTTP**.  
+1. **Sensor Unit**: Reads temperature and humidity using a DHT11 sensor and broadcasts data via **BLE**.
+2. **Central Hub**: Scans for BLE sensors, processes incoming data, and sends JSON payloads to a backend server over **Wi-Fi HTTPS**.
 
-The system is designed for reliable, real-time data acquisition and transmission using:
+The system ensures reliable, real-time data acquisition using:
 
-- **BLE notifications** for sensor-to-hub communication  
-- **Circular buffer** to prevent data loss  
-- **State machine logic** for robust sensor operation  
-- **Backend JSON processing** and HTTP transmission  
-- **Network monitoring and auto-reconnection**  
-
----
-
-## Architecture
-
-### 1. Sensor Unit (Arduino Uno WiFi Rev 4)
-
-- **DHT_handler:** Reads temperature & humidity.  
-- **Sensor_package_manager:** Creates `SensorPacket` objects containing sensor data.  
-- **Bluetooth_manager:** Manages BLE service and characteristic for notifications.  
-- **Buffer_manager:** Circular buffer for queued packets.  
-- **Sensor_state_manager:** State machine handles creating, buffering, and sending packets.  
-- **Main Loop:** Continuously runs the state machine and BLE transmission logic.  
-
-### 2. Central Hub (ESP32)
-
-- **Backend_task:** Processes incoming sensor packets and formats JSON.  
-- **Broker_task:** Handles BLE scanning, connections, and subscription to sensor notifications.  
-- **Networkstatus_task:** Monitors Wi-Fi connectivity, triggers reconnection if necessary.  
-- **Httptransmission_task:** Sends JSON data to a backend server.  
-- **Threadsafe Serial Utilities:** Ensures safe logging from multiple FreeRTOS tasks.  
+* BLE notifications for sensor-to-hub communication
+* Circular buffer to prevent data loss
+* State machine logic for robust sensor operation
+* Backend JSON formatting and HTTP transmission
+* Network monitoring with auto-reconnection
 
 ---
 
-## Hardware Requirements
+## Documentation
 
-- **Sensor Unit:**  
-  - Arduino Uno WiFi Rev 4  
-  - DHT11 sensor  
-  - BLE capabilities via onboard Wi-Fi/BLE  
-- **Central Hub:**  
-  - ESP32 development board with BLE and Wi-Fi  
-- Optional: additional sensor units  
+For detailed information, refer to the following Markdown files:
 
----
+* [Setup & Configuration](docs/setup.md) — hardware, software, wiring, secrets, and build instructions
+* [System Architecture](docs/architecture.md) — components, tasks, and data flow
+* [Developer Guide](docs/developer.md) — developer workflows, testing, and contribution guidelines
+* [Backend & JSON Format](docs/backend.md) — backend communication, payload structure, and reliability notes
+* [Troubleshooting & Common Pitfalls](docs/troubleshooting.md) — debugging tips and runtime issues
 
-## Software Requirements
+Full API documentation generated with **Doxygen** is also available online:  
+[GitHub Pages Doxygen Docs](https://chas-academy-chas-advance-group-7.github.io/IoT/)
 
-- Arduino IDE or PlatformIO  
-- **ArduinoBLE** library for ESP32  
-- **DHT** sensor library for Arduino  
-- FreeRTOS (built into ESP32 Arduino framework)  
-- Wi-Fi credentials (`WiFi_secrets.h` for ESP32 hub)  
+If you want to understand how our GitHub Actions workflows automate builds, tests, and deployments, refer to [CI/CD Workflows](docs/CICD.md).
 
 ---
 
-## Setup
+## Quick Start
 
-### 1. Sensor Unit (Arduino Uno WiFi)
+### 1. Configure Secrets
 
-1. Connect the DHT11 sensor to the appropriate digital pin.  
-2. Configure the sensor ID in `sensor_package_manager.h`.  
-3. Install required libraries (`DHT`).  
-4. Upload the firmware to the Arduino Uno WiFi.  
+Copy the example secret headers and configure with your credentials:
 
-### 2. Central Hub (ESP32)
+```bash
+cp src_broker_esp32/include/WiFi_secrets_example.h src_broker_esp32/include/WiFi_secrets.h
+cp src_broker_esp32/include/backend_server_secrets_example.h src_broker_esp32/include/backend_server_secrets.h
+```
 
-1. Connect ESP32 to the development environment.  
-2. Add Wi-Fi credentials in `WiFi_secrets.h`.  
-3. Configure the backend URL in `httptransmission_task.h`.  
-4. Upload the firmware to the ESP32.  
+### 2. Build & Upload Sensor Firmware (Arduino Uno R4 WiFi)
+
+```bash
+cd src_package_arduino
+pio run -e uno_r4_wifi -t upload
+```
+
+> Arduino IDE users can open the project, select the Uno R4 WiFi board, and upload.
+
+### 3. Build & Upload Broker Firmware (ESP32)
+
+```bash
+cd src_broker_esp32
+pio run -e esp32_broker -t upload
+```
+
+### 4. Verify Operation
+
+* Monitor serial output to ensure the sensor is advertising and the hub is connecting via BLE.
+* Check that packets are correctly converted to JSON and transmitted to the backend.
 
 ---
 
 ## Usage
 
-- The **sensor unit** continuously reads temperature and humidity and broadcasts it via BLE.  
-- The **ESP32 hub** scans for BLE sensors, subscribes to notifications, buffers incoming packets, and converts them to JSON.  
-- JSON data is sent to the backend via HTTP over Wi-Fi.  
-- Network connectivity is monitored with automatic reconnection.  
-- Serial logs provide debugging and monitoring information.  
+* Sensor unit continuously reads temperature and humidity and broadcasts via BLE.
+* ESP32 hub scans for BLE sensors, subscribes to notifications, buffers packets, and converts them to JSON for backend transmission.
+* Network connectivity is monitored automatically.
+* Serial logs are available for debugging and monitoring.
 
 ---
 
 ## Project Structure
 
-## Documentation
+* `src_package_arduino/` — Sensor firmware source code
+* `src_broker_esp32/` — Broker firmware source code
+* `docs/` — Detailed Markdown documentation
+* `Doxyfile` — Doxygen configuration for generating developer docs
 
-Documentation is generated with **Doxygen**. To generate the docs, run:
+Generate Doxygen documentation:
 
 ```bash
 doxygen Doxyfile
 ```
 
+---
+
+## Notes
+
+* Do not commit `WiFi_secrets.h` or `backend_server_secrets.h` to version control.
+* Verify BLE UUIDs match between the sensor and hub.
+* Ensure consistent `SensorPacket` structure between Arduino and ESP32.
+* Adjust queue sizes in ESP32 if packets are dropped under high load.
+
+This README serves as a concise introduction and guide, directing developers and users to the detailed documentation in the `docs/` folder.

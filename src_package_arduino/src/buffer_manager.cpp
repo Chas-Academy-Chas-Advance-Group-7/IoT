@@ -2,22 +2,28 @@
  * @file buffer_manager.cpp
  * @brief Circular buffer management for storing SensorPacket data.
  *
- * Provides functions to add, retrieve, peek, commit, and flush sensor packets
- * in a fixed-size circular buffer. This is useful for temporary storage of
- * sensor data before sending over BLE or network.
+ * Implementation notes:
+ * - This module implements the circular buffer whose contract is declared
+ *   in `buffer_manager.h`. It respects the peek/commit usage pattern: callers
+ *   should peek a packet and only call `commitPacketRemoval()` after a
+ *   successful processing/transfer.
+ * - The implementation will attempt to recover from simple corruption by
+ *   flushing the buffer when `isBufferValid()` fails, and will drop the
+ *   oldest packet when the buffer is full to make room for new data. This
+ *   design choice favors fresh telemetry over stale data.
+ * - Threading: these functions are designed for a single-threaded Arduino
+ *   environment. If used from multiple contexts (e.g., ISRs), callers must
+ *   serialize access (disable interrupts or use a mutex).
  *
- * Example usage:
+ * Example usage (peek/commit pattern):
  * @code
  * SensorPacket packet;
- * if (addPacketToBuffer(packet)) {
- *     Serial.println("Packet added");
- * }
- *
  * if (peekPacketFromBuffer(packet)) {
- *     // Inspect packet without removing
- *     commitPacketRemoval(); // Remove after processing
+ *   // attempt to send packet
+ *   if (sendOverBLE(packet)) {
+ *     commitPacketRemoval();
+ *   }
  * }
- * flushBuffer(); // Clear buffer
  * @endcode
  */
 
