@@ -1,0 +1,5 @@
+<map id="parse_result_t" name="parse_result_t">
+<area shape="rect" id="Node000001" title="Result of parsing raw BLE manufacturer data." alt="" coords="19,93,134,119"/>
+<area shape="rect" id="Node000002" href="$structsensor__message__t.html" title="Structure representing a sensor reading." alt="" coords="5,5,148,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,45,79,93,74,93,74,45"/>
+</map>

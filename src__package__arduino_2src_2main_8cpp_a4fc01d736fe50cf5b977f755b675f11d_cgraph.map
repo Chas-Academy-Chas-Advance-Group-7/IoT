@@ -1,0 +1,5 @@
+<map id="setup" name="setup">
+<area shape="rect" id="Node000001" title="Arduino setup function." alt="" coords="5,5,64,31"/>
+<area shape="rect" id="Node000002" href="$DHT__handler_8cpp.html#a365f03800f16c4169786fbe03abc1153" title="Initialize the DHT sensor for readings." alt="" coords="112,5,219,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="64,15,98,15,98,21,64,21"/>
+</map>

@@ -1,0 +1,27 @@
+<map id="main.cpp" name="main.cpp">
+<area shape="rect" id="Node000001" title="Main entry point for the sensor firmware." alt="" coords="35,5,118,31"/>
+<area shape="rect" id="Node000002" href="$sensor__state__manager_8h.html" title="Sensor unit state machine API and documentation." alt="" coords="153,79,334,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,28,205,71,202,76,102,33"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="265,299,349,324"/>
+<area shape="poly" id="edge16_Node000001_Node000006" title=" " alt="" coords="71,32,45,73,19,132,11,163,9,194,15,223,31,249,45,260,67,269,125,285,191,296,252,303,251,308,190,301,124,290,65,274,42,264,27,252,10,225,3,195,5,162,14,130,40,71,66,29"/>
+<area shape="rect" id="Node000003" href="$DHT__handler_8h.html" title="Header for DHT sensor handling on the sensor unit." alt="" coords="30,152,147,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="220,106,127,149,125,144,217,102"/>
+<area shape="rect" id="Node000005" href="$sensor__package__manager_8h.html" title="Sensor packet layout and helpers for assembling SensorPacket structs." alt="" coords="137,225,339,251"/>
+<area shape="poly" id="edge14_Node000002_Node000005" title=" " alt="" coords="239,106,228,127,219,152,220,183,228,212,223,213,214,184,214,152,223,125,234,103"/>
+<area shape="poly" id="edge15_Node000002_Node000006" title=" " alt="" coords="334,94,401,101,469,111,526,127,548,138,563,150,572,168,578,193,575,222,559,252,545,263,526,273,476,288,364,307,363,302,475,283,524,268,543,259,555,249,570,221,573,193,567,170,559,154,545,142,524,132,467,117,400,106,334,100"/>
+<area shape="rect" id="Node000007" href="$bluetooth__manager_8h.html" title="BLE peripheral management for sensor units." alt="" coords="389,152,549,177"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="280,101,420,145,418,150,279,107"/>
+<area shape="rect" id="Node000009" href="$buffer__manager_8h.html" title="Circular buffer interface for storing SensorPacket data." alt="" coords="229,152,365,177"/>
+<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="254,103,282,140,278,143,250,106"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="51,225,113,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="90,178,87,212,82,212,85,177"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="114,175,202,217,200,222,111,180"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="75,179,59,194,44,213,36,232,37,241,41,249,54,260,74,270,129,285,193,296,252,303,251,308,192,301,128,290,73,275,52,264,37,252,32,242,31,231,39,210,55,191,72,175"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="251,249,289,287,285,291,248,253"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="432,180,289,224,287,219,431,175"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="491,175,512,190,532,209,543,230,543,241,537,252,509,271,465,286,364,306,363,301,463,281,507,267,533,249,538,240,538,231,528,212,509,194,488,180"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="415,225,523,251"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="471,178,471,212,466,212,466,178"/>
+<area shape="poly" id="edge12_Node000009_Node000005" title=" " alt="" coords="289,179,258,217,254,213,285,176"/>
+<area shape="poly" id="edge13_Node000009_Node000006" title=" " alt="" coords="314,176,336,196,354,224,356,242,352,260,332,290,328,287,347,258,351,242,349,226,332,200,311,180"/>
+</map>

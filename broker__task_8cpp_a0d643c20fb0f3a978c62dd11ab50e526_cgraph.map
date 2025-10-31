@@ -1,0 +1,8 @@
+<map id="connectToSensor" name="connectToSensor">
+<area shape="rect" id="Node000001" title="Connects to a BLE sensor and subscribes to its notifications." alt="" coords="5,31,136,56"/>
+<area shape="rect" id="Node000002" href="$broker__task_8cpp.html#a19260a63dfa833b5eca3339154a6ccbc" title="Callback for BLE characteristic notifications." alt="" coords="184,5,335,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,32,170,27,171,33,136,37"/>
+<area shape="rect" id="Node000003" href="$threadsafe__serial_8cpp.html#a211c3f6179c90047a5c0c7666dcbadb1" title="Thread&#45;safe printf&#45;style formatted print." alt="" coords="383,31,468,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="136,41,369,41,369,46,136,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="335,27,369,32,369,37,334,32"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="addPacketToBuffer" name="addPacketToBuffer">
+<area shape="rect" id="Node000001" title="Add a SensorPacket to the circular buffer with automatic recovery and overflow handling." alt="" coords="363,5,504,31"/>
+<area shape="rect" id="Node000002" href="$sensor__state__manager_8cpp.html#a202113f795d7196fdb2f2e154573062e" title="Try sampling sensors and enqueue a new SensorPacket." alt="" coords="104,5,315,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="349,21,315,21,315,15,349,15"/>
+<area shape="rect" id="Node000003" href="$src__package__arduino_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Arduino main loop function." alt="" coords="5,5,56,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="90,21,56,21,56,15,90,15"/>
+</map>

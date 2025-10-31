@@ -1,0 +1,15 @@
+<map id="sensor_data.cpp" name="sensor_data.cpp">
+<area shape="rect" id="Node000001" title="Functions for parsing, validating, and logging sensor data from BLE devices." alt="" coords="93,5,221,31"/>
+<area shape="rect" id="Node000002" href="$sensor__data_8h.html" title="Header for parsing, validating, and logging sensor data from BLE devices." alt="" coords="5,79,119,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,33,90,72,87,68,140,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="100,152,184,177"/>
+<area shape="poly" id="edge7_Node000001_Node000003" title=" " alt="" coords="158,31,147,139,142,138,153,31"/>
+<area shape="rect" id="Node000004" href="$threadsafe__serial_8h.html" title="Thread&#45;safe Serial printing utilities for Arduino with FreeRTOS." alt="" coords="194,79,373,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="178,28,252,69,249,74,176,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="77,102,121,141,117,145,73,106"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="262,106,178,148,176,143,259,102"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="208,152,359,177"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="286,104,286,138,281,138,281,104"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="383,152,520,177"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="311,102,412,144,410,149,309,106"/>
+</map>

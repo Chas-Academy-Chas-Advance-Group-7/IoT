@@ -1,0 +1,5 @@
+<map id="networkstatus_task.h" name="networkstatus_task.h">
+<area shape="rect" id="Node000001" title="Header for the network status FreeRTOS task." alt="" coords="5,5,168,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="45,79,129,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,31,89,65,84,65,84,31"/>
+</map>

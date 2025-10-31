@@ -1,0 +1,46 @@
+<map id="loop" name="loop">
+<area shape="rect" id="Node000001" title="Arduino main loop function." alt="" coords="5,153,56,179"/>
+<area shape="rect" id="Node000002" href="$sensor__state__manager_8cpp.html#ac0408ab1cf4324682efe91602a9e42c9" title="Re&#45;evaluate timers, flags and inputs to select the next state." alt="" coords="126,104,293,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="56,154,103,138,134,130,135,135,105,143,57,159"/>
+<area shape="rect" id="Node000004" href="$sensor__state__manager_8cpp.html#aa4f73ee3dd8e6bab72fab72bbf882a16" title="Ensure BLE is in the expected lifecycle state (advertising/connected)." alt="" coords="123,55,295,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="39,152,65,120,103,89,116,82,119,87,105,94,68,124,43,155"/>
+<area shape="rect" id="Node000009" href="$sensor__state__manager_8cpp.html#a202113f795d7196fdb2f2e154573062e" title="Try sampling sensors and enqueue a new SensorPacket." alt="" coords="104,252,315,277"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="56,176,174,243,171,247,53,181"/>
+<area shape="rect" id="Node000016" href="$sensor__state__manager_8cpp.html#a4bedd757ce0a34be7abc32ce988d8f12" title="Run diagnostics and recovery paths for unrecoverable errors." alt="" coords="146,301,273,327"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="38,178,61,231,80,261,106,287,134,301,131,306,102,291,76,265,56,234,33,180"/>
+<area shape="rect" id="Node000017" href="$sensor__state__manager_8cpp.html#a983a3afb91dcbfff50322233586c469c" title="Transfer the next buffered packet via BLE notification." alt="" coords="113,153,306,179"/>
+<area shape="poly" id="edge18_Node000001_Node000017" title=" " alt="" coords="56,163,99,163,99,169,56,169"/>
+<area shape="rect" id="Node000003" href="$bluetooth__manager_8cpp.html#a8cd7266cec47e6f6bbe935416c076514" title="Check if a BLE central device is currently connected." alt="" coords="377,55,526,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="272,101,374,80,375,85,273,107"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="295,65,363,65,363,70,295,70"/>
+<area shape="rect" id="Node000005" href="$bluetooth__manager_8cpp.html#acdb4283f066b8733e235c63fe52d9553" title="Initialize the BLE peripheral for the sensor." alt="" coords="391,5,512,31"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="272,52,377,30,378,36,273,57"/>
+<area shape="rect" id="Node000008" href="$sensor__state__manager_8cpp.html#a74cf98913506cad562c2540860db68f3" title="Enter the ERROR_STATE and capture context for diagnostics." alt="" coords="370,252,533,277"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="297,77,316,89,332,108,339,127,342,165,344,202,351,220,365,237,371,243,367,247,361,241,346,222,339,203,336,165,334,128,327,110,313,93,294,81"/>
+<area shape="rect" id="Node000006" href="$bluetooth__manager_8cpp.html#a2b744d5d335a0af515c9958567d5f8bc" title=" " alt="" coords="608,79,703,104"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="505,28,541,39,616,70,614,75,539,45,503,33"/>
+<area shape="rect" id="Node000007" href="$bluetooth__manager_8cpp.html#a83aaf49454fe892c91182596227f13ed" title=" " alt="" coords="599,5,712,31"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="513,15,585,15,585,21,513,21"/>
+<area shape="poly" id="edge16_Node000009_Node000008" title=" " alt="" coords="315,262,356,262,356,267,315,267"/>
+<area shape="rect" id="Node000010" href="$buffer__manager_8cpp.html#a1e2e65d62c21f27267142571c0afb23e" title="Add a packet to the circular buffer." alt="" coords="381,301,522,327"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="273,275,375,296,374,301,272,280"/>
+<area shape="rect" id="Node000014" href="$sensor__package__manager_8cpp.html#ad8fe0b7c67a2a79fa83a0736dffc2d4e" title="Assemble a SensorPacket using the most recent sensor readings." alt="" coords="366,363,537,388"/>
+<area shape="poly" id="edge14_Node000009_Node000014" title=" " alt="" coords="290,275,316,286,332,298,341,311,350,323,364,336,400,355,397,360,361,340,346,327,337,314,328,302,313,291,288,280"/>
+<area shape="rect" id="Node000011" href="$buffer__manager_8cpp.html#a8b1ea34da4293c06ad58cf934128b3ea" title="Drop the oldest packet from the circular buffer." alt="" coords="588,239,723,264"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="497,299,539,286,602,266,604,271,541,291,498,304"/>
+<area shape="rect" id="Node000012" href="$buffer__manager_8cpp.html#aa4be9e04bfc0423517ed15c1fc6f63db" title="Clear the entire circular buffer." alt="" coords="609,288,701,313"/>
+<area shape="poly" id="edge12_Node000010_Node000012" title=" " alt="" coords="522,307,595,302,595,307,523,312"/>
+<area shape="rect" id="Node000013" href="$buffer__manager_8cpp.html#af1a458a3d86b060eb32cd856911eb4db" title="Validate the integrity of the buffer state." alt="" coords="603,337,707,363"/>
+<area shape="poly" id="edge13_Node000010_Node000013" title=" " alt="" coords="523,324,590,336,589,341,522,329"/>
+<area shape="rect" id="Node000015" href="$DHT__handler_8cpp.html#a414d4bcc044c508d8701d17893ff3263" title="Read temperature and humidity from the DHT sensor and store in a packet." alt="" coords="616,387,695,412"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="537,383,602,390,602,396,537,388"/>
+<area shape="poly" id="edge22_Node000017_Node000003" title=" " alt="" coords="284,151,313,138,328,127,337,115,346,102,361,89,374,83,376,87,364,94,350,105,341,118,332,131,316,143,286,156"/>
+<area shape="poly" id="edge24_Node000017_Node000008" title=" " alt="" coords="235,176,293,206,364,237,388,245,387,250,362,242,290,211,233,181"/>
+<area shape="rect" id="Node000018" href="$buffer__manager_8cpp.html#aa88f90c7b96583dc985ba442bf487555" title="Commit the removal of the last peeked packet." alt="" coords="365,153,537,179"/>
+<area shape="poly" id="edge19_Node000017_Node000018" title=" " alt="" coords="306,163,351,163,351,169,306,169"/>
+<area shape="rect" id="Node000019" href="$bluetooth__manager_8cpp.html#a46761ce1ac4ac80065b22d3889b44c4b" title="Get a reference to the sensor BLE characteristic." alt="" coords="363,104,540,129"/>
+<area shape="poly" id="edge20_Node000017_Node000019" title=" " alt="" coords="272,151,374,130,375,135,273,156"/>
+<area shape="rect" id="Node000020" href="$buffer__manager_8cpp.html#a8c120aa09fe6f1048e88204783a652ae" title="Peek at the oldest packet without removing it." alt="" coords="367,203,535,228"/>
+<area shape="poly" id="edge23_Node000017_Node000020" title=" " alt="" coords="273,176,375,197,374,202,272,181"/>
+<area shape="poly" id="edge21_Node000019_Node000006" title=" " alt="" coords="540,103,594,96,594,102,541,108"/>
+</map>

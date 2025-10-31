@@ -1,0 +1,8 @@
+<map id="buffer_manager.h" name="buffer_manager.h">
+<area shape="rect" id="Node000001" title="Circular buffer interface for storing SensorPacket data." alt="" coords="108,5,244,31"/>
+<area shape="rect" id="Node000002" href="$sensor__package__manager_8h.html" title="Sensor packet layout and helpers for assembling SensorPacket structs." alt="" coords="5,79,208,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,33,129,71,125,67,163,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="134,152,218,177"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="190,29,208,50,223,78,224,96,220,114,200,143,196,141,215,112,219,96,217,79,203,53,186,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,102,157,140,153,144,116,106"/>
+</map>

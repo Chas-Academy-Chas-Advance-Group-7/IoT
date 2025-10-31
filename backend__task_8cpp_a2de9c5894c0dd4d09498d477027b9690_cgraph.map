@@ -1,0 +1,5 @@
+<map id="backendTask" name="backendTask">
+<area shape="rect" id="Node000001" title="Backend task function responsible for processing sensor data." alt="" coords="5,5,111,31"/>
+<area shape="rect" id="Node000002" href="$threadsafe__serial_8cpp.html#a211c3f6179c90047a5c0c7666dcbadb1" title="Thread&#45;safe printf&#45;style formatted print." alt="" coords="159,5,244,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,15,145,15,145,21,111,21"/>
+</map>

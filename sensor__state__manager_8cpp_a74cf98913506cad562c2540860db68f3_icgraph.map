@@ -1,0 +1,13 @@
+<map id="transitionToErrorState" name="transitionToErrorState">
+<area shape="rect" id="Node000001" title="Enter the ERROR_STATE and capture context for diagnostics." alt="" coords="363,55,525,80"/>
+<area shape="rect" id="Node000002" href="$sensor__state__manager_8cpp.html#aa4f73ee3dd8e6bab72fab72bbf882a16" title="Ensure BLE is in the expected lifecycle state (advertising/connected)." alt="" coords="123,5,295,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="369,54,270,33,271,28,370,49"/>
+<area shape="rect" id="Node000004" href="$sensor__state__manager_8cpp.html#a202113f795d7196fdb2f2e154573062e" title="Try sampling sensors and enqueue a new SensorPacket." alt="" coords="104,55,315,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="349,70,315,70,315,65,349,65"/>
+<area shape="rect" id="Node000005" href="$sensor__state__manager_8cpp.html#a983a3afb91dcbfff50322233586c469c" title="Transfer the next buffered packet via BLE notification." alt="" coords="113,104,306,129"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="370,85,271,107,270,101,369,80"/>
+<area shape="rect" id="Node000003" href="$src__package__arduino_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f" title="Arduino main loop function." alt="" coords="5,55,56,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="135,36,105,45,57,60,56,55,103,39,134,31"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="90,70,56,70,56,65,90,65"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="138,103,103,94,56,79,57,74,105,89,140,98"/>
+</map>

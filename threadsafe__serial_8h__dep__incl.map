@@ -1,0 +1,17 @@
+<map id="threadsafe_serial.h" name="threadsafe_serial.h">
+<area shape="rect" id="Node000001" title="Thread&#45;safe Serial printing utilities for Arduino with FreeRTOS." alt="" coords="504,5,651,31"/>
+<area shape="rect" id="Node000002" href="$backend__task_8cpp.html" title="Backend processing task for sensor data." alt="" coords="5,79,144,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="491,34,144,83,144,78,490,29"/>
+<area shape="rect" id="Node000003" href="$broker__task_8cpp.html" title="Broker task for discovering BLE sensors and forwarding their data." alt="" coords="168,79,293,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="509,36,287,81,286,76,508,31"/>
+<area shape="rect" id="Node000004" href="$httptransmission__task_8cpp.html" title="FreeRTOS task for transmitting aggregated sensor data to a backend server via HTTP/HTTPS." alt="" coords="317,79,512,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="540,39,442,81,440,76,538,34"/>
+<area shape="rect" id="Node000005" href="$src__broker__esp32_2src_2main_8cpp.html" title="Main entry point for the ESP32 sensor aggregation system." alt="" coords="536,79,619,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="580,44,580,79,575,79,575,44"/>
+<area shape="rect" id="Node000006" href="$networkstatus__task_8cpp.html" title="Task for monitoring Wi&#45;Fi connection status and managing network events." alt="" coords="643,79,821,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="616,34,708,76,706,81,613,39"/>
+<area shape="rect" id="Node000007" href="$sensor__data_8cpp.html" title="Functions for parsing, validating, and logging sensor data from BLE devices." alt="" coords="845,79,973,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="644,31,856,76,855,81,643,36"/>
+<area shape="rect" id="Node000008" href="$threadsafe__serial_8cpp.html" title="Thread&#45;safe wrapper functions for Arduino Serial printing." alt="" coords="997,79,1160,104"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="665,29,998,76,998,81,664,34"/>
+</map>

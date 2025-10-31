@@ -1,0 +1,13 @@
+<map id="state_BLEManagement" name="state_BLEManagement">
+<area shape="rect" id="Node000001" title="Ensure the BLE stack is initialized and the peripheral is advertising or connected as required." alt="" coords="5,55,177,80"/>
+<area shape="rect" id="Node000002" href="$bluetooth__manager_8cpp.html#a8cd7266cec47e6f6bbe935416c076514" title="Check if a BLE central device is currently connected." alt="" coords="232,5,381,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,52,237,31,238,36,148,57"/>
+<area shape="rect" id="Node000003" href="$bluetooth__manager_8cpp.html#acdb4283f066b8733e235c63fe52d9553" title="Initialize the BLE peripheral for the sensor." alt="" coords="246,55,367,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,65,232,65,232,70,178,70"/>
+<area shape="rect" id="Node000006" href="$sensor__state__manager_8cpp.html#a74cf98913506cad562c2540860db68f3" title="Enter the ERROR_STATE and capture context for diagnostics." alt="" coords="225,104,388,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="148,77,238,98,237,104,147,83"/>
+<area shape="rect" id="Node000004" href="$bluetooth__manager_8cpp.html#a2b744d5d335a0af515c9958567d5f8bc" title=" " alt="" coords="445,31,540,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="367,57,431,49,432,54,368,62"/>
+<area shape="rect" id="Node000005" href="$bluetooth__manager_8cpp.html#a83aaf49454fe892c91182596227f13ed" title=" " alt="" coords="436,80,549,105"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="368,73,423,80,422,86,367,78"/>
+</map>

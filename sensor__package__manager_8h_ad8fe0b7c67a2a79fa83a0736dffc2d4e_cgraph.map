@@ -1,0 +1,5 @@
+<map id="assembleSensorPacket" name="assembleSensorPacket">
+<area shape="rect" id="Node000001" title="Assemble a SensorPacket using the most recent sensor readings." alt="" coords="5,5,176,31"/>
+<area shape="rect" id="Node000002" href="$DHT__handler_8cpp.html#a414d4bcc044c508d8701d17893ff3263" title="Read temperature and humidity from the DHT sensor and store in a packet." alt="" coords="224,5,303,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,15,210,15,210,21,176,21"/>
+</map>

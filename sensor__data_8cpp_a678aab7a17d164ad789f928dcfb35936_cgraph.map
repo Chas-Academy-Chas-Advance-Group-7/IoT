@@ -1,0 +1,7 @@
+<map id="logSensorReading" name="logSensorReading">
+<area shape="rect" id="Node000001" title="Logs a sensor reading to the thread&#45;safe Serial." alt="" coords="5,31,144,56"/>
+<area shape="rect" id="Node000002" href="$threadsafe__serial_8cpp.html#a211c3f6179c90047a5c0c7666dcbadb1" title="Thread&#45;safe printf&#45;style formatted print." alt="" coords="195,5,281,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,30,181,24,182,29,145,35"/>
+<area shape="rect" id="Node000003" href="$threadsafe__serial_8cpp.html#aa2a33e2abc21c32573829bde657382a6" title="Thread&#45;safe println for C&#45;style strings." alt="" coords="192,55,284,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,51,179,56,178,61,144,56"/>
+</map>

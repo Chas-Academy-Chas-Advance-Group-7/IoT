@@ -1,0 +1,13 @@
+<map id="DHT_handler.h" name="DHT_handler.h">
+<area shape="rect" id="Node000001" title="Header for DHT sensor handling on the sensor unit." alt="" coords="211,5,329,31"/>
+<area shape="rect" id="Node000002" href="$DHT__handler_8cpp.html" title="Handles reading temperature and humidity from a DHT sensor." alt="" coords="5,79,137,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,38,105,81,103,76,224,33"/>
+<area shape="rect" id="Node000003" href="$sensor__package__manager_8cpp.html" title="Manages sensor data and assembly of SensorPacket structures." alt="" coords="161,79,379,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="273,44,273,79,267,79,267,44"/>
+<area shape="rect" id="Node000004" href="$sensor__state__manager_8h.html" title="Sensor unit state machine API and documentation." alt="" coords="403,79,585,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="320,32,459,76,457,81,318,37"/>
+<area shape="rect" id="Node000005" href="$src__package__arduino_2src_2main_8cpp.html" title="Main entry point for the sensor firmware." alt="" coords="370,152,453,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="472,115,427,154,423,150,469,111"/>
+<area shape="rect" id="Node000006" href="$sensor__state__manager_8cpp.html" title="Manages the state machine of the sensor unit for packet creation, buffering, and BLE transfer." alt="" coords="477,152,673,177"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="519,111,564,150,560,154,516,115"/>
+</map>

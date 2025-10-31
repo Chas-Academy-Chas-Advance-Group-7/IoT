@@ -1,0 +1,11 @@
+<map id="brokerTask" name="brokerTask">
+<area shape="rect" id="Node000001" title="Main broker task function." alt="" coords="5,81,97,107"/>
+<area shape="rect" id="Node000002" href="$broker__task_8cpp.html#a0d643c20fb0f3a978c62dd11ab50e526" title="Connects to a BLE sensor and subscribes to its notifications." alt="" coords="145,56,276,81"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,84,132,79,132,84,98,89"/>
+<area shape="rect" id="Node000004" href="$threadsafe__serial_8cpp.html#a211c3f6179c90047a5c0c7666dcbadb1" title="Thread&#45;safe printf&#45;style formatted print." alt="" coords="523,56,608,81"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="98,92,276,91,401,83,509,72,509,78,402,88,276,97,98,98"/>
+<area shape="rect" id="Node000003" href="$broker__task_8cpp.html#a19260a63dfa833b5eca3339154a6ccbc" title="Callback for BLE characteristic notifications." alt="" coords="324,5,475,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="258,53,337,32,339,37,260,58"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="276,66,509,66,509,71,276,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="443,28,510,49,509,54,441,33"/>
+</map>

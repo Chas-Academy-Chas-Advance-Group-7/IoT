@@ -1,0 +1,10 @@
+<map id="buffer_manager.cpp" name="buffer_manager.cpp">
+<area shape="rect" id="Node000001" title="Circular buffer management for storing SensorPacket data." alt="" coords="101,5,251,31"/>
+<area shape="rect" id="Node000002" href="$buffer__manager_8h.html" title="Circular buffer interface for storing SensorPacket data." alt="" coords="108,79,244,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,31,179,65,173,65,173,31"/>
+<area shape="rect" id="Node000003" href="$sensor__package__manager_8h.html" title="Sensor packet layout and helpers for assembling SensorPacket structs." alt="" coords="5,152,208,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="166,106,129,144,125,140,163,102"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="134,225,218,251"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="190,102,208,124,223,151,224,169,220,187,200,217,196,214,215,185,219,169,217,153,203,127,186,106"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="120,176,157,214,153,217,116,180"/>
+</map>

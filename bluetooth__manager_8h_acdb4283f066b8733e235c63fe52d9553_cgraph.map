@@ -1,0 +1,7 @@
+<map id="setupBluetooth" name="setupBluetooth">
+<area shape="rect" id="Node000001" title="Initialize the BLE peripheral for the sensor." alt="" coords="5,31,127,56"/>
+<area shape="rect" id="Node000002" href="$bluetooth__manager_8cpp.html#a2b744d5d335a0af515c9958567d5f8bc" title=" " alt="" coords="184,5,279,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,31,170,25,171,30,127,37"/>
+<area shape="rect" id="Node000003" href="$bluetooth__manager_8cpp.html#a83aaf49454fe892c91182596227f13ed" title=" " alt="" coords="175,55,288,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="127,49,161,54,160,60,127,55"/>
+</map>

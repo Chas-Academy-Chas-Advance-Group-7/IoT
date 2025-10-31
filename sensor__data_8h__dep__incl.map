@@ -1,0 +1,11 @@
+<map id="sensor_data.h" name="sensor_data.h">
+<area shape="rect" id="Node000001" title="Header for parsing, validating, and logging sensor data from BLE devices." alt="" coords="290,5,403,31"/>
+<area shape="rect" id="Node000002" href="$backend__task_8cpp.html" title="Backend processing task for sensor data." alt="" coords="5,79,144,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="291,37,119,81,118,76,289,32"/>
+<area shape="rect" id="Node000003" href="$httptransmission__task_8cpp.html" title="FreeRTOS task for transmitting aggregated sensor data to a backend server via HTTP/HTTPS." alt="" coords="168,79,363,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="325,42,280,80,277,76,322,38"/>
+<area shape="rect" id="Node000004" href="$src__broker__esp32_2src_2main_8cpp.html" title="Main entry point for the ESP32 sensor aggregation system." alt="" coords="387,79,469,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="372,38,416,76,413,80,368,42"/>
+<area shape="rect" id="Node000005" href="$sensor__data_8cpp.html" title="Functions for parsing, validating, and logging sensor data from BLE devices." alt="" coords="493,79,621,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="394,32,524,76,522,81,392,37"/>
+</map>

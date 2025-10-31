@@ -1,0 +1,13 @@
+<map id="DHT_handler.cpp" name="DHT_handler.cpp">
+<area shape="rect" id="Node000001" title="Handles reading temperature and humidity from a DHT sensor." alt="" coords="107,5,239,31"/>
+<area shape="rect" id="Node000002" href="$DHT__handler_8h.html" title="Header for DHT sensor handling on the sensor unit." alt="" coords="56,79,173,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,33,135,70,131,67,162,29"/>
+<area shape="rect" id="Node000004" href="$sensor__package__manager_8h.html" title="Sensor packet layout and helpers for assembling SensorPacket structs." alt="" coords="141,152,344,177"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="181,30,234,138,229,141,177,32"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,152,67,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,106,61,145,57,141,100,102"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="137,102,211,143,208,147,134,106"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="131,225,215,251"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="118,104,121,137,132,176,155,213,151,216,127,178,116,138,112,104"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="233,180,196,217,192,214,229,176"/>
+</map>

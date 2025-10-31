@@ -1,0 +1,11 @@
+<map id="bluetooth_manager.h" name="bluetooth_manager.h">
+<area shape="rect" id="Node000001" title="BLE peripheral management for sensor units." alt="" coords="114,5,274,31"/>
+<area shape="rect" id="Node000002" href="$bluetooth__manager_8cpp.html" title="BLE peripheral setup and management for sensor units." alt="" coords="5,79,180,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,41,111,81,108,76,165,36"/>
+<area shape="rect" id="Node000003" href="$sensor__state__manager_8h.html" title="Sensor unit state machine API and documentation." alt="" coords="205,79,386,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,36,280,76,277,81,220,41"/>
+<area shape="rect" id="Node000004" href="$src__package__arduino_2src_2main_8cpp.html" title="Main entry point for the sensor firmware." alt="" coords="171,152,254,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="273,115,228,154,224,150,270,111"/>
+<area shape="rect" id="Node000005" href="$sensor__state__manager_8cpp.html" title="Manages the state machine of the sensor unit for packet creation, buffering, and BLE transfer." alt="" coords="279,152,475,177"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="320,111,365,150,362,154,317,115"/>
+</map>

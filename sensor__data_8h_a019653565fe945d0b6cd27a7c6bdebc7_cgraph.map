@@ -1,0 +1,5 @@
+<map id="parseBLEData" name="parseBLEData">
+<area shape="rect" id="Node000001" title="Parse BLE manufacturer data into a structured sensor message." alt="" coords="5,5,119,31"/>
+<area shape="rect" id="Node000002" href="$sensor__data_8cpp.html#a7651f2a2268621036860de195b990e43" title="Validates a sensor reading for plausibility." alt="" coords="167,5,317,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,15,153,15,153,21,119,21"/>
+</map>

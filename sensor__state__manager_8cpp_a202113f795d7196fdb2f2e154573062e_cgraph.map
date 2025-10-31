@@ -1,0 +1,17 @@
+<map id="state_CreateAndBufferPacket" name="state_CreateAndBufferPacket">
+<area shape="rect" id="Node000001" title="Sample sensors, build a SensorPacket, and enqueue it." alt="" coords="5,140,216,165"/>
+<area shape="rect" id="Node000002" href="$buffer__manager_8cpp.html#a1e2e65d62c21f27267142571c0afb23e" title="Add a packet to the circular buffer." alt="" coords="279,79,420,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,137,285,105,287,110,162,143"/>
+<area shape="rect" id="Node000006" href="$sensor__package__manager_8cpp.html#ad8fe0b7c67a2a79fa83a0736dffc2d4e" title="Assemble a SensorPacket using the most recent sensor readings." alt="" coords="264,140,435,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="216,150,250,150,250,155,216,155"/>
+<area shape="rect" id="Node000008" href="$sensor__state__manager_8cpp.html#a74cf98913506cad562c2540860db68f3" title="Enter the ERROR_STATE and capture context for diagnostics." alt="" coords="268,189,431,215"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="173,163,274,184,273,189,172,168"/>
+<area shape="rect" id="Node000003" href="$buffer__manager_8cpp.html#a8b1ea34da4293c06ad58cf934128b3ea" title="Drop the oldest packet from the circular buffer." alt="" coords="483,5,617,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="384,76,482,39,500,33,501,38,484,45,386,81"/>
+<area shape="rect" id="Node000004" href="$buffer__manager_8cpp.html#aa4be9e04bfc0423517ed15c1fc6f63db" title="Clear the entire circular buffer." alt="" coords="504,55,596,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="420,80,489,72,490,77,421,86"/>
+<area shape="rect" id="Node000005" href="$buffer__manager_8cpp.html#af1a458a3d86b060eb32cd856911eb4db" title="Validate the integrity of the buffer state." alt="" coords="498,104,602,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="421,98,484,106,484,111,420,103"/>
+<area shape="rect" id="Node000007" href="$DHT__handler_8cpp.html#a414d4bcc044c508d8701d17893ff3263" title="Read temperature and humidity from the DHT sensor and store in a packet." alt="" coords="511,153,589,179"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="435,156,497,160,497,165,435,161"/>
+</map>

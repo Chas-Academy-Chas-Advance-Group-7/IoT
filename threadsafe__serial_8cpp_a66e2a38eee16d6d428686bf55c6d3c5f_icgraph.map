@@ -1,0 +1,8 @@
+<map id="safePrint" name="safePrint">
+<area shape="rect" id="Node000001" title="Thread&#45;safe version of Serial.print() for C&#45;style strings." alt="" coords="305,31,385,56"/>
+<area shape="rect" id="Node000002" href="$networkstatus__task_8cpp.html#a1d89a4d845e0e5ef835c78000d81daad" title="Task for monitoring Wi&#45;Fi connection and updating network events." alt="" coords="112,5,257,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="291,38,257,32,258,27,292,32"/>
+<area shape="rect" id="Node000003" href="$src__broker__esp32_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Arduino setup function." alt="" coords="5,31,64,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="291,46,64,46,64,41,291,41"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,35,65,41,64,36,98,30"/>
+</map>

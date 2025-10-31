@@ -1,0 +1,19 @@
+<map id="networkstatus_task.cpp" name="networkstatus_task.cpp">
+<area shape="rect" id="Node000001" title="Task for monitoring Wi&#45;Fi connection status and managing network events." alt="" coords="235,5,413,31"/>
+<area shape="rect" id="Node000002" href="$networkstatus__task_8h.html" title="Header for the network status FreeRTOS task." alt="" coords="5,79,160,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="290,33,154,77,153,72,288,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="141,167,225,192"/>
+<area shape="poly" id="edge7_Node000001_Node000003" title=" " alt="" coords="295,33,259,52,225,80,203,117,190,154,185,152,198,115,221,77,256,48,293,28"/>
+<area shape="rect" id="Node000004" href="$threadsafe__serial_8h.html" title="Thread&#45;safe Serial printing utilities for Arduino with FreeRTOS." alt="" coords="235,86,413,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="327,31,327,72,321,72,321,31"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="438,86,501,111"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="347,28,437,77,435,82,344,33"/>
+<area shape="rect" id="Node000008" href="$WiFi__secrets__example_8h.html" title="Example Wi&#45;Fi credentials for ESP32 projects." alt="" coords="525,86,705,111"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="367,28,560,80,559,85,366,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,117,158,156,155,160,105,121"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="304,114,217,162,214,158,302,109"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="249,167,399,192"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="327,112,327,153,321,153,321,112"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="423,167,561,192"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="350,109,457,159,454,163,347,114"/>
+</map>

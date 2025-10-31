@@ -1,0 +1,32 @@
+<map id="main.cpp" name="main.cpp">
+<area shape="rect" id="Node000001" title="Main entry point for the ESP32 sensor aggregation system." alt="" coords="579,5,662,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,86,148,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="579,26,397,47,160,81,137,86,136,80,159,76,396,41,579,21"/>
+<area shape="rect" id="Node000003" href="$sensor__data_8h.html" title="Header for parsing, validating, and logging sensor data from BLE devices." alt="" coords="172,86,285,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="580,29,305,81,287,85,286,80,304,76,579,24"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="669,167,753,192"/>
+<area shape="poly" id="edge18_Node000001_Node000004" title=" " alt="" coords="579,23,496,29,406,45,370,57,346,73,340,82,339,92,342,104,351,117,371,132,401,144,483,162,574,171,656,175,655,180,574,176,482,167,399,149,368,136,347,120,337,106,333,93,335,80,342,70,368,52,404,40,495,24,579,18"/>
+<area shape="rect" id="Node000005" href="$sensor__packet__from__sensor_8h.html" title="Defines the data structure for sensor packets received from Arduino sensors." alt="" coords="361,79,515,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="595,33,495,76,493,71,593,28"/>
+<area shape="rect" id="Node000006" href="$backend__task_8h.html" title="Header for the backend FreeRTOS task processing sensor data." alt="" coords="539,86,702,111"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="623,31,623,72,618,72,618,31"/>
+<area shape="rect" id="Node000007" href="$broker__task_8h.html" title="Header for the broker FreeRTOS task handling BLE sensor discovery." alt="" coords="726,86,875,111"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="648,28,763,78,761,83,646,33"/>
+<area shape="rect" id="Node000008" href="$httptransmission__task_8h.html" title="Header for the HTTP transmission FreeRTOS task." alt="" coords="899,79,1070,119"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="663,26,886,74,885,79,662,31"/>
+<area shape="rect" id="Node000009" href="$networkstatus__task_8h.html" title="Header for the network status FreeRTOS task." alt="" coords="1094,79,1249,119"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="662,21,840,41,1081,76,1080,81,840,47,662,26"/>
+<area shape="rect" id="Node000010" href="$threadsafe__serial_8h.html" title="Thread&#45;safe Serial printing utilities for Arduino with FreeRTOS." alt="" coords="1273,86,1451,111"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="663,19,916,38,1087,55,1261,76,1293,81,1292,86,1260,81,1086,60,915,44,662,25"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="272,109,305,116,498,148,656,169,655,174,497,153,304,121,271,114"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="504,116,659,160,658,165,503,121"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="636,109,689,156,686,160,632,114"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="789,114,736,160,733,156,786,110"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="920,121,765,165,764,160,918,116"/>
+<area shape="poly" id="edge13_Node000009_Node000004" title=" " alt="" coords="1094,119,1082,121,767,173,767,167,1082,116,1093,114"/>
+<area shape="poly" id="edge15_Node000010_Node000004" title=" " alt="" coords="1305,114,1261,121,984,155,768,176,767,171,984,150,1260,116,1304,109"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1203,167,1353,192"/>
+<area shape="poly" id="edge16_Node000010_Node000011" title=" " alt="" coords="1351,113,1302,159,1299,155,1348,110"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1377,167,1515,192"/>
+<area shape="poly" id="edge17_Node000010_Node000012" title=" " alt="" coords="1376,110,1425,155,1422,159,1373,113"/>
+</map>

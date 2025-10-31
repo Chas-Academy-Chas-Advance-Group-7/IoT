@@ -1,0 +1,24 @@
+<map id="sensor_state_manager.h" name="sensor_state_manager.h">
+<area shape="rect" id="Node000001" title="Sensor unit state machine API and documentation." alt="" coords="116,5,297,31"/>
+<area shape="rect" id="Node000002" href="$DHT__handler_8h.html" title="Header for DHT sensor handling on the sensor unit." alt="" coords="52,79,169,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,33,139,72,136,68,190,29"/>
+<area shape="rect" id="Node000004" href="$sensor__package__manager_8h.html" title="Sensor packet layout and helpers for assembling SensorPacket structs." alt="" coords="168,152,371,177"/>
+<area shape="poly" id="edge13_Node000001_Node000004" title=" " alt="" coords="212,31,220,64,234,103,255,139,251,142,230,105,215,65,207,32"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="227,225,311,251"/>
+<area shape="poly" id="edge14_Node000001_Node000005" title=" " alt="" coords="130,33,83,51,61,64,42,81,22,104,11,128,10,151,22,176,34,186,52,195,102,210,214,229,213,234,100,215,50,200,31,190,18,179,5,152,6,126,18,102,38,77,58,60,80,46,129,28"/>
+<area shape="rect" id="Node000006" href="$bluetooth__manager_8h.html" title="BLE peripheral management for sensor units." alt="" coords="404,79,564,104"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="252,28,426,73,425,78,251,33"/>
+<area shape="rect" id="Node000008" href="$buffer__manager_8h.html" title="Circular buffer interface for storing SensorPacket data." alt="" coords="244,79,380,104"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="225,28,285,69,282,73,222,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="32,152,93,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,106,80,142,76,139,101,103"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="137,102,232,144,230,149,135,106"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="117,103,132,138,143,158,158,175,190,200,224,218,222,222,187,204,154,179,139,161,127,141,112,105"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="272,178,272,212,267,212,267,178"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="450,107,318,150,316,145,449,101"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="477,106,447,141,404,179,361,204,319,223,316,218,359,200,401,175,443,138,473,103"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="497,152,605,177"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="497,103,532,140,529,144,493,106"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="307,106,285,142,281,139,303,103"/>
+<area shape="poly" id="edge12_Node000008_Node000005" title=" " alt="" coords="335,102,357,116,377,134,389,155,389,167,385,179,373,194,358,206,326,224,323,219,355,202,369,190,380,176,384,166,384,157,373,137,354,120,332,106"/>
+</map>

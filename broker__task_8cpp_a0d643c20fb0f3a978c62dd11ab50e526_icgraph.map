@@ -1,0 +1,7 @@
+<map id="connectToSensor" name="connectToSensor">
+<area shape="rect" id="Node000001" title="Connects to a BLE sensor and subscribes to its notifications." alt="" coords="252,5,383,31"/>
+<area shape="rect" id="Node000002" href="$broker__task_8cpp.html#a09e3fef213641fea826388bc4245dd09" title="Broker task for discovering BLE sensors and handling notifications." alt="" coords="112,5,204,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,21,204,21,204,15,238,15"/>
+<area shape="rect" id="Node000003" href="$src__broker__esp32_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Arduino setup function." alt="" coords="5,5,64,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="98,21,64,21,64,15,98,15"/>
+</map>

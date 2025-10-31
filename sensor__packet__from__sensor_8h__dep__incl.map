@@ -1,0 +1,9 @@
+<map id="sensor_packet_from_sensor.h" name="sensor_packet_from_sensor.h">
+<area shape="rect" id="Node000001" title="Defines the data structure for sensor packets received from Arduino sensors." alt="" coords="154,5,307,45"/>
+<area shape="rect" id="Node000002" href="$backend__task_8cpp.html" title="Backend processing task for sensor data." alt="" coords="5,93,144,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,54,99,96,97,91,180,49"/>
+<area shape="rect" id="Node000003" href="$broker__task_8cpp.html" title="Broker task for discovering BLE sensors and forwarding their data." alt="" coords="168,93,293,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="233,59,233,93,228,93,228,59"/>
+<area shape="rect" id="Node000004" href="$src__broker__esp32_2src_2main_8cpp.html" title="Main entry point for the ESP32 sensor aggregation system." alt="" coords="317,93,400,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="274,50,341,91,338,95,272,55"/>
+</map>

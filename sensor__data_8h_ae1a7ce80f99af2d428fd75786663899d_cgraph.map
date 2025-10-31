@@ -1,0 +1,5 @@
+<map id="logParseError" name="logParseError">
+<area shape="rect" id="Node000001" title="Log a parse error for a given BLE device." alt="" coords="5,5,113,31"/>
+<area shape="rect" id="Node000002" href="$threadsafe__serial_8cpp.html#a211c3f6179c90047a5c0c7666dcbadb1" title="Thread&#45;safe printf&#45;style formatted print." alt="" coords="161,5,247,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,15,148,15,148,21,114,21"/>
+</map>

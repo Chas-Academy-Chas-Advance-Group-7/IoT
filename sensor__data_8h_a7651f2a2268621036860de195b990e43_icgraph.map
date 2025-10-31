@@ -1,0 +1,5 @@
+<map id="validateSensorData" name="validateSensorData">
+<area shape="rect" id="Node000001" title="Validate a sensor reading." alt="" coords="167,5,317,31"/>
+<area shape="rect" id="Node000002" href="$sensor__data_8cpp.html#a019653565fe945d0b6cd27a7c6bdebc7" title="Parse BLE manufacturer data into a structured sensor message." alt="" coords="5,5,119,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,21,119,21,119,15,153,15"/>
+</map>

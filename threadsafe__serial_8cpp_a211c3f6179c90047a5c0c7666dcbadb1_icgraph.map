@@ -1,0 +1,27 @@
+<map id="safePrintf" name="safePrintf">
+<area shape="rect" id="Node000001" title="Thread&#45;safe printf&#45;like function for formatted Serial output." alt="" coords="715,208,800,233"/>
+<area shape="rect" id="Node000002" href="$backend__task_8cpp.html#a2de9c5894c0dd4d09498d477027b9690" title="Backend task for processing sensor data and producing JSON output." alt="" coords="343,5,448,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="748,195,738,162,721,122,697,83,665,52,640,38,613,27,555,14,498,11,448,13,448,8,498,6,555,9,614,22,642,33,668,48,702,80,726,120,743,160,753,194"/>
+<area shape="rect" id="Node000003" href="$src__broker__esp32_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title="Arduino setup function." alt="" coords="5,107,64,132"/>
+<area shape="poly" id="edge15_Node000001_Node000003" title=" " alt="" coords="742,197,711,151,690,129,665,111,616,93,551,81,476,75,394,74,235,81,113,97,65,110,63,105,111,91,234,76,394,68,476,70,552,76,617,88,668,106,694,125,715,148,746,194"/>
+<area shape="rect" id="Node000004" href="$broker__task_8cpp.html#a09e3fef213641fea826388bc4245dd09" title="Broker task for discovering BLE sensors and handling notifications." alt="" coords="147,183,239,208"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="749,247,719,301,696,328,668,348,628,364,593,366,558,359,515,349,423,320,336,281,263,241,212,210,215,206,266,237,338,276,425,315,517,343,559,354,594,360,627,358,665,344,693,324,715,298,744,245"/>
+<area shape="rect" id="Node000005" href="$broker__task_8cpp.html#a0d643c20fb0f3a978c62dd11ab50e526" title="Connects to a BLE sensor and subscribes to its notifications." alt="" coords="330,183,461,208"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="701,219,461,203,461,197,701,214"/>
+<area shape="rect" id="Node000006" href="$httptransmission__task_8cpp.html#a139cba602bd72e7d5415ff602e8cc325" title="Task for sending processed sensor data to a backend server via HTTP." alt="" coords="112,107,275,132"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="735,199,704,171,666,147,616,130,564,118,458,106,359,105,275,111,275,106,359,100,459,101,565,113,617,125,668,142,707,166,738,195"/>
+<area shape="rect" id="Node000007" href="$sensor__data_8cpp.html#ae1a7ce80f99af2d428fd75786663899d" title="Log a parse error for a given BLE device." alt="" coords="537,259,645,284"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="702,240,635,261,633,256,701,235"/>
+<area shape="rect" id="Node000008" href="$sensor__data_8cpp.html#a678aab7a17d164ad789f928dcfb35936" title="Log a sensor reading to thread&#45;safe Serial." alt="" coords="522,308,661,333"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="736,245,705,273,668,299,642,310,640,306,665,294,702,269,733,241"/>
+<area shape="rect" id="Node000009" href="$networkstatus__task_8cpp.html#a1d89a4d845e0e5ef835c78000d81daad" title="Task for monitoring Wi&#45;Fi connection and updating network events." alt="" coords="323,409,468,435"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="753,248,743,282,726,321,701,360,668,392,620,416,568,429,516,434,468,433,468,428,516,429,567,424,619,411,665,388,697,357,721,319,737,280,748,246"/>
+<area shape="rect" id="Node000010" href="$broker__task_8cpp.html#a19260a63dfa833b5eca3339154a6ccbc" title="Callback for BLE characteristic notifications." alt="" coords="516,157,667,183"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="701,206,633,185,635,180,702,201"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="329,17,280,18,225,23,168,34,113,52,93,64,75,79,48,108,44,105,71,75,90,60,111,48,166,28,224,17,280,12,329,12"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="152,179,61,134,63,130,155,174"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="316,198,240,198,240,193,316,193"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="98,122,64,122,64,117,98,117"/>
+<area shape="poly" id="edge12_Node000009_Node000003" title=" " alt="" coords="347,406,321,392,257,351,209,316,164,276,110,221,71,174,42,134,47,131,75,171,114,218,168,272,212,311,260,347,324,388,350,401"/>
+<area shape="poly" id="edge14_Node000010_Node000005" title=" " alt="" coords="503,184,461,190,461,184,502,179"/>
+</map>

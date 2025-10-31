@@ -1,0 +1,9 @@
+<map id="addPacketToBuffer" name="addPacketToBuffer">
+<area shape="rect" id="Node000001" title="Add a SensorPacket to the circular buffer with automatic recovery and overflow handling." alt="" coords="5,55,147,80"/>
+<area shape="rect" id="Node000002" href="$buffer__manager_8cpp.html#a8b1ea34da4293c06ad58cf934128b3ea" title="Drop the oldest packet from the circular buffer." alt="" coords="195,5,329,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,52,199,32,200,37,125,57"/>
+<area shape="rect" id="Node000003" href="$buffer__manager_8cpp.html#aa4be9e04bfc0423517ed15c1fc6f63db" title="Clear the entire circular buffer." alt="" coords="216,55,308,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="147,65,202,65,202,70,147,70"/>
+<area shape="rect" id="Node000004" href="$buffer__manager_8cpp.html#af1a458a3d86b060eb32cd856911eb4db" title="Validate the integrity of the buffer state." alt="" coords="210,104,314,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="125,77,200,98,199,103,124,83"/>
+</map>

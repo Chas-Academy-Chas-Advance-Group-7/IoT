@@ -1,0 +1,7 @@
+<map id="networkstatus_task.h" name="networkstatus_task.h">
+<area shape="rect" id="Node000001" title="Header for the network status FreeRTOS task." alt="" coords="43,5,205,31"/>
+<area shape="rect" id="Node000002" href="$src__broker__esp32_2src_2main_8cpp.html" title="Main entry point for the ESP32 sensor aggregation system." alt="" coords="5,79,88,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,42,61,80,58,76,100,38"/>
+<area shape="rect" id="Node000003" href="$networkstatus__task_8cpp.html" title="Task for monitoring Wi&#45;Fi connection status and managing network events." alt="" coords="113,79,290,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="148,38,190,76,187,80,145,42"/>
+</map>

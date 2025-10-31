@@ -1,0 +1,7 @@
+<map id="httptransmission_task.h" name="httptransmission_task.h">
+<area shape="rect" id="Node000001" title="Header for the HTTP transmission FreeRTOS task." alt="" coords="95,5,273,31"/>
+<area shape="rect" id="Node000002" href="$httptransmission__task_8cpp.html" title="FreeRTOS task for transmitting aggregated sensor data to a backend server via HTTP/HTTPS." alt="" coords="5,79,200,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,42,118,80,114,76,159,38"/>
+<area shape="rect" id="Node000003" href="$src__broker__esp32_2src_2main_8cpp.html" title="Main entry point for the ESP32 sensor aggregation system." alt="" coords="224,79,307,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,38,254,76,250,80,206,42"/>
+</map>

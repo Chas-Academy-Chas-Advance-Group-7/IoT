@@ -1,0 +1,7 @@
+<map id="broker_task.h" name="broker_task.h">
+<area shape="rect" id="Node000001" title="Header for the broker FreeRTOS task handling BLE sensor discovery." alt="" coords="77,5,187,31"/>
+<area shape="rect" id="Node000002" href="$broker__task_8cpp.html" title="Broker task for discovering BLE sensors and forwarding their data." alt="" coords="5,79,131,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,43,80,80,76,77,110,39"/>
+<area shape="rect" id="Node000003" href="$src__broker__esp32_2src_2main_8cpp.html" title="Main entry point for the ESP32 sensor aggregation system." alt="" coords="155,79,237,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="154,39,188,77,184,80,150,43"/>
+</map>

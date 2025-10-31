@@ -1,0 +1,5 @@
+<map id="safePrintln" name="safePrintln">
+<area shape="rect" id="Node000001" title="Thread&#45;safe version of Serial.println() for C&#45;style strings." alt="" coords="192,5,284,31"/>
+<area shape="rect" id="Node000002" href="$sensor__data_8cpp.html#a678aab7a17d164ad789f928dcfb35936" title="Log a sensor reading to thread&#45;safe Serial." alt="" coords="5,5,144,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,21,145,21,145,15,178,15"/>
+</map>
