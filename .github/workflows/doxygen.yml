@@ -1,0 +1,56 @@
+name: Generate Doxygen documentation
+
+# Give workflow permission to push changes back to the repository
+permissions:
+  contents: write
+
+# Trigger workflow on pushes to develop branch or manual dispatch
+on:
+  push:
+    branches:
+      - develop
+      - feature/*
+  workflow_dispatch:
+
+jobs:
+  Doxygen:
+    name: Build and deploy Doxygen docs
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Full history needed for cache key hashing
+
+      # Step 2: Cache previously generated Doxygen HTML output
+      - name: Cache Doxygen output
+        uses: actions/cache@v3
+        id: doxygen-cache
+        with:
+          path: docs/html
+          # Hash all .h and .cpp files to determine if cache is still valid
+          key: doxygen-cache-${{ hashFiles('**/*.h', '**/*.cpp') }}
+          restore-keys: |
+            doxygen-cache-
+
+      # Step 3: Install Doxygen and Graphviz (needed to generate documentation)
+      - name: Install Doxygen & Graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+
+      # Step 4: Generate Doxygen docs if cache was not hit
+      - name: Generate Doxygen documentation
+        if: steps.doxygen-cache.outputs.cache-hit != 'true'
+        run: doxygen Doxyfile
+
+      # Step 5: Deploy generated docs to the doxygen-documentation branch
+      - name: Deploy to doxygen-documentation branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Provided automatically
+          publish_dir: ./docs/html                  # Doxygen output folder
+          publish_branch: doxygen-documentation     # Target branch
+          force_orphan: true                        # Replace previous branch history
